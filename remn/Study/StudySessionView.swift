@@ -13,6 +13,10 @@ struct StudySessionView: View {
     @Bindable var session: StudySessionRecord
     @State private var revealed = false
     @State private var showingBack = false
+    @State private var flipScaleX: CGFloat = 1
+    @State private var flipLift: CGFloat = 0
+    @State private var isFlipping = false
+    @State private var ratingsVisible = false
     @State private var candidates: [StudyRating: ScheduleCandidate] = [:]
     @State private var reviewTime = Date()
     @State private var showRatingsHelp = false
@@ -72,10 +76,9 @@ struct StudySessionView: View {
                 Text(card.deckContext)
                     .font(RemnTypography.smallControl)
                     .foregroundStyle(Color.remnGraphite)
-                ZStack(alignment: .topLeading) {
-                    studyCardFace(card, isBack: false)
-                    studyCardFace(card, isBack: true)
-                }
+                studyCardFace(card, isBack: showingBack)
+                .scaleEffect(x: reduceMotion ? 1 : flipScaleX, y: 1, anchor: .center)
+                .offset(y: reduceMotion ? 0 : flipLift)
                 .contentShape(Rectangle())
                 .onTapGesture { revealOrFlip(card) }
                 .accessibilityHint(Text(showingBack ? "study.tapFlip" : "study.tapReveal"))
@@ -88,17 +91,17 @@ struct StudySessionView: View {
             .padding(.bottom, revealed ? 100 : 40)
         }
         .safeAreaInset(edge: .bottom) {
-            if revealed { ratings(for: card) }
+            if revealed {
+                ratings(for: card)
+                    .opacity(ratingsVisible ? 1 : 0)
+                    .offset(y: ratingsVisible ? 0 : 8)
+                    .allowsHitTesting(ratingsVisible)
+            }
         }
     }
 
     private func studyCardFace(_ card: Flashcard, isBack: Bool) -> some View {
-        let isVisible = showingBack == isBack
-        let angle = isBack
-            ? (showingBack ? 0.0 : 90.0)
-            : (showingBack ? -90.0 : 0.0)
-
-        return FlashcardSurface(
+        FlashcardSurface(
             seed: card.id.hashValue &+ (isBack ? 1 : 0),
             style: .study
         ) {
@@ -118,23 +121,13 @@ struct StudySessionView: View {
                 .foregroundStyle(Color.remnGraphite)
             }
         }
-        .opacity(isVisible ? 1 : 0)
-        .rotation3DEffect(
-            .degrees(reduceMotion ? 0 : angle),
-            axis: (x: 0, y: 1, z: 0),
-            perspective: 0.58
-        )
-        .zIndex(isVisible ? 1 : 0)
-        .accessibilityHidden(!isVisible)
-        .animation(
-            reduceMotion ? .easeOut(duration: 0.15) : .easeInOut(duration: 0.40),
-            value: showingBack
-        )
     }
 
     private func revealOrFlip(_ card: Flashcard) {
+        guard !isFlipping else { return }
+
         if revealed {
-            showingBack.toggle()
+            flipCard(toBack: !showingBack)
             return
         }
 
@@ -148,16 +141,52 @@ struct StudySessionView: View {
             let needsHelp = !didShowRatingHelp
             didShowRatingHelp = true
             revealed = true
-            showingBack = true
-
-            if needsHelp {
-                Task { @MainActor in
-                    try? await Task.sleep(for: .milliseconds(reduceMotion ? 180 : 460))
+            ratingsVisible = false
+            flipCard(toBack: true) {
+                withAnimation(.easeOut(duration: 0.18)) {
+                    ratingsVisible = true
+                }
+                if needsHelp {
                     showRatingsHelp = true
                 }
             }
         } catch {
             appState.errorMessage = error.localizedDescription
+        }
+    }
+
+    private func flipCard(toBack: Bool, completion: (() -> Void)? = nil) {
+        guard showingBack != toBack else {
+            completion?()
+            return
+        }
+
+        if reduceMotion {
+            withAnimation(.easeOut(duration: 0.15)) {
+                showingBack = toBack
+            }
+            completion?()
+            return
+        }
+
+        isFlipping = true
+        withAnimation(.timingCurve(0.42, 0, 0.78, 0.38, duration: 0.16)) {
+            flipScaleX = 0.035
+            flipLift = -3
+        }
+
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(160))
+            showingBack = toBack
+
+            withAnimation(.timingCurve(0.18, 0.72, 0.20, 1, duration: 0.23)) {
+                flipScaleX = 1
+                flipLift = 0
+            }
+
+            try? await Task.sleep(for: .milliseconds(230))
+            isFlipping = false
+            completion?()
         }
     }
 
@@ -213,6 +242,9 @@ struct StudySessionView: View {
             )
             revealed = false
             showingBack = false
+            ratingsVisible = false
+            flipScaleX = 1
+            flipLift = 0
             candidates = [:]
             SessionService.refreshQueue(session, cards: cards)
             try context.save()
@@ -227,6 +259,9 @@ struct StudySessionView: View {
             try ReviewService().undoLastReview(in: session, context: context)
             revealed = false
             showingBack = false
+            ratingsVisible = false
+            flipScaleX = 1
+            flipLift = 0
             candidates = [:]
             withAnimation { showUndo = false }
         } catch {
