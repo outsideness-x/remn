@@ -26,8 +26,8 @@ enum FlashcardSurfaceStyle {
 
     var cornerRadius: CGFloat {
         switch self {
-        case .compact: 13
-        case .regular, .study, .export: 17
+        case .compact: 8
+        case .regular, .study, .export: 10
         }
     }
 }
@@ -54,26 +54,35 @@ struct FlashcardSurface<Content: View>: View {
             .padding(.vertical, style.verticalPadding)
             .background {
                 ZStack {
+                    WobblyRoundedRectangle(seed: seed &+ 109, cornerRadius: style.cornerRadius)
+                        .fill(Color.remnAccent.opacity(0.13))
+                        .overlay {
+                            WobblyRoundedRectangle(seed: seed &+ 109, cornerRadius: style.cornerRadius)
+                                .stroke(Color.remnAccent.opacity(0.78), lineWidth: 1.15)
+                        }
+                        .offset(x: 3, y: 5)
+
                     WobblyRoundedRectangle(seed: seed &+ 71, cornerRadius: style.cornerRadius)
-                        .fill(Color.remnInk.opacity(0.10))
-                        .offset(x: 1.5, y: 4)
+                        .fill(Color.remnInk.opacity(0.08))
+                        .offset(x: 1, y: 2.5)
+
                     WobblyRoundedRectangle(seed: seed, cornerRadius: style.cornerRadius)
                         .fill(Color.remnCardPaper)
                 }
             }
             .overlay {
                 WobblyRoundedRectangle(seed: seed, cornerRadius: style.cornerRadius)
-                    .stroke(Color.remnInk.opacity(0.42), lineWidth: 1.15)
+                    .stroke(Color.remnInk.opacity(0.72), lineWidth: 1.3)
             }
             .rotationEffect(.degrees(tilt))
-            .padding(.horizontal, style == .compact ? 2 : 0)
-            .padding(.bottom, 4)
+            .padding(.horizontal, style == .compact ? 3 : 1)
+            .padding(.bottom, 7)
     }
 
     private var tilt: Double {
         guard style == .compact else { return 0 }
         let step = Int(UInt(bitPattern: seed) % 5) - 2
-        return Double(step) * 0.10
+        return Double(step) * 0.18
     }
 }
 
