@@ -80,6 +80,9 @@ struct StudySetupSheet: View {
                     subjectsPicker
                     sectionTitle("study.howMany")
                     countPicker
+                    TimelineView(.periodic(from: .now, by: 15)) { timeline in
+                        sessionSummary(at: timeline.date)
+                    }
                     if countChoice == .custom {
                         Stepper(value: $customCount, in: 1...500) {
                             Text("\(customCount) \(RemnLanguage.localized("library.cards"))")
@@ -178,6 +181,37 @@ struct StudySetupSheet: View {
 
     private var targetCount: Int? {
         countChoice == .custom ? customCount : countChoice.value
+    }
+
+    private func sessionSummary(at date: Date) -> some View {
+        let selectedCount = StudyQueueBuilder.select(
+            from: cards,
+            subjectIDs: selectedSubjectIDs,
+            deckID: initialDeckID,
+            targetCount: targetCount,
+            now: date
+        ).count
+        let availability = StudyQueueBuilder.availability(
+            from: cards,
+            subjectIDs: selectedSubjectIDs,
+            deckID: initialDeckID,
+            now: date
+        )
+
+        return VStack(alignment: .leading, spacing: 4) {
+            Text("\(selectedCount) \(RemnLanguage.localized("study.inSession"))")
+                .font(.body.weight(.semibold).monospacedDigit())
+                .foregroundStyle(Color.remnInk)
+            HStack(spacing: 6) {
+                Text("\(availability.availableNow) \(RemnLanguage.localized("study.availableNow"))")
+                Text("·")
+                Text("\(availability.scheduledLater) \(RemnLanguage.localized("study.scheduledLater"))")
+            }
+            .font(.caption.monospacedDigit())
+            .foregroundStyle(Color.remnGraphite)
+        }
+        .padding(.top, 2)
+        .accessibilityElement(children: .combine)
     }
 
     private func restoreSelection() {

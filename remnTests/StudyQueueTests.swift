@@ -58,6 +58,43 @@ final class StudyQueueTests: XCTestCase {
         XCTAssertEqual(result.map(\.id), [first.id])
     }
 
+    func testTargetTwentyAdmitsBothAvailableCards() {
+        let (subject, deck, first) = TestStore.makeCard(createdAt: now.addingTimeInterval(-20))
+        first.state = .learning
+        first.due = now.addingTimeInterval(-2)
+        let second = Flashcard(deck: deck, frontMarkdown: "second", backMarkdown: "answer")
+        second.state = .learning
+        second.due = now.addingTimeInterval(-1)
+
+        let result = StudyQueueBuilder.select(
+            from: [first, second],
+            subjectIDs: [subject.id],
+            deckID: deck.id,
+            targetCount: 20,
+            now: now
+        )
+
+        XCTAssertEqual(result.map(\.id), [first.id, second.id])
+    }
+
+    func testAvailabilitySeparatesNowFromScheduledLater() {
+        let (subject, deck, due) = TestStore.makeCard(createdAt: now)
+        due.state = .learning
+        due.due = now.addingTimeInterval(-1)
+        let later = Flashcard(deck: deck, frontMarkdown: "later", backMarkdown: "answer")
+        later.state = .learning
+        later.due = now.addingTimeInterval(120)
+
+        let availability = StudyQueueBuilder.availability(
+            from: [due, later],
+            subjectIDs: [subject.id],
+            deckID: deck.id,
+            now: now
+        )
+
+        XCTAssertEqual(availability, StudyAvailability(availableNow: 1, scheduledLater: 1))
+    }
+
     func testAllDueExcludesNewCards() {
         let (subject, deck, due) = TestStore.makeCard(createdAt: now)
         due.state = .review
