@@ -23,7 +23,7 @@ struct SearchView: View {
             .padding(.top, 12)
 
             ScrollView {
-                LazyVStack(spacing: 0) {
+                LazyVStack(spacing: 10) {
                     if query.isEmpty {
                         Text("search.prompt")
                             .font(RemnTypography.control)
@@ -65,25 +65,26 @@ private struct SearchResultRow: View {
     let card: Flashcard
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 7) {
-            Text(RemnFormatters.usefulLine(card.frontMarkdown))
-                .font(.body.weight(.semibold))
-                .foregroundStyle(Color.remnInk)
-                .lineLimit(3)
-            HStack {
+        FlashcardSurface(seed: card.id.hashValue, style: .compact) {
+            VStack(alignment: .leading, spacing: 9) {
                 Text(context)
+                    .font(RemnTypography.smallControl)
+                    .foregroundStyle(Color.remnGraphite)
                     .lineLimit(1)
-                Spacer()
-                Text(RemnFormatters.dueStatus(for: card))
+                Text(RemnFormatters.usefulLine(card.frontMarkdown))
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Color.remnInk)
+                    .lineLimit(3)
+                HStack {
+                    FlashcardSideLabel(title: "card.front")
+                    Spacer()
+                    Text(RemnFormatters.dueStatus(for: card))
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(Color.remnGraphite)
+                }
             }
-            .font(.caption)
-            .foregroundStyle(Color.remnGraphite)
         }
-        .padding(.horizontal, 3)
-        .padding(.vertical, 16)
-        .overlay(alignment: .bottom) {
-            ScribbleDivider(seed: card.id.hashValue)
-        }
+        .padding(.vertical, 4)
     }
 
     private var context: String {

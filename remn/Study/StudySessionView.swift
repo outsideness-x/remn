@@ -67,20 +67,26 @@ struct StudySessionView: View {
 
     private func study(_ card: Flashcard) -> some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 32) {
+            VStack(alignment: .leading, spacing: 16) {
                 Text(card.deckContext)
                     .font(RemnTypography.smallControl)
                     .foregroundStyle(Color.remnGraphite)
-                CardContentView(markdown: card.frontMarkdown, context: .study)
-                if revealed {
-                    ScribbleDivider(seed: card.id.hashValue)
-                        .padding(.vertical, 5)
-                    CardContentView(markdown: card.backMarkdown, context: .study)
-                        .transition(.opacity.combined(with: reduceMotion ? .identity : .move(edge: .top)))
+                FlashcardSurface(seed: card.id.hashValue, style: .study) {
+                    VStack(alignment: .leading, spacing: 19) {
+                        FlashcardSideLabel(title: "card.front")
+                        CardContentView(markdown: card.frontMarkdown, context: .study)
+                        if revealed {
+                            ScribbleDivider(seed: card.id.hashValue)
+                                .padding(.vertical, 3)
+                            FlashcardSideLabel(title: "card.back")
+                            CardContentView(markdown: card.backMarkdown, context: .study)
+                                .transition(.opacity.combined(with: reduceMotion ? .identity : .move(edge: .top)))
+                        }
+                    }
                 }
             }
-            .padding(.horizontal, 26)
-            .padding(.top, 28)
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
             .padding(.bottom, revealed ? 100 : 76)
             .animation(reduceMotion ? nil : .easeOut(duration: 0.22), value: revealed)
         }

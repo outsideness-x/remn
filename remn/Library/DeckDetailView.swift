@@ -31,7 +31,7 @@ struct DeckDetailView: View {
                             action: { showCreateCard = true }
                         )
                     } else {
-                        LazyVStack(spacing: 0) {
+                        LazyVStack(spacing: 10) {
                             ForEach(deckCards, id: \.id) { card in
                                 NavigationLink {
                                     CardDetailView(card: card)

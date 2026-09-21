@@ -33,5 +33,14 @@ extension Color {
                 : UIColor(red: 0.71, green: 0.25, blue: 0.19, alpha: 1)
         }
     )
+
+    static let remnCardPaper = Color(
+        UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(red: 0.080, green: 0.074, blue: 0.102, alpha: 1)
+                : UIColor(red: 0.982, green: 0.969, blue: 0.925, alpha: 1)
+        }
+    )
+
     static let remnSurface = remnInk.opacity(0.055)
 }

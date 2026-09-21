@@ -183,19 +183,17 @@ struct CardEditorView: View {
 
     private var preview: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 34) {
-                Text("card.front")
-                    .font(RemnTypography.control)
-                    .foregroundStyle(Color.remnGraphite)
-                CardContentView(markdown: front, context: .preview)
-                ScribbleDivider(seed: 88)
-                Text("card.back")
-                    .font(RemnTypography.control)
-                    .foregroundStyle(Color.remnGraphite)
-                CardContentView(markdown: back, context: .preview)
+            FlashcardSurface(seed: card?.id.hashValue ?? 88) {
+                VStack(alignment: .leading, spacing: 18) {
+                    FlashcardSideLabel(title: "card.front")
+                    CardContentView(markdown: front, context: .preview)
+                    ScribbleDivider(seed: 88)
+                    FlashcardSideLabel(title: "card.back")
+                    CardContentView(markdown: back, context: .preview)
+                }
             }
-            .padding(.horizontal, 26)
-            .padding(.top, 28)
+            .padding(.horizontal, 20)
+            .padding(.top, 22)
             .padding(.bottom, 44)
         }
     }

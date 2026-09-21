@@ -4,23 +4,26 @@ struct CardExportView: View {
     let card: Flashcard
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
+        VStack(alignment: .leading, spacing: 16) {
             Text(context)
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
                 .foregroundStyle(Color.black.opacity(0.58))
                 .textCase(.uppercase)
-            CardContentView(markdown: card.frontMarkdown, context: .export)
-                .foregroundStyle(Color.black)
-            exportDivider
-            CardContentView(markdown: card.backMarkdown, context: .export)
-                .foregroundStyle(Color.black)
+            FlashcardSurface(seed: card.id.hashValue, style: .export) {
+                VStack(alignment: .leading, spacing: 20) {
+                    FlashcardSideLabel(title: "card.front")
+                    CardContentView(markdown: card.frontMarkdown, context: .export)
+                    exportDivider
+                    FlashcardSideLabel(title: "card.back")
+                    CardContentView(markdown: card.backMarkdown, context: .export)
+                }
+            }
             Text("remn")
-                .font(.system(size: 14, weight: .black, design: .rounded))
+                .font(RemnTypography.display(19, weight: .semibold, relativeTo: .body))
                 .foregroundStyle(Color.black.opacity(0.55))
                 .frame(maxWidth: .infinity, alignment: .trailing)
-                .padding(.top, 10)
         }
-        .padding(40)
+        .padding(30)
         .frame(width: 540, alignment: .leading)
         .fixedSize(horizontal: false, vertical: true)
         .background(Color(red: 0.957, green: 0.945, blue: 0.914))
@@ -47,4 +50,3 @@ struct CardExportView: View {
         .frame(height: 10)
     }
 }
-

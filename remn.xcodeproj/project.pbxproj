@@ -32,6 +32,7 @@
 		707019A24C095F95E9E8AA85 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4050B3C2FC8F8B5C1E7E1 /* Deck.swift */; };
 		75DBDC84D21711F5F26B9E28 /* BackupModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CDEC6CF690B3CFB8C3008B /* BackupModels.swift */; };
 		77CE4F9591967D8D25C5A624 /* SubjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FF9D89B5DA9AC233E8B060 /* SubjectModel.swift */; };
+		78F33C9003CA07274546D4C8 /* FlashcardSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = B74613E361D1008F37D52C7D /* FlashcardSurface.swift */; };
 		7A0248F25ED7DB1837DF7E9B /* NameEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA5B762D59F24BB59139A3A /* NameEditorSheet.swift */; };
 		7AA28B3B566D5144EFD9604C /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC69D30D20A30414C1CAF279 /* AppState.swift */; };
 		7ADA5F050256C62E1F361A60 /* FSRSSchedulerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB918FC5E723ACBE1B50FC2E /* FSRSSchedulerService.swift */; };
@@ -128,6 +129,7 @@
 		9F4E40F875B27C4CFBA7E1F1 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
 		9F72936533B36DABA6988A35 /* MarkdownRenderSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownRenderSource.swift; sourceTree = "<group>"; };
 		A6E4DDE9993647270960E6C2 /* CardEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEditorView.swift; sourceTree = "<group>"; };
+		B74613E361D1008F37D52C7D /* FlashcardSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardSurface.swift; sourceTree = "<group>"; };
 		BC69D30D20A30414C1CAF279 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		BEA5B762D59F24BB59139A3A /* NameEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameEditorSheet.swift; sourceTree = "<group>"; };
 		C6404ADE572E66098D93C09E /* Caveat-Variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Caveat-Variable.ttf"; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 		2BF31850F41ECA3351FC57AC /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				B74613E361D1008F37D52C7D /* FlashcardSurface.swift */,
 				9ACE8C66501FBC9214D431FA /* HandmadeComponents.swift */,
 				73275047DD887BC610647B2A /* RemnColors.swift */,
 				1E99BF5C47CF0005283FDD06 /* RemnNavigationHeader.swift */,
@@ -521,6 +524,7 @@
 				7ADA5F050256C62E1F361A60 /* FSRSSchedulerService.swift in Sources */,
 				F3E30020DAC50E4107057764 /* Flashcard+Display.swift in Sources */,
 				1530F51EA72ABD44CA007034 /* Flashcard.swift in Sources */,
+				78F33C9003CA07274546D4C8 /* FlashcardSurface.swift in Sources */,
 				3946DFBC2D26E5AF69D25DC7 /* Formatters.swift in Sources */,
 				D797D3202B36BEFE11F83B11 /* HandmadeComponents.swift in Sources */,
 				8B57FB701B37D5C1D1BEC6BB /* LibraryRow.swift in Sources */,

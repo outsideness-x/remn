@@ -31,17 +31,29 @@ struct CardDetailView: View {
                 .buttonStyle(.plain)
             }
             ScrollView {
-                VStack(alignment: .leading, spacing: 30) {
+                VStack(alignment: .leading, spacing: 16) {
                     Text(card.deckContext)
                         .font(RemnTypography.smallControl)
                         .foregroundStyle(Color.remnGraphite)
-                    CardContentView(markdown: card.frontMarkdown)
-                    ScribbleDivider(seed: card.id.hashValue)
-                        .padding(.vertical, 4)
-                    CardContentView(markdown: card.backMarkdown)
+                    FlashcardSurface(seed: card.id.hashValue) {
+                        VStack(alignment: .leading, spacing: 18) {
+                            HStack(alignment: .firstTextBaseline) {
+                                FlashcardSideLabel(title: "card.front")
+                                Spacer()
+                                Text(RemnFormatters.dueStatus(for: card))
+                                    .font(.caption.monospacedDigit())
+                                    .foregroundStyle(Color.remnGraphite)
+                            }
+                            CardContentView(markdown: card.frontMarkdown)
+                            ScribbleDivider(seed: card.id.hashValue)
+                                .padding(.vertical, 2)
+                            FlashcardSideLabel(title: "card.back")
+                            CardContentView(markdown: card.backMarkdown)
+                        }
+                    }
                 }
-                .padding(.horizontal, 26)
-                .padding(.top, 28)
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
                 .padding(.bottom, 44)
             }
         }
