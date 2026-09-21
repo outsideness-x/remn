@@ -12,6 +12,7 @@ struct StudySessionView: View {
 
     @Bindable var session: StudySessionRecord
     @State private var revealed = false
+    @State private var showingBack = false
     @State private var candidates: [StudyRating: ScheduleCandidate] = [:]
     @State private var reviewTime = Date()
     @State private var showRatingsHelp = false
@@ -71,54 +72,93 @@ struct StudySessionView: View {
                 Text(card.deckContext)
                     .font(RemnTypography.smallControl)
                     .foregroundStyle(Color.remnGraphite)
-                FlashcardSurface(seed: card.id.hashValue, style: .study) {
-                    VStack(alignment: .leading, spacing: 19) {
-                        FlashcardSideLabel(title: "card.front")
-                        CardContentView(markdown: card.frontMarkdown, context: .study)
-                        if revealed {
-                            ScribbleDivider(seed: card.id.hashValue)
-                                .padding(.vertical, 3)
-                            FlashcardSideLabel(title: "card.back")
-                            CardContentView(markdown: card.backMarkdown, context: .study)
-                                .transition(.opacity.combined(with: reduceMotion ? .identity : .move(edge: .top)))
-                        }
-                    }
+                ZStack(alignment: .topLeading) {
+                    studyCardFace(card, isBack: false)
+                    studyCardFace(card, isBack: true)
+                }
+                .contentShape(Rectangle())
+                .onTapGesture { revealOrFlip(card) }
+                .accessibilityHint(Text(showingBack ? "study.tapFlip" : "study.tapReveal"))
+                .accessibilityAction(named: Text(showingBack ? "card.front" : "card.back")) {
+                    revealOrFlip(card)
                 }
             }
             .padding(.horizontal, 20)
             .padding(.top, 20)
-            .padding(.bottom, revealed ? 100 : 76)
-            .animation(reduceMotion ? nil : .easeOut(duration: 0.22), value: revealed)
+            .padding(.bottom, revealed ? 100 : 40)
         }
         .safeAreaInset(edge: .bottom) {
-            if revealed { ratings(for: card) } else { revealButton(card) }
+            if revealed { ratings(for: card) }
         }
     }
 
-    private func revealButton(_ card: Flashcard) -> some View {
-        Button {
-            reviewTime = .now
-            do {
-                candidates = try ReviewService().candidates(
-                    for: card,
-                    at: reviewTime,
-                    desiredRetention: desiredRetention
+    private func studyCardFace(_ card: Flashcard, isBack: Bool) -> some View {
+        let isVisible = showingBack == isBack
+        let angle = isBack
+            ? (showingBack ? 0.0 : 90.0)
+            : (showingBack ? -90.0 : 0.0)
+
+        return FlashcardSurface(
+            seed: card.id.hashValue &+ (isBack ? 1 : 0),
+            style: .study
+        ) {
+            VStack(alignment: .leading, spacing: 19) {
+                FlashcardSideLabel(title: isBack ? "card.back" : "card.front")
+                CardContentView(
+                    markdown: isBack ? card.backMarkdown : card.frontMarkdown,
+                    context: .study
                 )
-                revealed = true
-                if !didShowRatingHelp {
-                    didShowRatingHelp = true
+                HStack(spacing: 7) {
+                    Spacer()
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                        .font(.caption2.weight(.semibold))
+                    Text(isBack ? "study.tapFlip" : "study.tapReveal")
+                        .font(RemnTypography.smallControl)
+                }
+                .foregroundStyle(Color.remnGraphite)
+            }
+        }
+        .opacity(isVisible ? 1 : 0)
+        .rotation3DEffect(
+            .degrees(reduceMotion ? 0 : angle),
+            axis: (x: 0, y: 1, z: 0),
+            perspective: 0.58
+        )
+        .zIndex(isVisible ? 1 : 0)
+        .accessibilityHidden(!isVisible)
+        .animation(
+            reduceMotion ? .easeOut(duration: 0.15) : .easeInOut(duration: 0.40),
+            value: showingBack
+        )
+    }
+
+    private func revealOrFlip(_ card: Flashcard) {
+        if revealed {
+            showingBack.toggle()
+            return
+        }
+
+        reviewTime = .now
+        do {
+            candidates = try ReviewService().candidates(
+                for: card,
+                at: reviewTime,
+                desiredRetention: desiredRetention
+            )
+            let needsHelp = !didShowRatingHelp
+            didShowRatingHelp = true
+            revealed = true
+            showingBack = true
+
+            if needsHelp {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(reduceMotion ? 180 : 460))
                     showRatingsHelp = true
                 }
-            } catch {
-                appState.errorMessage = error.localizedDescription
             }
-        } label: {
-            Text("study.showAnswer").frame(maxWidth: .infinity)
+        } catch {
+            appState.errorMessage = error.localizedDescription
         }
-        .buttonStyle(WobblyButtonStyle(filled: true, seed: card.id.hashValue))
-        .padding(.horizontal, 20)
-        .padding(.vertical, 10)
-        .background(Color.remnPaper.opacity(0.97))
     }
 
     private func ratings(for card: Flashcard) -> some View {
@@ -172,6 +212,7 @@ struct StudySessionView: View {
                 at: reviewTime
             )
             revealed = false
+            showingBack = false
             candidates = [:]
             SessionService.refreshQueue(session, cards: cards)
             try context.save()
@@ -185,6 +226,7 @@ struct StudySessionView: View {
         do {
             try ReviewService().undoLastReview(in: session, context: context)
             revealed = false
+            showingBack = false
             candidates = [:]
             withAnimation { showUndo = false }
         } catch {
