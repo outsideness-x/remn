@@ -11,6 +11,7 @@ struct CardRow: View {
                     Spacer(minLength: 8)
                     Text(RemnFormatters.dueStatus(for: card))
                         .font(RemnTypography.smallControl)
+                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(statusColor)
                 }
                 Text(RemnFormatters.usefulLine(card.frontMarkdown))

@@ -47,8 +47,10 @@ private struct StartupFailureView: View {
         VStack(spacing: 18) {
             Text("remn")
                 .font(RemnTypography.brand)
+                .remnHandwrittenBounds()
             Text("storage.couldNotOpen")
                 .font(RemnTypography.navigationTitle)
+                .remnHandwrittenBounds()
             Text(message)
                 .font(.footnote)
                 .foregroundStyle(.secondary)

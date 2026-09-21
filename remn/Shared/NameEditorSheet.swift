@@ -26,16 +26,23 @@ struct NameEditorSheet: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 8) {
-                Button("cancel") { dismiss() }
-                    .frame(minWidth: 64, minHeight: 44, alignment: .leading)
+                Button { dismiss() } label: {
+                    Text("cancel")
+                        .remnHandwrittenBounds()
+                }
+                .frame(minWidth: 64, minHeight: 44, alignment: .leading)
                 Spacer(minLength: 4)
                 Text(title)
                     .font(RemnTypography.navigationTitle)
+                    .remnHandwrittenBounds()
                     .foregroundStyle(Color.remnInk)
                     .lineLimit(1)
                 Spacer(minLength: 4)
-                Button(actionTitle, action: save)
-                    .frame(minWidth: 64, minHeight: 44, alignment: .trailing)
+                Button(action: save) {
+                    Text(actionTitle)
+                        .remnHandwrittenBounds()
+                }
+                .frame(minWidth: 64, minHeight: 44, alignment: .trailing)
                     .disabled(cleanName.isEmpty)
                     .opacity(cleanName.isEmpty ? 0.35 : 1)
             }

@@ -7,6 +7,7 @@ struct ScreenTitle: View {
         VStack(alignment: .leading, spacing: 1) {
             Text(title)
                 .font(RemnTypography.pageTitle)
+                .remnHandwrittenBounds()
                 .foregroundStyle(Color.remnInk)
             ScribbleDivider(seed: 31)
                 .frame(width: 58)
@@ -22,6 +23,7 @@ struct WobblyButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(RemnTypography.control)
+            .remnHandwrittenBounds()
             .foregroundStyle(filled ? Color.remnPaper : Color.remnInk)
             .padding(.horizontal, 20)
             .frame(minHeight: 52)

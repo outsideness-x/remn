@@ -22,6 +22,15 @@ enum RemnTypography {
     }
 }
 
+extension View {
+    /// Caveat has generous handwritten overhangs that sit outside its reported glyph bounds.
+    /// Give those strokes a little canvas so SwiftUI does not shave them off in compact controls.
+    func remnHandwrittenBounds(horizontal: CGFloat = 3, vertical: CGFloat = 2) -> some View {
+        padding(.horizontal, horizontal)
+            .padding(.vertical, vertical)
+    }
+}
+
 enum RemnLanguage {
     static let locale = Locale(identifier: "en")
 

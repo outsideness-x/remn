@@ -51,20 +51,27 @@ struct CardEditorView: View {
 
     private var editorHeader: some View {
         HStack(spacing: 8) {
-            Button("cancel") { dismiss() }
-                .frame(minWidth: 64, minHeight: 44, alignment: .leading)
+            Button { dismiss() } label: {
+                Text("cancel")
+                    .remnHandwrittenBounds()
+            }
+            .frame(minWidth: 64, minHeight: 44, alignment: .leading)
 
             Spacer(minLength: 4)
 
             Text(card == nil ? LocalizedStringKey("card.new") : LocalizedStringKey("card.edit"))
                 .font(RemnTypography.navigationTitle)
+                .remnHandwrittenBounds()
                 .foregroundStyle(Color.remnInk)
                 .lineLimit(1)
 
             Spacer(minLength: 4)
 
-            Button("save", action: save)
-                .frame(minWidth: 64, minHeight: 44, alignment: .trailing)
+            Button(action: save) {
+                Text("save")
+                    .remnHandwrittenBounds()
+            }
+            .frame(minWidth: 64, minHeight: 44, alignment: .trailing)
                 .disabled(!canSave)
                 .foregroundStyle(canSave ? Color.remnAccent : Color.remnGraphite.opacity(0.62))
         }
@@ -103,6 +110,7 @@ struct CardEditorView: View {
                         relativeTo: .body
                     )
                 )
+                .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                 .foregroundStyle(mode == value ? Color.remnAccent : Color.remnGraphite)
                 .frame(maxWidth: .infinity, minHeight: 46)
                 .contentShape(Rectangle())
@@ -151,6 +159,7 @@ struct CardEditorView: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text("deck")
                         .font(RemnTypography.smallControl)
+                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(Color.remnGraphite)
                     if let selectedDeck {
                         Text(selectedDeck.name)
@@ -202,6 +211,7 @@ struct CardEditorView: View {
         VStack(alignment: .leading, spacing: 7) {
             Text(title)
                 .font(RemnTypography.display(21, weight: .medium, relativeTo: .headline))
+                .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                 .foregroundStyle(focusedSide == side ? Color.remnAccent : Color.remnGraphite)
 
             ZStack(alignment: .topLeading) {

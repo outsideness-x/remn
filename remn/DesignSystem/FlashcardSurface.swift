@@ -92,6 +92,7 @@ struct FlashcardSideLabel: View {
     var body: some View {
         Text(title)
             .font(RemnTypography.smallControl)
+            .remnHandwrittenBounds(horizontal: 2, vertical: 1)
             .foregroundStyle(Color.remnGraphite)
     }
 }

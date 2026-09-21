@@ -13,6 +13,7 @@ struct StudyCompletionView: View {
             StackedCardsDoodle()
             Text("done.")
                 .font(RemnTypography.display(42, weight: .medium, relativeTo: .largeTitle))
+                .remnHandwrittenBounds()
                 .foregroundStyle(Color.remnInk)
             Text(summary)
                 .font(.callout.monospacedDigit())
@@ -38,6 +39,7 @@ struct StudyCompletionView: View {
             }
             .buttonStyle(.plain)
             .font(RemnTypography.control)
+            .remnHandwrittenBounds()
         }
         .padding(24)
         .background(Color.remnPaper.ignoresSafeArea())

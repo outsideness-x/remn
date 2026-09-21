@@ -45,16 +45,23 @@ struct StudySessionView: View {
 
     private var studyHeader: some View {
         HStack(spacing: 8) {
-            Button("close") { dismiss() }
-                .frame(minWidth: 64, minHeight: 44, alignment: .leading)
+            Button { dismiss() } label: {
+                Text("close")
+                    .remnHandwrittenBounds()
+            }
+            .frame(minWidth: 64, minHeight: 44, alignment: .leading)
             Spacer()
             Text(session.isActive ? progress : "remn")
                 .font(session.isActive ? .caption.monospacedDigit() : RemnTypography.navigationTitle)
+                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                 .foregroundStyle(Color.remnGraphite)
             Spacer()
             Group {
                 if showUndo {
-                    Button("undo", action: undo)
+                    Button(action: undo) {
+                        Text("undo")
+                            .remnHandwrittenBounds()
+                    }
                         .transition(.opacity)
                 } else {
                     Color.clear
@@ -75,6 +82,7 @@ struct StudySessionView: View {
             VStack(alignment: .leading, spacing: 16) {
                 Text(card.deckContext)
                     .font(RemnTypography.smallControl)
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnGraphite)
                 studyCardFace(card, isBack: showingBack)
                 .scaleEffect(x: reduceMotion ? 1 : flipScaleX, y: 1, anchor: .center)
@@ -117,6 +125,7 @@ struct StudySessionView: View {
                         .font(.caption2.weight(.semibold))
                     Text(isBack ? "study.tapFlip" : "study.tapReveal")
                         .font(RemnTypography.smallControl)
+                        .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                 }
                 .foregroundStyle(Color.remnGraphite)
             }

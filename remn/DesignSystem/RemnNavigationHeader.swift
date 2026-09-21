@@ -28,6 +28,7 @@ struct RemnNavigationHeader<Trailing: View>: View {
 
             Text(title)
                 .font(RemnTypography.navigationTitle)
+                .remnHandwrittenBounds()
                 .lineLimit(1)
 
             Spacer(minLength: 0)

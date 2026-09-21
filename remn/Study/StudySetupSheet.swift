@@ -59,11 +59,15 @@ struct StudySetupSheet: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 8) {
-                Button("cancel") { dismiss() }
-                    .frame(minWidth: 64, minHeight: 44, alignment: .leading)
+                Button { dismiss() } label: {
+                    Text("cancel")
+                        .remnHandwrittenBounds()
+                }
+                .frame(minWidth: 64, minHeight: 44, alignment: .leading)
                 Spacer()
                 Text("study.setup")
                     .font(RemnTypography.navigationTitle)
+                    .remnHandwrittenBounds()
                     .foregroundStyle(Color.remnInk)
                 Spacer()
                 Color.clear.frame(width: 64, height: 44)
@@ -154,6 +158,7 @@ struct StudySetupSheet: View {
                 } label: {
                     Text(choice.label)
                         .font(RemnTypography.smallControl)
+                        .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                         .foregroundStyle(countChoice == choice ? Color.remnAccent : Color.remnInk)
                         .frame(maxWidth: .infinity, minHeight: 44)
                         .background(
@@ -176,6 +181,7 @@ struct StudySetupSheet: View {
     private func sectionTitle(_ key: LocalizedStringKey) -> some View {
         Text(key)
             .font(RemnTypography.display(23, weight: .medium, relativeTo: .title3))
+            .remnHandwrittenBounds()
             .foregroundStyle(Color.remnInk)
     }
 

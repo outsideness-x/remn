@@ -27,12 +27,14 @@ struct SearchView: View {
                     if query.isEmpty {
                         Text("search.prompt")
                             .font(RemnTypography.control)
+                            .remnHandwrittenBounds()
                             .foregroundStyle(Color.remnGraphite)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top, 26)
                     } else if results.isEmpty {
                         Text("search.empty")
                             .font(RemnTypography.display(23, weight: .medium, relativeTo: .title3))
+                            .remnHandwrittenBounds()
                             .foregroundStyle(Color.remnGraphite)
                             .padding(.top, 64)
                     } else {
@@ -69,6 +71,7 @@ private struct SearchResultRow: View {
             VStack(alignment: .leading, spacing: 9) {
                 Text(context)
                     .font(RemnTypography.smallControl)
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnGraphite)
                     .lineLimit(1)
                 Text(RemnFormatters.usefulLine(card.frontMarkdown))

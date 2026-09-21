@@ -51,6 +51,7 @@ struct MarkdownToolbar: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("editor.insert")
                 .font(RemnTypography.smallControl)
+                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                 .foregroundStyle(Color.remnGraphite)
 
             ScrollView(.horizontal, showsIndicators: false) {

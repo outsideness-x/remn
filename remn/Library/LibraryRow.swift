@@ -11,10 +11,12 @@ struct LibraryRow: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)
                     .font(RemnTypography.display(27, weight: .semibold, relativeTo: .title3))
+                    .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                     .foregroundStyle(Color.remnInk)
                     .lineLimit(2)
                 Text("\(dueCount) \(RemnLanguage.localized("library.due"))  ·  \(totalCount) \(RemnLanguage.localized("library.cards"))")
                     .font(RemnTypography.smallControl)
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnGraphite)
             }
             Spacer(minLength: 8)

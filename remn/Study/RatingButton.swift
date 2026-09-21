@@ -10,6 +10,7 @@ struct RatingButton: View {
             VStack(spacing: 3) {
                 Text(LocalizedStringKey(rating.titleKey))
                     .font(RemnTypography.smallControl)
+                    .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
                 Text(interval)

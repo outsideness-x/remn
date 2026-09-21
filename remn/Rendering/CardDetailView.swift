@@ -34,6 +34,7 @@ struct CardDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     Text(card.deckContext)
                         .font(RemnTypography.smallControl)
+                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(Color.remnGraphite)
                     FlashcardSurface(seed: card.id.hashValue) {
                         VStack(alignment: .leading, spacing: 18) {

@@ -84,6 +84,7 @@ struct LibraryView: View {
         HStack(alignment: .firstTextBaseline) {
             Text("remn")
                 .font(RemnTypography.brand)
+                .remnHandwrittenBounds()
                 .foregroundStyle(Color.remnInk)
                 .accessibilityAddTraits(.isHeader)
             Spacer()
