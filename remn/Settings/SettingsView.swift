@@ -10,6 +10,7 @@ struct SettingsView: View {
     @State private var exportDocument = BackupDocument()
     @State private var showExporter = false
     @State private var showImporter = false
+    @State private var showSRSExplanation = false
     @State private var resultMessage: String?
 
     var body: some View {
@@ -29,6 +30,18 @@ struct SettingsView: View {
                             Text("settings.retention.help")
                                 .font(.footnote)
                                 .foregroundStyle(Color.remnGraphite)
+
+                            Button { showSRSExplanation = true } label: {
+                                HStack(spacing: 7) {
+                                    Text("settings.srs.open")
+                                    Text("→")
+                                        .accessibilityHidden(true)
+                                }
+                                .font(RemnTypography.smallControl)
+                                .foregroundStyle(Color.remnAccent)
+                                .padding(.top, 4)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                     settingsSection("settings.appearance") {
@@ -87,6 +100,9 @@ struct SettingsView: View {
         ) {
             Button("ok", role: .cancel) { resultMessage = nil }
         } message: { Text(resultMessage ?? "") }
+        .sheet(isPresented: $showSRSExplanation) {
+            SRSExplainerSheet()
+        }
     }
 
     private func settingsSection<Content: View>(
@@ -174,6 +190,141 @@ struct SettingsView: View {
             resultMessage = RemnLanguage.localized("backup.imported")
         } catch {
             resultMessage = error.localizedDescription
+        }
+    }
+}
+
+private struct SRSExplainerSheet: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text("srs.title")
+                    .font(RemnTypography.navigationTitle)
+                Spacer()
+                Button("done") { dismiss() }
+                    .font(RemnTypography.smallControl)
+                    .foregroundStyle(Color.remnAccent)
+                    .buttonStyle(.plain)
+                    .frame(minWidth: 44, minHeight: 44, alignment: .trailing)
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 8)
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 32) {
+                    FlashcardSurface(seed: 606, style: .compact) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("FSRS-6")
+                                .font(RemnTypography.display(32, weight: .semibold, relativeTo: .title))
+                                .foregroundStyle(Color.remnAccent)
+                            Text("srs.intro")
+                                .font(.body)
+                                .foregroundStyle(Color.remnInk)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+
+                    explainerSection(number: "1", title: "srs.memory.title", body: "srs.memory.body") {
+                        memoryDoodle
+                    }
+
+                    explainerSection(number: "2", title: "srs.ratings.title", body: "srs.ratings.body") {
+                        ratingLegend
+                    }
+
+                    explainerSection(number: "3", title: "srs.queue.title", body: "srs.queue.body") {
+                        EmptyView()
+                    }
+
+                    explainerSection(number: "4", title: "srs.retention.title", body: "srs.retention.body") {
+                        EmptyView()
+                    }
+
+                    Text("srs.history")
+                        .font(.footnote)
+                        .foregroundStyle(Color.remnGraphite)
+                        .padding(.bottom, 18)
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 18)
+            }
+        }
+        .background(Color.remnPaper.ignoresSafeArea())
+    }
+
+    private func explainerSection<Detail: View>(
+        number: String,
+        title: LocalizedStringKey,
+        body: LocalizedStringKey,
+        @ViewBuilder detail: () -> Detail
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .firstTextBaseline, spacing: 9) {
+                Text(number)
+                    .font(RemnTypography.display(18, weight: .semibold, relativeTo: .headline))
+                    .foregroundStyle(Color.remnAccent)
+                    .frame(width: 25, height: 25)
+                    .overlay {
+                        Circle()
+                            .stroke(Color.remnAccent, lineWidth: 1.4)
+                    }
+                    .rotationEffect(.degrees(number == "2" ? 4 : -3))
+                Text(title)
+                    .font(RemnTypography.display(25, weight: .semibold, relativeTo: .title3))
+                    .foregroundStyle(Color.remnInk)
+            }
+            Text(body)
+                .font(.body)
+                .foregroundStyle(Color.remnInk)
+                .fixedSize(horizontal: false, vertical: true)
+            detail()
+        }
+    }
+
+    private var memoryDoodle: some View {
+        HStack(spacing: 7) {
+            memoryStep("srs.now", width: 46)
+            Text("→").foregroundStyle(Color.remnAccent)
+            memoryStep("srs.later", width: 62)
+            Text("→").foregroundStyle(Color.remnAccent)
+            memoryStep("srs.muchLater", width: 88)
+        }
+        .font(RemnTypography.smallControl)
+        .padding(.top, 4)
+        .accessibilityElement(children: .combine)
+    }
+
+    private func memoryStep(_ title: LocalizedStringKey, width: CGFloat) -> some View {
+        Text(title)
+            .frame(width: width)
+            .padding(.vertical, 7)
+            .background {
+                WobblyRoundedRectangle(seed: Int(width), cornerRadius: 10)
+                    .fill(Color.remnSurface)
+            }
+    }
+
+    private var ratingLegend: some View {
+        VStack(alignment: .leading, spacing: 7) {
+            ratingLine("rating.again", note: "srs.again")
+            ratingLine("rating.hard", note: "srs.hard")
+            ratingLine("rating.good", note: "srs.good")
+            ratingLine("rating.easy", note: "srs.easy")
+        }
+        .padding(.top, 4)
+    }
+
+    private func ratingLine(_ rating: LocalizedStringKey, note: LocalizedStringKey) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 10) {
+            Text(rating)
+                .font(RemnTypography.smallControl)
+                .foregroundStyle(Color.remnAccent)
+                .frame(width: 54, alignment: .leading)
+            Text(note)
+                .font(.subheadline)
+                .foregroundStyle(Color.remnGraphite)
         }
     }
 }
