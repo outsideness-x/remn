@@ -69,6 +69,7 @@ enum DoodleIconKind {
     case back
     case forward
     case more
+    case flip
 }
 
 struct DoodleIcon: View {
@@ -157,9 +158,66 @@ struct DoodleIcon: View {
                     dot.addEllipse(in: CGRect(x: x - 1.15, y: 10.85, width: 2.3, height: 2.3))
                     context.fill(dot, with: .color(color))
                 }
+
+            case .flip:
+                var curve = Path()
+                curve.move(to: CGPoint(x: 5.2, y: 14.3))
+                curve.addCurve(
+                    to: CGPoint(x: 18.1, y: 10.2),
+                    control1: CGPoint(x: 5.5, y: 7.3),
+                    control2: CGPoint(x: 13.4, y: 5.5)
+                )
+                curve.move(to: CGPoint(x: 13.2, y: 7.2))
+                curve.addLine(to: CGPoint(x: 18.4, y: 10.1))
+                curve.addLine(to: CGPoint(x: 15.3, y: 15.1))
+                context.stroke(curve, with: .color(color), style: stroke)
             }
         }
         .frame(width: size, height: size)
+        .accessibilityHidden(true)
+    }
+}
+
+struct DoodleSelectionMark: View {
+    let selected: Bool
+
+    var body: some View {
+        Canvas { context, size in
+            let color = selected ? Color.remnAccent : Color.remnGraphite
+            let stroke = StrokeStyle(lineWidth: selected ? 1.8 : 1.3, lineCap: .round, lineJoin: .round)
+            var ring = Path()
+            ring.move(to: CGPoint(x: size.width * 0.50, y: 1.5))
+            ring.addCurve(
+                to: CGPoint(x: 1.5, y: size.height * 0.51),
+                control1: CGPoint(x: size.width * 0.20, y: 0.8),
+                control2: CGPoint(x: 0.7, y: size.height * 0.22)
+            )
+            ring.addCurve(
+                to: CGPoint(x: size.width * 0.51, y: size.height - 1.3),
+                control1: CGPoint(x: 1.2, y: size.height * 0.80),
+                control2: CGPoint(x: size.width * 0.22, y: size.height - 0.8)
+            )
+            ring.addCurve(
+                to: CGPoint(x: size.width - 1.4, y: size.height * 0.49),
+                control1: CGPoint(x: size.width * 0.80, y: size.height - 1.4),
+                control2: CGPoint(x: size.width - 0.8, y: size.height * 0.78)
+            )
+            ring.addCurve(
+                to: CGPoint(x: size.width * 0.50, y: 1.5),
+                control1: CGPoint(x: size.width - 1.1, y: size.height * 0.20),
+                control2: CGPoint(x: size.width * 0.79, y: 1.0)
+            )
+            context.stroke(ring, with: .color(color), style: stroke)
+
+            if selected {
+                var check = Path()
+                check.move(to: CGPoint(x: size.width * 0.24, y: size.height * 0.52))
+                check.addLine(to: CGPoint(x: size.width * 0.43, y: size.height * 0.70))
+                check.addLine(to: CGPoint(x: size.width * 0.78, y: size.height * 0.28))
+                context.stroke(check, with: .color(color), style: stroke)
+            }
+        }
+        .frame(width: 22, height: 22)
         .accessibilityHidden(true)
     }
 }

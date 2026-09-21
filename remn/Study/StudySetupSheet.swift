@@ -130,9 +130,10 @@ struct StudySetupSheet: View {
                     }
                 } label: {
                     HStack {
-                        Image(systemName: selectedSubjectIDs.contains(subject.id) ? "checkmark.circle.fill" : "circle")
-                            .foregroundStyle(selectedSubjectIDs.contains(subject.id) ? Color.remnAccent : Color.remnGraphite)
+                        DoodleSelectionMark(selected: selectedSubjectIDs.contains(subject.id))
                         Text(subject.name)
+                            .font(RemnTypography.display(22, weight: .medium, relativeTo: .headline))
+                            .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                             .foregroundStyle(Color.remnInk)
                             .multilineTextAlignment(.leading)
                         Spacer()
@@ -152,7 +153,7 @@ struct StudySetupSheet: View {
 
     private var countPicker: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 76), spacing: 10)], spacing: 10) {
-            ForEach(CountChoice.allCases) { choice in
+            ForEach(Array(CountChoice.allCases.enumerated()), id: \.element.id) { index, choice in
                 Button {
                     countChoice = choice
                 } label: {
@@ -161,17 +162,18 @@ struct StudySetupSheet: View {
                         .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                         .foregroundStyle(countChoice == choice ? Color.remnAccent : Color.remnInk)
                         .frame(maxWidth: .infinity, minHeight: 44)
-                        .background(
-                            Color.remnSurface.opacity(countChoice == choice ? 1 : 0.45),
-                            in: RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        )
+                        .background {
+                            WobblyRoundedRectangle(seed: 310 + index * 19, cornerRadius: 10)
+                                .fill(Color.remnSurface.opacity(countChoice == choice ? 1 : 0.36))
+                        }
                         .overlay {
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            WobblyRoundedRectangle(seed: 310 + index * 19, cornerRadius: 10)
                                 .stroke(
-                                    countChoice == choice ? Color.remnAccent : Color.remnInk.opacity(0.15),
-                                    lineWidth: countChoice == choice ? 1.2 : 0.7
+                                    countChoice == choice ? Color.remnAccent : Color.remnInk.opacity(0.36),
+                                    lineWidth: countChoice == choice ? 1.5 : 0.9
                                 )
                         }
+                        .rotationEffect(.degrees(Double(index % 3 - 1) * 0.20))
                 }
                 .buttonStyle(.plain)
             }
@@ -204,10 +206,21 @@ struct StudySetupSheet: View {
             now: date
         )
 
-        return VStack(alignment: .leading, spacing: 4) {
-            Text("\(selectedCount) \(RemnLanguage.localized("study.inSession"))")
-                .font(.body.weight(.semibold).monospacedDigit())
-                .foregroundStyle(Color.remnInk)
+        return VStack(alignment: .leading, spacing: 9) {
+            HStack(alignment: .firstTextBaseline, spacing: 7) {
+                Text("\(selectedCount)")
+                    .font(RemnTypography.display(31, weight: .semibold, relativeTo: .title))
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                    .foregroundStyle(Color.remnAccent)
+                Text("study.inSession")
+                    .font(RemnTypography.control)
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                    .foregroundStyle(Color.remnInk)
+                Spacer()
+                StackedCardsDoodle()
+                    .scaleEffect(0.48)
+                    .frame(width: 28, height: 22)
+            }
             HStack(spacing: 6) {
                 Text("\(availability.availableNow) \(RemnLanguage.localized("study.availableNow"))")
                 Text("·")
@@ -216,7 +229,16 @@ struct StudySetupSheet: View {
             .font(.caption.monospacedDigit())
             .foregroundStyle(Color.remnGraphite)
         }
-        .padding(.top, 2)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background {
+            WobblyRoundedRectangle(seed: 441, cornerRadius: 9)
+                .fill(Color.remnSurface.opacity(0.55))
+        }
+        .overlay {
+            WobblyRoundedRectangle(seed: 441, cornerRadius: 9)
+                .stroke(Color.remnInk.opacity(0.38), lineWidth: 1.1)
+        }
         .accessibilityElement(children: .combine)
     }
 

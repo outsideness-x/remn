@@ -27,6 +27,7 @@ struct RatingButton: View {
                 WobblyRoundedRectangle(seed: rating.rawValue * 23, cornerRadius: 13)
                     .stroke(rating == .again ? Color.remnAccent : Color.remnInk.opacity(0.55), lineWidth: 1.2)
             }
+            .rotationEffect(.degrees(Double(rating.rawValue - 2) * 0.18))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Text(LocalizedStringKey(rating.titleKey)))

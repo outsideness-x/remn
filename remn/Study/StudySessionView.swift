@@ -121,8 +121,7 @@ struct StudySessionView: View {
                 )
                 HStack(spacing: 7) {
                     Spacer()
-                    Image(systemName: "arrow.triangle.2.circlepath")
-                        .font(.caption2.weight(.semibold))
+                    DoodleIcon(kind: .flip, color: .remnGraphite, size: 18)
                     Text(isBack ? "study.tapFlip" : "study.tapReveal")
                         .font(RemnTypography.smallControl)
                         .remnHandwrittenBounds(horizontal: 3, vertical: 1)
@@ -203,7 +202,8 @@ struct StudySessionView: View {
         VStack(spacing: 8) {
             HStack {
                 Text("study.rate")
-                    .font(.caption)
+                    .font(RemnTypography.smallControl)
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnGraphite)
                 Spacer()
                 Button { showRatingsHelp = true } label: {
