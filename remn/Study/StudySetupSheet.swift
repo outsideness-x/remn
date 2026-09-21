@@ -1,0 +1,211 @@
+import SwiftData
+import SwiftUI
+
+struct StudySetupSheet: View {
+    enum CountChoice: String, CaseIterable, Identifiable {
+        case ten, twenty, thirty, fifty, allDue, custom
+        var id: String { rawValue }
+
+        var value: Int? {
+            switch self {
+            case .ten: 10
+            case .twenty: 20
+            case .thirty: 30
+            case .fifty: 50
+            case .allDue, .custom: nil
+            }
+        }
+
+        var label: String {
+            switch self {
+            case .ten: "10"
+            case .twenty: "20"
+            case .thirty: "30"
+            case .fifty: "50"
+            case .allDue: RemnLanguage.localized("study.allDue")
+            case .custom: RemnLanguage.localized("study.custom")
+            }
+        }
+    }
+
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
+    @Environment(AppState.self) private var appState
+    @Query(sort: [SortDescriptor(\SubjectModel.manualSortOrder), SortDescriptor(\SubjectModel.createdAt)])
+    private var subjects: [SubjectModel]
+    @Query private var cards: [Flashcard]
+    @AppStorage("lastSubjectIDs") private var lastSubjectIDs = ""
+
+    let initialSubjectIDs: Set<UUID>
+    let initialDeckID: UUID?
+    let onStart: (StudySessionRecord) -> Void
+
+    @State private var selectedSubjectIDs: Set<UUID>
+    @State private var countChoice = CountChoice.twenty
+    @State private var customCount = 20
+    @State private var noCards = false
+
+    init(
+        initialSubjectIDs: Set<UUID>,
+        initialDeckID: UUID?,
+        onStart: @escaping (StudySessionRecord) -> Void
+    ) {
+        self.initialSubjectIDs = initialSubjectIDs
+        self.initialDeckID = initialDeckID
+        self.onStart = onStart
+        _selectedSubjectIDs = State(initialValue: initialSubjectIDs)
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 8) {
+                Button("cancel") { dismiss() }
+                    .frame(minWidth: 64, minHeight: 44, alignment: .leading)
+                Spacer()
+                Text("study.setup")
+                    .font(RemnTypography.navigationTitle)
+                    .foregroundStyle(Color.remnInk)
+                Spacer()
+                Color.clear.frame(width: 64, height: 44)
+            }
+            .font(RemnTypography.control)
+            .foregroundStyle(Color.remnAccent)
+            .buttonStyle(.plain)
+            .padding(.horizontal, 22)
+            .padding(.vertical, 6)
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 30) {
+                    sectionTitle("study.what")
+                    subjectsPicker
+                    sectionTitle("study.howMany")
+                    countPicker
+                    if countChoice == .custom {
+                        Stepper(value: $customCount, in: 1...500) {
+                            Text("\(customCount) \(RemnLanguage.localized("library.cards"))")
+                                .font(.body.weight(.semibold))
+                        }
+                        .padding(.vertical, 8)
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 20)
+                .padding(.bottom, 116)
+            }
+            .background(Color.remnPaper.ignoresSafeArea())
+        }
+        .background(Color.remnPaper.ignoresSafeArea())
+        .safeAreaInset(edge: .bottom) {
+            Button("study.start", action: start)
+                .frame(maxWidth: .infinity)
+                .buttonStyle(WobblyButtonStyle(filled: true, seed: 91))
+                .disabled(selectedSubjectIDs.isEmpty)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
+                .background(Color.remnPaper.opacity(0.97))
+        }
+        .onAppear(perform: restoreSelection)
+        .alert("study.noneAvailable", isPresented: $noCards) {
+            Button("ok", role: .cancel) {}
+        } message: {
+            Text("study.noneAvailable.message")
+        }
+    }
+
+    private var subjectsPicker: some View {
+        VStack(spacing: 10) {
+            ForEach(subjects, id: \.id) { subject in
+                Button {
+                    if selectedSubjectIDs.contains(subject.id) {
+                        selectedSubjectIDs.remove(subject.id)
+                    } else {
+                        selectedSubjectIDs.insert(subject.id)
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: selectedSubjectIDs.contains(subject.id) ? "checkmark.circle.fill" : "circle")
+                            .foregroundStyle(selectedSubjectIDs.contains(subject.id) ? Color.remnAccent : Color.remnGraphite)
+                        Text(subject.name)
+                            .foregroundStyle(Color.remnInk)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                        Text("\(subject.cards.count)")
+                            .font(.caption)
+                            .foregroundStyle(Color.remnGraphite)
+                    }
+                    .frame(minHeight: 44)
+                    .padding(.horizontal, 3)
+                    .padding(.vertical, 5)
+                }
+                .buttonStyle(.plain)
+                ScribbleDivider(seed: subject.id.hashValue)
+            }
+        }
+    }
+
+    private var countPicker: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 76), spacing: 10)], spacing: 10) {
+            ForEach(CountChoice.allCases) { choice in
+                Button {
+                    countChoice = choice
+                } label: {
+                    Text(choice.label)
+                        .font(RemnTypography.smallControl)
+                        .foregroundStyle(countChoice == choice ? Color.remnAccent : Color.remnInk)
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .background(
+                            Color.remnSurface.opacity(countChoice == choice ? 1 : 0.45),
+                            in: RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        )
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .stroke(
+                                    countChoice == choice ? Color.remnAccent : Color.remnInk.opacity(0.15),
+                                    lineWidth: countChoice == choice ? 1.2 : 0.7
+                                )
+                        }
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    private func sectionTitle(_ key: LocalizedStringKey) -> some View {
+        Text(key)
+            .font(RemnTypography.display(23, weight: .medium, relativeTo: .title3))
+            .foregroundStyle(Color.remnInk)
+    }
+
+    private var targetCount: Int? {
+        countChoice == .custom ? customCount : countChoice.value
+    }
+
+    private func restoreSelection() {
+        guard selectedSubjectIDs.isEmpty else { return }
+        let saved = Set(
+            lastSubjectIDs.split(separator: ",").compactMap { UUID(uuidString: String($0)) }
+        )
+        let available = Set(subjects.map(\.id))
+        selectedSubjectIDs = saved.intersection(available)
+        if selectedSubjectIDs.isEmpty, let first = subjects.first {
+            selectedSubjectIDs = [first.id]
+        }
+    }
+
+    private func start() {
+        do {
+            let session = try SessionService.start(
+                cards: cards,
+                subjectIDs: selectedSubjectIDs,
+                deckID: initialDeckID,
+                targetCount: targetCount,
+                context: context
+            )
+            guard let session else { noCards = true; return }
+            lastSubjectIDs = selectedSubjectIDs.map(\.uuidString).joined(separator: ",")
+            onStart(session)
+        } catch {
+            appState.errorMessage = error.localizedDescription
+        }
+    }
+}

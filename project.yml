@@ -1,0 +1,95 @@
+name: remn
+options:
+  bundleIdPrefix: com.chemical-pink
+  deploymentTarget:
+    iOS: "18.0"
+  groupSortPosition: top
+  xcodeVersion: "26.0"
+packages:
+  FSRS:
+    url: https://github.com/open-spaced-repetition/swift-fsrs.git
+    revision: 4fbaf20184d62f82a9f44f343337c61a2c5483e9
+  Textual:
+    url: https://github.com/gonzalezreal/textual.git
+    exactVersion: 0.2.0
+  SwiftUIMath:
+    url: https://github.com/gonzalezreal/swiftui-math.git
+    exactVersion: 0.1.0
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    IPHONEOS_DEPLOYMENT_TARGET: 18.0
+    MARKETING_VERSION: 1.0
+    CURRENT_PROJECT_VERSION: 1
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+targets:
+  remn:
+    type: application
+    platform: iOS
+    sources:
+      - path: remn
+    info:
+      path: remn/Resources/Info.plist
+      properties:
+        CFBundleDisplayName: remn
+        CFBundleDevelopmentRegion: en
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UIAppFonts:
+          - Caveat-Variable.ttf
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSPhotoLibraryAddUsageDescription: Save flashcards as images to your photo library.
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.chemical-pink.remn
+        PRODUCT_NAME: remn
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.education
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SUPPORTS_MACCATALYST: NO
+    dependencies:
+      - package: FSRS
+        product: FSRS
+      - package: Textual
+        product: Textual
+      - package: SwiftUIMath
+        product: SwiftUIMath
+  remnTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: remnTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.chemical-pink.remn.tests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: remn
+      - package: Textual
+        product: Textual
+schemes:
+  remn:
+    build:
+      targets:
+        remn: all
+        remnTests: [test]
+    test:
+      gatherCoverageData: true
+      targets:
+        - remnTests
