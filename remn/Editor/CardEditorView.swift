@@ -66,70 +66,119 @@ struct CardEditorView: View {
             Button("save", action: save)
                 .frame(minWidth: 64, minHeight: 44, alignment: .trailing)
                 .disabled(!canSave)
-                .opacity(canSave ? 1 : 0.35)
+                .foregroundStyle(canSave ? Color.remnAccent : Color.remnGraphite.opacity(0.62))
         }
         .font(RemnTypography.control)
         .foregroundStyle(Color.remnAccent)
         .buttonStyle(.plain)
-        .padding(.horizontal, 24)
-        .padding(.top, 12)
-        .padding(.bottom, 18)
+        .padding(.horizontal, 20)
+        .padding(.top, 8)
+        .padding(.bottom, 4)
     }
 
     private var modeSwitch: some View {
-        HStack(spacing: 40) {
+        HStack(spacing: 0) {
             modeButton(.edit, title: "edit")
             modeButton(.preview, title: "preview")
         }
-        .frame(maxWidth: .infinity)
-        .padding(.bottom, 22)
+        .padding(.horizontal, 20)
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .fill(Color.remnInk.opacity(0.12))
+                .frame(height: 1)
+                .padding(.horizontal, 20)
+        }
     }
 
     private func modeButton(_ value: Mode, title: LocalizedStringKey) -> some View {
         Button {
+            focusedSide = nil
             withAnimation(.easeOut(duration: 0.16)) { mode = value }
         } label: {
             Text(title)
                 .font(
                     RemnTypography.display(
-                        18,
+                        19,
                         weight: mode == value ? .semibold : .regular,
                         relativeTo: .body
                     )
                 )
                 .foregroundStyle(mode == value ? Color.remnAccent : Color.remnGraphite)
-                .frame(minWidth: 82, minHeight: 44)
-            .contentShape(Rectangle())
+                .frame(maxWidth: .infinity, minHeight: 46)
+                .contentShape(Rectangle())
+                .overlay(alignment: .bottom) {
+                    if mode == value {
+                        Rectangle()
+                            .fill(Color.remnAccent)
+                            .frame(height: 2)
+                            .padding(.horizontal, 18)
+                    }
+                }
         }
         .buttonStyle(.plain)
     }
 
     private var editor: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 28) {
-                HStack(alignment: .firstTextBaseline, spacing: 14) {
-                    Text("deck")
-                        .font(RemnTypography.control)
-                        .foregroundStyle(Color.remnGraphite)
-                    Spacer()
-                    Picker("deck", selection: $selectedDeckID) {
-                        ForEach(decks, id: \.id) { deck in
-                            Text(deckLabel(deck)).tag(Optional(deck.id))
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .font(.body.weight(.medium))
-                    .tint(.remnInk)
-                }
+            VStack(alignment: .leading, spacing: 22) {
+                deckMenu
                 MarkdownToolbar(insert: insert)
                 editorSection(title: "card.front", text: $front, side: .front)
                 editorSection(title: "card.back", text: $back, side: .back)
             }
-            .padding(.horizontal, 24)
-            .padding(.top, 4)
-            .padding(.bottom, 40)
+            .padding(.horizontal, 20)
+            .padding(.top, 18)
+            .padding(.bottom, 36)
         }
         .scrollDismissesKeyboard(.interactively)
+    }
+
+    private var deckMenu: some View {
+        Menu {
+            ForEach(decks, id: \.id) { deck in
+                Button {
+                    selectedDeckID = deck.id
+                } label: {
+                    if selectedDeckID == deck.id {
+                        Label(deckLabel(deck), systemImage: "checkmark")
+                    } else {
+                        Text(deckLabel(deck))
+                    }
+                }
+            }
+        } label: {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("deck")
+                        .font(RemnTypography.smallControl)
+                        .foregroundStyle(Color.remnGraphite)
+                    if let selectedDeck {
+                        Text(selectedDeck.name)
+                            .font(.system(.body, design: .default, weight: .semibold))
+                            .foregroundStyle(Color.remnInk)
+                            .lineLimit(1)
+                        if let subject = selectedDeck.subject {
+                            Text(subject.name)
+                                .font(.caption)
+                                .foregroundStyle(Color.remnGraphite)
+                                .lineLimit(1)
+                        }
+                    }
+                }
+                Spacer(minLength: 8)
+                Image(systemName: "chevron.down")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Color.remnGraphite)
+                    .frame(width: 44, height: 44)
+            }
+            .contentShape(Rectangle())
+            .padding(.vertical, 4)
+            .overlay(alignment: .bottom) {
+                ScribbleDivider(seed: 204)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text("deck"))
     }
 
     private var preview: some View {
@@ -152,20 +201,42 @@ struct CardEditorView: View {
     }
 
     private func editorSection(title: LocalizedStringKey, text: Binding<String>, side: Side) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 7) {
             Text(title)
-                .font(RemnTypography.display(19, weight: .medium, relativeTo: .headline))
-                .foregroundStyle(Color.remnGraphite)
-            TextEditor(text: text)
-                .focused($focusedSide, equals: side)
-                .font(.system(.body, design: .monospaced))
-                .scrollContentBackground(.hidden)
-                .padding(.horizontal, -5)
-                .padding(.vertical, 4)
-                .frame(minHeight: 188)
-                .overlay(alignment: .bottom) {
-                    ScribbleDivider(seed: side == .front ? 141 : 177)
+                .font(RemnTypography.display(21, weight: .medium, relativeTo: .headline))
+                .foregroundStyle(focusedSide == side ? Color.remnAccent : Color.remnGraphite)
+
+            ZStack(alignment: .topLeading) {
+                WobblyRoundedRectangle(seed: side == .front ? 141 : 177, cornerRadius: 12)
+                    .fill(Color.remnSurface)
+
+                if text.wrappedValue.isEmpty {
+                    Text(side == .front ? "editor.front.placeholder" : "editor.back.placeholder")
+                        .font(.system(.body, design: .default))
+                        .foregroundStyle(Color.remnGraphite.opacity(0.7))
+                        .padding(.horizontal, 13)
+                        .padding(.vertical, 15)
+                        .allowsHitTesting(false)
                 }
+
+                TextEditor(text: text)
+                    .focused($focusedSide, equals: side)
+                    .font(.system(.body, design: .monospaced))
+                    .foregroundStyle(Color.remnInk)
+                    .scrollContentBackground(.hidden)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 7)
+            }
+            .frame(height: side == .front ? 176 : 204)
+            .overlay {
+                WobblyRoundedRectangle(seed: side == .front ? 141 : 177, cornerRadius: 12)
+                    .stroke(
+                        focusedSide == side ? Color.remnAccent : Color.remnInk.opacity(0.16),
+                        lineWidth: focusedSide == side ? 1.6 : 1
+                    )
+            }
+            .animation(.easeOut(duration: 0.12), value: focusedSide)
+            .onTapGesture { focusedSide = side }
         }
     }
 
@@ -208,5 +279,9 @@ struct CardEditorView: View {
     private func deckLabel(_ deck: Deck) -> String {
         if let subject = deck.subject { return "\(subject.name) / \(deck.name)" }
         return deck.name
+    }
+
+    private var selectedDeck: Deck? {
+        decks.first { $0.id == selectedDeckID }
     }
 }

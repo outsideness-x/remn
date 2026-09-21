@@ -12,12 +12,12 @@ enum MarkdownInsertion: String, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .bold: "B"
-        case .inlineCode: "<>"
-        case .codeBlock: "```"
-        case .inlineMath: "$x$"
-        case .displayMath: "$$"
-        case .bullets: "•"
+        case .bold: RemnLanguage.localized("editor.tool.bold")
+        case .inlineCode: RemnLanguage.localized("editor.tool.code")
+        case .codeBlock: RemnLanguage.localized("editor.tool.block")
+        case .inlineMath: RemnLanguage.localized("editor.tool.math")
+        case .displayMath: RemnLanguage.localized("editor.tool.equation")
+        case .bullets: RemnLanguage.localized("editor.tool.list")
         }
     }
 
@@ -48,18 +48,31 @@ struct MarkdownToolbar: View {
     let insert: (MarkdownInsertion) -> Void
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 2) {
-                ForEach(MarkdownInsertion.allCases) { item in
-                    Button { insert(item) } label: {
-                        Text(item.label)
-                            .font(.system(size: 14, weight: .medium, design: .monospaced))
-                            .foregroundStyle(Color.remnGraphite)
-                            .frame(minWidth: 44, minHeight: 44)
-                            .contentShape(Rectangle())
+        VStack(alignment: .leading, spacing: 4) {
+            Text("editor.insert")
+                .font(RemnTypography.smallControl)
+                .foregroundStyle(Color.remnGraphite)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 0) {
+                    ForEach(Array(MarkdownInsertion.allCases.enumerated()), id: \.element.id) { index, item in
+                        if index > 0 {
+                            Text("/")
+                                .font(.caption.monospaced())
+                                .foregroundStyle(Color.remnGraphite.opacity(0.36))
+                                .accessibilityHidden(true)
+                        }
+                        Button { insert(item) } label: {
+                            Text(item.label)
+                                .font(.system(.caption, design: .monospaced, weight: .medium))
+                                .foregroundStyle(Color.remnInk)
+                                .padding(.horizontal, 10)
+                                .frame(minHeight: 40)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Text(verbatim: item.localizedLabel))
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(Text(verbatim: item.localizedLabel))
                 }
             }
         }
