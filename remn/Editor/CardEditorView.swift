@@ -20,6 +20,7 @@ struct CardEditorView: View {
     @State private var front: String
     @State private var back: String
     @State private var mode = Mode.edit
+    @State private var showDeckPicker = false
     @FocusState private var focusedSide: Side?
 
     init(initialDeck: Deck, card: Flashcard? = nil) {
@@ -47,6 +48,12 @@ struct CardEditorView: View {
                 Button("done") { focusedSide = nil }
             }
         }
+        .handmadeDialog(
+            isPresented: $showDeckPicker,
+            title: "deck",
+            message: selectedDeck.map { Text(verbatim: deckLabel($0)) },
+            actions: deckActions
+        )
     }
 
     private var editorHeader: some View {
@@ -142,19 +149,7 @@ struct CardEditorView: View {
     }
 
     private var deckMenu: some View {
-        Menu {
-            ForEach(decks, id: \.id) { deck in
-                Button {
-                    selectedDeckID = deck.id
-                } label: {
-                    if selectedDeckID == deck.id {
-                        Label(deckLabel(deck), systemImage: "checkmark")
-                    } else {
-                        Text(deckLabel(deck))
-                    }
-                }
-            }
-        } label: {
+        Button { showDeckPicker = true } label: {
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 3) {
                     HandwrittenText("deck")
@@ -188,6 +183,20 @@ struct CardEditorView: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Text("deck"))
+    }
+
+    private var deckActions: [HandmadeDialogAction] {
+        decks.map { deck in
+            HandmadeDialogAction(
+                LocalizedStringKey(deckLabel(deck)),
+                role: selectedDeckID == deck.id ? .normal : .plain
+            ) {
+                selectedDeckID = deck.id
+                showDeckPicker = false
+            }
+        } + [
+            HandmadeDialogAction("cancel", role: .cancel) { showDeckPicker = false }
+        ]
     }
 
     private var preview: some View {

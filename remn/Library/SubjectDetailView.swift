@@ -7,6 +7,7 @@ struct SubjectDetailView: View {
     @Bindable var subject: SubjectModel
 
     @State private var showCreate = false
+    @State private var manageDeck: Deck?
     @State private var renameDeck: Deck?
     @State private var deleteDeck: Deck?
 
@@ -32,18 +33,27 @@ struct SubjectDetailView: View {
                     } else {
                         LazyVStack(spacing: 0) {
                             ForEach(subject.orderedDecks, id: \.id) { deck in
-                                NavigationLink {
-                                    DeckDetailView(deck: deck)
-                                } label: {
-                                    LibraryRow(
-                                        title: deck.name,
-                                        dueCount: dueCount(deck.cards),
-                                        totalCount: deck.cards.count,
-                                        seed: deck.id.hashValue
-                                    )
+                                HStack(spacing: 2) {
+                                    NavigationLink {
+                                        DeckDetailView(deck: deck)
+                                    } label: {
+                                        LibraryRow(
+                                            title: deck.name,
+                                            dueCount: dueCount(deck.cards),
+                                            totalCount: deck.cards.count,
+                                            seed: deck.id.hashValue
+                                        )
+                                    }
+                                    .buttonStyle(.plain)
+
+                                    Button { manageDeck = deck } label: {
+                                        DoodleIcon(kind: .more, color: .remnGraphite, size: 20)
+                                            .frame(width: 44, height: 54)
+                                            .contentShape(Rectangle())
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel(Text("actions"))
                                 }
-                                .buttonStyle(.plain)
-                                .contextMenu { deckMenu(deck) }
                             }
                         }
                     }
@@ -85,6 +95,15 @@ struct SubjectDetailView: View {
         }
         .handmadeDialog(
             isPresented: Binding(
+                get: { manageDeck != nil },
+                set: { if !$0 { manageDeck = nil } }
+            ),
+            title: "deck",
+            message: Text(verbatim: manageDeck?.name ?? ""),
+            actions: deckActions
+        )
+        .handmadeDialog(
+            isPresented: Binding(
                 get: { deleteDeck != nil },
                 set: { if !$0 { deleteDeck = nil } }
             ),
@@ -100,13 +119,21 @@ struct SubjectDetailView: View {
         )
     }
 
-    @ViewBuilder
-    private func deckMenu(_ deck: Deck) -> some View {
-        Button("rename") { renameDeck = deck }
-        Button("move.up") { move(deck, by: -1) }
-        Button("move.down") { move(deck, by: 1) }
-        Divider()
-        Button("delete", role: .destructive) { deleteDeck = deck }
+    private var deckActions: [HandmadeDialogAction] {
+        guard let deck = manageDeck else { return [] }
+        return [
+            HandmadeDialogAction("rename", role: .plain) {
+                manageDeck = nil
+                renameDeck = deck
+            },
+            HandmadeDialogAction("move.up", role: .plain) { move(deck, by: -1) },
+            HandmadeDialogAction("move.down", role: .plain) { move(deck, by: 1) },
+            HandmadeDialogAction("delete", role: .destructive) {
+                manageDeck = nil
+                deleteDeck = deck
+            },
+            HandmadeDialogAction("cancel", role: .cancel) { manageDeck = nil }
+        ]
     }
 
     private func move(_ deck: Deck, by offset: Int) {

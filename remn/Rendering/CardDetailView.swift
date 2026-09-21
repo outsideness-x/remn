@@ -8,6 +8,7 @@ struct CardDetailView: View {
     @Bindable var card: Flashcard
 
     @State private var showEditor = false
+    @State private var showActions = false
     @State private var showDelete = false
     @State private var showReset = false
     @State private var isExporting = false
@@ -16,19 +17,13 @@ struct CardDetailView: View {
     var body: some View {
         VStack(spacing: 0) {
             RemnNavigationHeader(title: "card") {
-                Menu {
-                    Button("edit") { showEditor = true }
-                    Button("card.duplicate", action: duplicate)
-                    Button("card.saveImage", action: export)
-                    Button("card.reset") { showReset = true }
-                    Divider()
-                    Button("delete", role: .destructive) { showDelete = true }
-                } label: {
+                Button { showActions = true } label: {
                     DoodleIcon(kind: .more, color: .remnInk, size: 21)
                         .frame(width: 44, height: 44)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(Text("actions"))
             }
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
@@ -70,6 +65,12 @@ struct CardDetailView: View {
         .sheet(isPresented: $showEditor) {
             if let deck = card.deck { CardEditorView(initialDeck: deck, card: card) }
         }
+        .handmadeDialog(
+            isPresented: $showActions,
+            title: "card",
+            message: Text(verbatim: RemnFormatters.usefulLine(card.frontMarkdown)),
+            actions: cardActions
+        )
         .handmadeDialog(
             isPresented: $showDelete,
             title: "card.delete.title",
@@ -115,6 +116,26 @@ struct CardDetailView: View {
         )
         do { try context.save() }
         catch { appState.errorMessage = error.localizedDescription }
+    }
+
+    private var cardActions: [HandmadeDialogAction] {
+        [
+            HandmadeDialogAction("edit", role: .plain) {
+                showActions = false
+                showEditor = true
+            },
+            HandmadeDialogAction("card.duplicate", role: .plain, perform: duplicate),
+            HandmadeDialogAction("card.saveImage", role: .plain, perform: export),
+            HandmadeDialogAction("card.reset", role: .plain) {
+                showActions = false
+                showReset = true
+            },
+            HandmadeDialogAction("delete", role: .destructive) {
+                showActions = false
+                showDelete = true
+            },
+            HandmadeDialogAction("cancel", role: .cancel) { showActions = false }
+        ]
     }
 
     private func export() {

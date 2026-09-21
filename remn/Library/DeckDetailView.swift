@@ -8,6 +8,7 @@ struct DeckDetailView: View {
     @Bindable var deck: Deck
 
     @State private var showCreateCard = false
+    @State private var manageCard: Flashcard?
     @State private var editingCard: Flashcard?
     @State private var deleteCard: Flashcard?
     @State private var resetCard: Flashcard?
@@ -34,13 +35,22 @@ struct DeckDetailView: View {
                     } else {
                         LazyVStack(spacing: 10) {
                             ForEach(deckCards, id: \.id) { card in
-                                NavigationLink {
-                                    CardDetailView(card: card)
-                                } label: {
-                                    CardRow(card: card)
+                                HStack(spacing: 2) {
+                                    NavigationLink {
+                                        CardDetailView(card: card)
+                                    } label: {
+                                        CardRow(card: card)
+                                    }
+                                    .buttonStyle(.plain)
+
+                                    Button { manageCard = card } label: {
+                                        DoodleIcon(kind: .more, color: .remnGraphite, size: 20)
+                                            .frame(width: 42, height: 58)
+                                            .contentShape(Rectangle())
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel(Text("actions"))
                                 }
-                                .buttonStyle(.plain)
-                                .contextMenu { cardMenu(card) }
                             }
                         }
                     }
@@ -72,6 +82,15 @@ struct DeckDetailView: View {
         .sheet(item: $editingCard) { card in
             CardEditorView(initialDeck: deck, card: card)
         }
+        .handmadeDialog(
+            isPresented: Binding(
+                get: { manageCard != nil },
+                set: { if !$0 { manageCard = nil } }
+            ),
+            title: "card",
+            message: Text(verbatim: manageCard.map { RemnFormatters.usefulLine($0.frontMarkdown) } ?? ""),
+            actions: cardActions
+        )
         .handmadeDialog(
             isPresented: Binding(
                 get: { deleteCard != nil },
@@ -107,13 +126,24 @@ struct DeckDetailView: View {
         )
     }
 
-    @ViewBuilder
-    private func cardMenu(_ card: Flashcard) -> some View {
-        Button("edit") { editingCard = card }
-        Button("card.duplicate") { duplicate(card) }
-        Button("card.reset") { resetCard = card }
-        Divider()
-        Button("delete", role: .destructive) { deleteCard = card }
+    private var cardActions: [HandmadeDialogAction] {
+        guard let card = manageCard else { return [] }
+        return [
+            HandmadeDialogAction("edit", role: .plain) {
+                manageCard = nil
+                editingCard = card
+            },
+            HandmadeDialogAction("card.duplicate", role: .plain) { duplicate(card) },
+            HandmadeDialogAction("card.reset", role: .plain) {
+                manageCard = nil
+                resetCard = card
+            },
+            HandmadeDialogAction("delete", role: .destructive) {
+                manageCard = nil
+                deleteCard = card
+            },
+            HandmadeDialogAction("cancel", role: .cancel) { manageCard = nil }
+        ]
     }
 
     private func duplicate(_ card: Flashcard) {

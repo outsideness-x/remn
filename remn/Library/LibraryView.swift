@@ -9,6 +9,7 @@ struct LibraryView: View {
     @Query private var sessions: [StudySessionRecord]
 
     @State private var showCreate = false
+    @State private var manageSubject: SubjectModel?
     @State private var renameSubject: SubjectModel?
     @State private var deleteSubject: SubjectModel?
 
@@ -25,18 +26,27 @@ struct LibraryView: View {
                 } else {
                     LazyVStack(spacing: 0) {
                         ForEach(subjects, id: \.id) { subject in
-                            NavigationLink {
-                                SubjectDetailView(subject: subject)
-                            } label: {
-                                LibraryRow(
-                                    title: subject.name,
-                                    dueCount: dueCount(subject.cards),
-                                    totalCount: subject.cards.count,
-                                    seed: subject.id.hashValue
-                                )
+                            HStack(spacing: 2) {
+                                NavigationLink {
+                                    SubjectDetailView(subject: subject)
+                                } label: {
+                                    LibraryRow(
+                                        title: subject.name,
+                                        dueCount: dueCount(subject.cards),
+                                        totalCount: subject.cards.count,
+                                        seed: subject.id.hashValue
+                                    )
+                                }
+                                .buttonStyle(.plain)
+
+                                Button { manageSubject = subject } label: {
+                                    DoodleIcon(kind: .more, color: .remnGraphite, size: 20)
+                                        .frame(width: 44, height: 54)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityLabel(Text("actions"))
                             }
-                            .buttonStyle(.plain)
-                            .contextMenu { subjectMenu(subject) }
                         }
                     }
                 }
@@ -62,6 +72,15 @@ struct LibraryView: View {
                 save()
             }
         }
+        .handmadeDialog(
+            isPresented: Binding(
+                get: { manageSubject != nil },
+                set: { if !$0 { manageSubject = nil } }
+            ),
+            title: "subject",
+            message: Text(verbatim: manageSubject?.name ?? ""),
+            actions: subjectActions
+        )
         .handmadeDialog(
             isPresented: Binding(
                 get: { deleteSubject != nil },
@@ -143,13 +162,25 @@ struct LibraryView: View {
         sessions.filter(\.isActive).max { $0.updatedAt < $1.updatedAt }
     }
 
-    @ViewBuilder
-    private func subjectMenu(_ subject: SubjectModel) -> some View {
-        Button("rename") { renameSubject = subject }
-        Button("move.up") { move(subject, by: -1) }
-        Button("move.down") { move(subject, by: 1) }
-        Divider()
-        Button("delete", role: .destructive) { deleteSubject = subject }
+    private var subjectActions: [HandmadeDialogAction] {
+        guard let subject = manageSubject else { return [] }
+        return [
+            HandmadeDialogAction("rename", role: .plain) {
+                manageSubject = nil
+                renameSubject = subject
+            },
+            HandmadeDialogAction("move.up", role: .plain) {
+                move(subject, by: -1)
+            },
+            HandmadeDialogAction("move.down", role: .plain) {
+                move(subject, by: 1)
+            },
+            HandmadeDialogAction("delete", role: .destructive) {
+                manageSubject = nil
+                deleteSubject = subject
+            },
+            HandmadeDialogAction("cancel", role: .cancel) { manageSubject = nil }
+        ]
     }
 
     private func move(_ subject: SubjectModel, by offset: Int) {

@@ -6,6 +6,7 @@
     "appearance.dark" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "dark" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "тёмная" } } } },
     "appearance.light" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "light" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "светлая" } } } },
     "appearance.system" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "system" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "системная" } } } },
+    "actions" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "actions" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "действия" } } } },
     "back" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "back" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "назад" } } } },
     "backup.error.duplicates" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "the backup contains duplicate identifiers" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "в копии есть повторяющиеся идентификаторы" } } } },
     "backup.error.relationships" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "the backup contains broken relationships" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "в копии нарушены связи данных" } } } },

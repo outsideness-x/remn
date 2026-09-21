@@ -2,6 +2,7 @@ import SwiftUI
 
 enum HandmadeDialogRole {
     case normal
+    case plain
     case destructive
     case cancel
 }
@@ -63,11 +64,15 @@ private struct HandmadeDialogModifier: ViewModifier {
 
                             ScribbleDivider(seed: 913)
 
-                            VStack(spacing: 9) {
-                                ForEach(actions) { action in
-                                    dialogButton(action)
+                            ScrollView {
+                                VStack(spacing: 9) {
+                                    ForEach(actions) { action in
+                                        dialogButton(action)
+                                    }
                                 }
                             }
+                            .scrollIndicators(.hidden)
+                            .frame(height: min(CGFloat(actions.count) * 53, 360))
                         }
                         .padding(.horizontal, 22)
                         .padding(.vertical, 20)
@@ -121,9 +126,12 @@ private struct HandmadeDialogModifier: ViewModifier {
             }
         }
         .overlay {
-            if action.role == .destructive {
-                WobblyRoundedRectangle(seed: 883, cornerRadius: 11)
-                    .stroke(Color.remnAccent, lineWidth: 1.25)
+            if action.role == .destructive || action.role == .plain {
+                WobblyRoundedRectangle(seed: action.role == .destructive ? 883 : 851, cornerRadius: 11)
+                    .stroke(
+                        action.role == .destructive ? Color.remnAccent : Color.remnInk.opacity(0.42),
+                        lineWidth: 1.15
+                    )
             }
         }
     }
@@ -131,6 +139,7 @@ private struct HandmadeDialogModifier: ViewModifier {
     private func foreground(for role: HandmadeDialogRole) -> Color {
         switch role {
         case .normal: .remnPaper
+        case .plain: .remnInk
         case .destructive: .remnAccent
         case .cancel: .remnGraphite
         }
