@@ -33,7 +33,7 @@ struct SettingsView: View {
 
                             Button { showSRSExplanation = true } label: {
                                 HStack(spacing: 7) {
-                                    Text("settings.srs.open")
+                                    HandwrittenText("settings.srs.open")
                                         .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                                     Text("→")
                                         .accessibilityHidden(true)
@@ -63,7 +63,7 @@ struct SettingsView: View {
                     }
                     settingsSection("settings.about") {
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("remn")
+                            HandwrittenText("remn")
                                 .font(RemnTypography.display(25, weight: .medium, relativeTo: .title2))
                                 .remnHandwrittenBounds()
                             Text(versionText)
@@ -112,7 +112,7 @@ struct SettingsView: View {
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(title)
+            HandwrittenText(title)
                 .font(RemnTypography.display(22, weight: .medium, relativeTo: .title3))
                 .remnHandwrittenBounds()
             content()
@@ -124,7 +124,7 @@ struct SettingsView: View {
     private func appearanceChoice(_ mode: AppearanceMode, title: LocalizedStringKey) -> some View {
         Button { appearanceMode = mode.rawValue } label: {
             VStack(spacing: 7) {
-                Text(title)
+                HandwrittenText(title)
                     .font(RemnTypography.smallControl)
                     .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(appearanceMode == mode.rawValue ? Color.remnInk : Color.remnGraphite)
@@ -204,12 +204,12 @@ private struct SRSExplainerSheet: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Text("srs.title")
+                HandwrittenText("srs.title")
                     .font(RemnTypography.navigationTitle)
                     .remnHandwrittenBounds()
                 Spacer()
                 Button { dismiss() } label: {
-                    Text("done")
+                    HandwrittenText("done")
                         .font(RemnTypography.smallControl)
                         .remnHandwrittenBounds()
                 }
@@ -224,7 +224,7 @@ private struct SRSExplainerSheet: View {
                 VStack(alignment: .leading, spacing: 32) {
                     FlashcardSurface(seed: 606, style: .compact) {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("FSRS-6")
+                            HandwrittenText(verbatim: "FSRS-6")
                                 .font(RemnTypography.display(32, weight: .semibold, relativeTo: .title))
                                 .remnHandwrittenBounds()
                                 .foregroundStyle(Color.remnAccent)
@@ -271,7 +271,7 @@ private struct SRSExplainerSheet: View {
     ) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline, spacing: 9) {
-                Text(number)
+                HandwrittenText(verbatim: number)
                     .font(RemnTypography.display(18, weight: .semibold, relativeTo: .headline))
                     .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnAccent)
@@ -281,7 +281,7 @@ private struct SRSExplainerSheet: View {
                             .stroke(Color.remnAccent, lineWidth: 1.4)
                     }
                     .rotationEffect(.degrees(number == "2" ? 4 : -3))
-                Text(title)
+                HandwrittenText(title)
                     .font(RemnTypography.display(25, weight: .semibold, relativeTo: .title3))
                     .remnHandwrittenBounds()
                     .foregroundStyle(Color.remnInk)
@@ -309,7 +309,7 @@ private struct SRSExplainerSheet: View {
     }
 
     private func memoryStep(_ title: LocalizedStringKey, width: CGFloat) -> some View {
-        Text(title)
+        HandwrittenText(title)
             .frame(width: width)
             .padding(.vertical, 7)
             .background {
@@ -330,7 +330,7 @@ private struct SRSExplainerSheet: View {
 
     private func ratingLine(_ rating: LocalizedStringKey, note: LocalizedStringKey) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 10) {
-            Text(rating)
+            HandwrittenText(rating)
                 .font(RemnTypography.smallControl)
                 .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                 .foregroundStyle(Color.remnAccent)

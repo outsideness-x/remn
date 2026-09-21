@@ -52,14 +52,14 @@ struct CardEditorView: View {
     private var editorHeader: some View {
         HStack(spacing: 8) {
             Button { dismiss() } label: {
-                Text("cancel")
+                HandwrittenText("cancel")
                     .remnHandwrittenBounds()
             }
             .frame(minWidth: 64, minHeight: 44, alignment: .leading)
 
             Spacer(minLength: 4)
 
-            Text(card == nil ? LocalizedStringKey("card.new") : LocalizedStringKey("card.edit"))
+            HandwrittenText(card == nil ? LocalizedStringKey("card.new") : LocalizedStringKey("card.edit"))
                 .font(RemnTypography.navigationTitle)
                 .remnHandwrittenBounds()
                 .foregroundStyle(Color.remnInk)
@@ -68,7 +68,7 @@ struct CardEditorView: View {
             Spacer(minLength: 4)
 
             Button(action: save) {
-                Text("save")
+                HandwrittenText("save")
                     .remnHandwrittenBounds()
             }
             .frame(minWidth: 64, minHeight: 44, alignment: .trailing)
@@ -102,7 +102,7 @@ struct CardEditorView: View {
             focusedSide = nil
             withAnimation(.easeOut(duration: 0.16)) { mode = value }
         } label: {
-            Text(title)
+            HandwrittenText(title)
                 .font(
                     RemnTypography.display(
                         19,
@@ -157,7 +157,7 @@ struct CardEditorView: View {
         } label: {
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("deck")
+                    HandwrittenText("deck")
                         .font(RemnTypography.smallControl)
                         .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(Color.remnGraphite)
@@ -209,7 +209,7 @@ struct CardEditorView: View {
 
     private func editorSection(title: LocalizedStringKey, text: Binding<String>, side: Side) -> some View {
         VStack(alignment: .leading, spacing: 7) {
-            Text(title)
+            HandwrittenText(title)
                 .font(RemnTypography.display(21, weight: .medium, relativeTo: .headline))
                 .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                 .foregroundStyle(focusedSide == side ? Color.remnAccent : Color.remnGraphite)

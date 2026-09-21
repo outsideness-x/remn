@@ -11,7 +11,7 @@ struct StudyCompletionView: View {
         VStack(spacing: 26) {
             Spacer()
             StackedCardsDoodle()
-            Text("done.")
+            HandwrittenText("done.")
                 .font(RemnTypography.display(42, weight: .medium, relativeTo: .largeTitle))
                 .remnHandwrittenBounds()
                 .foregroundStyle(Color.remnInk)
@@ -19,15 +19,17 @@ struct StudyCompletionView: View {
                 .font(.callout.monospacedDigit())
                 .foregroundStyle(Color.remnGraphite)
             Spacer()
-            Button("study.backLibrary") {
+            Button {
                 session.isActive = false
                 try? context.save()
                 appState.presentedSession = nil
                 dismiss()
+            } label: {
+                HandwrittenText("study.backLibrary")
             }
             .frame(maxWidth: .infinity)
             .buttonStyle(WobblyButtonStyle(filled: true, seed: 63))
-            Button("study.more") {
+            Button {
                 session.isActive = false
                 try? context.save()
                 appState.presentedSession = nil
@@ -36,6 +38,8 @@ struct StudyCompletionView: View {
                     try? await Task.sleep(for: .milliseconds(350))
                     appState.prepareStudy(subjectIDs: Set(session.subjectIDs), deckID: session.deckID)
                 }
+            } label: {
+                HandwrittenText("study.more")
             }
             .buttonStyle(.plain)
             .font(RemnTypography.control)

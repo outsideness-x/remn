@@ -58,7 +58,7 @@ struct DeckDetailView: View {
                     appState.prepareStudy(subjectIDs: [subjectID], deckID: deck.id)
                 }
             } label: {
-                Text("study.deck").frame(maxWidth: .infinity)
+                HandwrittenText("study.deck").frame(maxWidth: .infinity)
             }
             .buttonStyle(WobblyButtonStyle(filled: true, seed: deck.id.hashValue))
             .disabled(deckCards.isEmpty)

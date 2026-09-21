@@ -22,6 +22,26 @@ enum RemnTypography {
     }
 }
 
+/// Reserves real glyph-run width around Caveat. The font intentionally draws many glyphs
+/// past their advance width (for example `?` extends about 16% of an em to the right),
+/// which SwiftUI otherwise clips before ordinary view padding is applied.
+struct HandwrittenText: View {
+    private let content: Text
+
+    init(_ key: LocalizedStringKey) {
+        content = Text(key)
+    }
+
+    init(verbatim value: String) {
+        content = Text(verbatim: value)
+    }
+
+    var body: some View {
+        (Text(verbatim: "\u{202F}") + content + Text(verbatim: "\u{202F}"))
+            .accessibilityLabel(content)
+    }
+}
+
 extension View {
     /// Caveat has generous handwritten overhangs that sit outside its reported glyph bounds.
     /// Give those strokes a little canvas so SwiftUI does not shave them off in compact controls.

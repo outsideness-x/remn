@@ -5,7 +5,7 @@ struct ScreenTitle: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 1) {
-            Text(title)
+            HandwrittenText(title)
                 .font(RemnTypography.pageTitle)
                 .remnHandwrittenBounds()
                 .foregroundStyle(Color.remnInk)

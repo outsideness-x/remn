@@ -18,7 +18,7 @@ struct CardExportView: View {
                     CardContentView(markdown: card.backMarkdown, context: .export)
                 }
             }
-            Text("remn")
+            HandwrittenText("remn")
                 .font(RemnTypography.display(19, weight: .semibold, relativeTo: .body))
                 .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                 .foregroundStyle(Color.black.opacity(0.55))

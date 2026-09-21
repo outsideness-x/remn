@@ -25,14 +25,14 @@ struct SearchView: View {
             ScrollView {
                 LazyVStack(spacing: 10) {
                     if query.isEmpty {
-                        Text("search.prompt")
+                        HandwrittenText("search.prompt")
                             .font(RemnTypography.control)
                             .remnHandwrittenBounds()
                             .foregroundStyle(Color.remnGraphite)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top, 26)
                     } else if results.isEmpty {
-                        Text("search.empty")
+                        HandwrittenText("search.empty")
                             .font(RemnTypography.display(23, weight: .medium, relativeTo: .title3))
                             .remnHandwrittenBounds()
                             .foregroundStyle(Color.remnGraphite)
@@ -69,7 +69,7 @@ private struct SearchResultRow: View {
     var body: some View {
         FlashcardSurface(seed: card.id.hashValue, style: .compact) {
             VStack(alignment: .leading, spacing: 9) {
-                Text(context)
+                HandwrittenText(verbatim: context)
                     .font(RemnTypography.smallControl)
                     .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnGraphite)

@@ -8,7 +8,7 @@ struct RatingButton: View {
     var body: some View {
         Button(action: action) {
             VStack(spacing: 3) {
-                Text(LocalizedStringKey(rating.titleKey))
+                HandwrittenText(LocalizedStringKey(rating.titleKey))
                     .font(RemnTypography.smallControl)
                     .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                     .lineLimit(1)

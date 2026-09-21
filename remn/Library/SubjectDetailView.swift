@@ -59,7 +59,7 @@ struct SubjectDetailView: View {
             Button {
                 appState.prepareStudy(subjectIDs: [subject.id])
             } label: {
-                Text("study.subject")
+                HandwrittenText("study.subject")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(WobblyButtonStyle(filled: true, seed: subject.id.hashValue))

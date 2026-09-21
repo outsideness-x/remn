@@ -9,12 +9,14 @@ struct LibraryRow: View {
     var body: some View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 5) {
-                Text(title)
+                HandwrittenText(verbatim: title)
                     .font(RemnTypography.display(27, weight: .semibold, relativeTo: .title3))
                     .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                     .foregroundStyle(Color.remnInk)
                     .lineLimit(2)
-                Text("\(dueCount) \(RemnLanguage.localized("library.due"))  ·  \(totalCount) \(RemnLanguage.localized("library.cards"))")
+                HandwrittenText(
+                    verbatim: "\(dueCount) \(RemnLanguage.localized("library.due"))  ·  \(totalCount) \(RemnLanguage.localized("library.cards"))"
+                )
                     .font(RemnTypography.smallControl)
                     .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnGraphite)

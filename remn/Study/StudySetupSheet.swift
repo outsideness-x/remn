@@ -60,12 +60,12 @@ struct StudySetupSheet: View {
         VStack(spacing: 0) {
             HStack(spacing: 8) {
                 Button { dismiss() } label: {
-                    Text("cancel")
+                    HandwrittenText("cancel")
                         .remnHandwrittenBounds()
                 }
                 .frame(minWidth: 64, minHeight: 44, alignment: .leading)
                 Spacer()
-                Text("study.setup")
+                HandwrittenText("study.setup")
                     .font(RemnTypography.navigationTitle)
                     .remnHandwrittenBounds()
                     .foregroundStyle(Color.remnInk)
@@ -103,8 +103,10 @@ struct StudySetupSheet: View {
         }
         .background(Color.remnPaper.ignoresSafeArea())
         .safeAreaInset(edge: .bottom) {
-            Button("study.start", action: start)
-                .frame(maxWidth: .infinity)
+            Button(action: start) {
+                HandwrittenText("study.start")
+                    .frame(maxWidth: .infinity)
+            }
                 .buttonStyle(WobblyButtonStyle(filled: true, seed: 91))
                 .disabled(selectedSubjectIDs.isEmpty)
                 .padding(.horizontal, 20)
@@ -131,7 +133,7 @@ struct StudySetupSheet: View {
                 } label: {
                     HStack {
                         DoodleSelectionMark(selected: selectedSubjectIDs.contains(subject.id))
-                        Text(subject.name)
+                        HandwrittenText(verbatim: subject.name)
                             .font(RemnTypography.display(22, weight: .medium, relativeTo: .headline))
                             .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                             .foregroundStyle(Color.remnInk)
@@ -157,7 +159,7 @@ struct StudySetupSheet: View {
                 Button {
                     countChoice = choice
                 } label: {
-                    Text(choice.label)
+                    HandwrittenText(verbatim: choice.label)
                         .font(RemnTypography.smallControl)
                         .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                         .foregroundStyle(countChoice == choice ? Color.remnAccent : Color.remnInk)
@@ -181,7 +183,7 @@ struct StudySetupSheet: View {
     }
 
     private func sectionTitle(_ key: LocalizedStringKey) -> some View {
-        Text(key)
+        HandwrittenText(key)
             .font(RemnTypography.display(23, weight: .medium, relativeTo: .title3))
             .remnHandwrittenBounds()
             .foregroundStyle(Color.remnInk)
@@ -208,11 +210,11 @@ struct StudySetupSheet: View {
 
         return VStack(alignment: .leading, spacing: 9) {
             HStack(alignment: .firstTextBaseline, spacing: 7) {
-                Text("\(selectedCount)")
+                HandwrittenText(verbatim: "\(selectedCount)")
                     .font(RemnTypography.display(31, weight: .semibold, relativeTo: .title))
                     .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnAccent)
-                Text("study.inSession")
+                HandwrittenText("study.inSession")
                     .font(RemnTypography.control)
                     .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnInk)

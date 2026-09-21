@@ -32,7 +32,7 @@ struct CardDetailView: View {
             }
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text(card.deckContext)
+                    HandwrittenText(verbatim: card.deckContext)
                         .font(RemnTypography.smallControl)
                         .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(Color.remnGraphite)

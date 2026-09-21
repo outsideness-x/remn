@@ -90,7 +90,7 @@ struct FlashcardSideLabel: View {
     let title: LocalizedStringKey
 
     var body: some View {
-        Text(title)
+        HandwrittenText(title)
             .font(RemnTypography.smallControl)
             .remnHandwrittenBounds(horizontal: 2, vertical: 1)
             .foregroundStyle(Color.remnGraphite)

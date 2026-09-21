@@ -27,19 +27,19 @@ struct NameEditorSheet: View {
         VStack(spacing: 0) {
             HStack(spacing: 8) {
                 Button { dismiss() } label: {
-                    Text("cancel")
+                    HandwrittenText("cancel")
                         .remnHandwrittenBounds()
                 }
                 .frame(minWidth: 64, minHeight: 44, alignment: .leading)
                 Spacer(minLength: 4)
-                Text(title)
+                HandwrittenText(title)
                     .font(RemnTypography.navigationTitle)
                     .remnHandwrittenBounds()
                     .foregroundStyle(Color.remnInk)
                     .lineLimit(1)
                 Spacer(minLength: 4)
                 Button(action: save) {
-                    Text(actionTitle)
+                    HandwrittenText(actionTitle)
                         .remnHandwrittenBounds()
                 }
                 .frame(minWidth: 64, minHeight: 44, alignment: .trailing)

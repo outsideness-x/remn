@@ -82,7 +82,7 @@ struct LibraryView: View {
 
     private var header: some View {
         HStack(alignment: .firstTextBaseline) {
-            Text("remn")
+            HandwrittenText("remn")
                 .font(RemnTypography.brand)
                 .remnHandwrittenBounds()
                 .foregroundStyle(Color.remnInk)
@@ -110,7 +110,7 @@ struct LibraryView: View {
                 Button {
                     appState.presentedSession = activeSession
                 } label: {
-                    Text("study.continue")
+                    HandwrittenText("study.continue")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(WobblyButtonStyle(filled: false, seed: 72))
@@ -122,7 +122,7 @@ struct LibraryView: View {
                     StackedCardsDoodle(ink: .remnPaper, accent: .remnPaper.opacity(0.62))
                         .scaleEffect(0.55)
                         .frame(width: 34, height: 30)
-                    Text("study")
+                    HandwrittenText("study")
                     Spacer()
                     DoodleIcon(kind: .forward, color: .remnPaper, size: 21)
                 }

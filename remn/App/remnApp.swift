@@ -45,10 +45,10 @@ private struct StartupFailureView: View {
 
     var body: some View {
         VStack(spacing: 18) {
-            Text("remn")
+            HandwrittenText("remn")
                 .font(RemnTypography.brand)
                 .remnHandwrittenBounds()
-            Text("storage.couldNotOpen")
+            HandwrittenText("storage.couldNotOpen")
                 .font(RemnTypography.navigationTitle)
                 .remnHandwrittenBounds()
             Text(message)

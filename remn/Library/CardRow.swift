@@ -9,7 +9,7 @@ struct CardRow: View {
                 HStack(alignment: .firstTextBaseline) {
                     FlashcardSideLabel(title: "card.front")
                     Spacer(minLength: 8)
-                    Text(RemnFormatters.dueStatus(for: card))
+                    HandwrittenText(verbatim: RemnFormatters.dueStatus(for: card))
                         .font(RemnTypography.smallControl)
                         .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(statusColor)

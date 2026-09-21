@@ -46,12 +46,12 @@ struct StudySessionView: View {
     private var studyHeader: some View {
         HStack(spacing: 8) {
             Button { dismiss() } label: {
-                Text("close")
+                HandwrittenText("close")
                     .remnHandwrittenBounds()
             }
             .frame(minWidth: 64, minHeight: 44, alignment: .leading)
             Spacer()
-            Text(session.isActive ? progress : "remn")
+            HandwrittenText(verbatim: session.isActive ? progress : "remn")
                 .font(session.isActive ? .caption.monospacedDigit() : RemnTypography.navigationTitle)
                 .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                 .foregroundStyle(Color.remnGraphite)
@@ -59,7 +59,7 @@ struct StudySessionView: View {
             Group {
                 if showUndo {
                     Button(action: undo) {
-                        Text("undo")
+                        HandwrittenText("undo")
                             .remnHandwrittenBounds()
                     }
                         .transition(.opacity)
@@ -80,7 +80,7 @@ struct StudySessionView: View {
     private func study(_ card: Flashcard) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text(card.deckContext)
+                HandwrittenText(verbatim: card.deckContext)
                     .font(RemnTypography.smallControl)
                     .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnGraphite)
@@ -122,7 +122,7 @@ struct StudySessionView: View {
                 HStack(spacing: 7) {
                     Spacer()
                     DoodleIcon(kind: .flip, color: .remnGraphite, size: 18)
-                    Text(isBack ? "study.tapFlip" : "study.tapReveal")
+                    HandwrittenText(isBack ? "study.tapFlip" : "study.tapReveal")
                         .font(RemnTypography.smallControl)
                         .remnHandwrittenBounds(horizontal: 3, vertical: 1)
                 }
@@ -201,7 +201,7 @@ struct StudySessionView: View {
     private func ratings(for card: Flashcard) -> some View {
         VStack(spacing: 8) {
             HStack {
-                Text("study.rate")
+                HandwrittenText("study.rate")
                     .font(RemnTypography.smallControl)
                     .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnGraphite)

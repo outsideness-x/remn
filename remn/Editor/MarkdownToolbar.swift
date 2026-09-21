@@ -49,7 +49,7 @@ struct MarkdownToolbar: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("editor.insert")
+            HandwrittenText("editor.insert")
                 .font(RemnTypography.smallControl)
                 .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                 .foregroundStyle(Color.remnGraphite)
