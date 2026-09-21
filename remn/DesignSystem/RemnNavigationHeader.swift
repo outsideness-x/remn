@@ -17,8 +17,7 @@ struct RemnNavigationHeader<Trailing: View>: View {
     var body: some View {
         HStack(spacing: 12) {
             Button { dismiss() } label: {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 16, weight: .semibold))
+                DoodleIcon(kind: .back, color: .remnInk, size: 21)
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }

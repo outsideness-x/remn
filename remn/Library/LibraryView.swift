@@ -88,12 +88,12 @@ struct LibraryView: View {
                 .accessibilityAddTraits(.isHeader)
             Spacer()
             NavigationLink { SearchView() } label: {
-                Image(systemName: "magnifyingglass")
+                DoodleIcon(kind: .search, color: .remnInk, size: 21)
                     .frame(width: 44, height: 44)
             }
             .accessibilityLabel(Text("search"))
             NavigationLink { SettingsView() } label: {
-                Image(systemName: "gearshape")
+                DoodleIcon(kind: .settings, color: .remnInk, size: 22)
                     .frame(width: 44, height: 44)
             }
             .accessibilityLabel(Text("settings"))
@@ -118,10 +118,12 @@ struct LibraryView: View {
                 appState.prepareStudy()
             } label: {
                 HStack {
-                    StackedCardsDoodle().scaleEffect(0.55).frame(width: 34, height: 30)
+                    StackedCardsDoodle(ink: .remnPaper, accent: .remnPaper.opacity(0.62))
+                        .scaleEffect(0.55)
+                        .frame(width: 34, height: 30)
                     Text("study")
                     Spacer()
-                    Image(systemName: "arrow.right")
+                    DoodleIcon(kind: .forward, color: .remnPaper, size: 21)
                 }
                 .frame(maxWidth: .infinity)
             }

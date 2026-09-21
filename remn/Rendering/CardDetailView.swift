@@ -24,7 +24,7 @@ struct CardDetailView: View {
                     Divider()
                     Button("delete", role: .destructive) { showDelete = true }
                 } label: {
-                    Image(systemName: "ellipsis")
+                    DoodleIcon(kind: .more, color: .remnInk, size: 21)
                         .frame(width: 44, height: 44)
                         .contentShape(Rectangle())
                 }

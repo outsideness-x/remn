@@ -10,7 +10,7 @@ struct LibraryRow: View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)
-                    .font(.system(.title3, design: .default, weight: .semibold))
+                    .font(RemnTypography.display(27, weight: .semibold, relativeTo: .title3))
                     .foregroundStyle(Color.remnInk)
                     .lineLimit(2)
                 Text("\(dueCount) \(RemnLanguage.localized("library.due"))  ·  \(totalCount) \(RemnLanguage.localized("library.cards"))")
@@ -18,9 +18,11 @@ struct LibraryRow: View {
                     .foregroundStyle(Color.remnGraphite)
             }
             Spacer(minLength: 8)
-            Image(systemName: "chevron.right")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(Color.remnGraphite.opacity(0.75))
+            DoodleIcon(
+                kind: .forward,
+                color: dueCount > 0 ? .remnAccent : .remnGraphite,
+                size: 20
+            )
         }
         .padding(.horizontal, 3)
         .padding(.vertical, 16)

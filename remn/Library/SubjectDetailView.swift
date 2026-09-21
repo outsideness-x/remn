@@ -14,7 +14,8 @@ struct SubjectDetailView: View {
         VStack(spacing: 0) {
             RemnNavigationHeader(title: "remn") {
                 Button { showCreate = true } label: {
-                    Image(systemName: "plus").frame(width: 44, height: 44)
+                    DoodleIcon(kind: .plus, color: .remnInk, size: 21)
+                        .frame(width: 44, height: 44)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(Text("deck.new"))
