@@ -70,30 +70,42 @@ struct CardDetailView: View {
         .sheet(isPresented: $showEditor) {
             if let deck = card.deck { CardEditorView(initialDeck: deck, card: card) }
         }
-        .confirmationDialog("card.delete.title", isPresented: $showDelete, titleVisibility: .visible) {
-            Button("delete", role: .destructive) {
-                context.delete(card)
-                do { try context.save(); dismiss() }
-                catch { appState.errorMessage = error.localizedDescription }
-            }
-            Button("cancel", role: .cancel) {}
-        } message: { Text("card.delete.message") }
-        .confirmationDialog("card.reset.title", isPresented: $showReset, titleVisibility: .visible) {
-            Button("card.reset", role: .destructive) {
-                do { try ReviewService().reset(card, context: context) }
-                catch { appState.errorMessage = error.localizedDescription }
-            }
-            Button("cancel", role: .cancel) {}
-        } message: { Text("card.reset.message") }
-        .alert(
-            "export.result",
+        .handmadeDialog(
+            isPresented: $showDelete,
+            title: "card.delete.title",
+            message: Text("card.delete.message"),
+            actions: [
+                HandmadeDialogAction("delete", role: .destructive) {
+                    context.delete(card)
+                    do { try context.save(); dismiss() }
+                    catch { appState.errorMessage = error.localizedDescription }
+                },
+                HandmadeDialogAction("cancel", role: .cancel) {}
+            ]
+        )
+        .handmadeDialog(
+            isPresented: $showReset,
+            title: "card.reset.title",
+            message: Text("card.reset.message"),
+            actions: [
+                HandmadeDialogAction("card.reset", role: .destructive) {
+                    do { try ReviewService().reset(card, context: context) }
+                    catch { appState.errorMessage = error.localizedDescription }
+                },
+                HandmadeDialogAction("cancel", role: .cancel) {}
+            ]
+        )
+        .handmadeDialog(
             isPresented: Binding(
                 get: { exportMessage != nil },
                 set: { if !$0 { exportMessage = nil } }
-            )
-        ) {
-            Button("ok", role: .cancel) { exportMessage = nil }
-        } message: { Text(exportMessage ?? "") }
+            ),
+            title: "export.result",
+            message: Text(verbatim: exportMessage ?? ""),
+            actions: [
+                HandmadeDialogAction("ok") { exportMessage = nil }
+            ]
+        )
     }
 
     private func duplicate() {

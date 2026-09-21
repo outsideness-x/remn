@@ -62,22 +62,21 @@ struct LibraryView: View {
                 save()
             }
         }
-        .confirmationDialog(
-            "subject.delete.title",
+        .handmadeDialog(
             isPresented: Binding(
                 get: { deleteSubject != nil },
                 set: { if !$0 { deleteSubject = nil } }
             ),
-            titleVisibility: .visible
-        ) {
-            Button("delete", role: .destructive) {
-                if let deleteSubject { context.delete(deleteSubject); save() }
-                deleteSubject = nil
-            }
-            Button("cancel", role: .cancel) { deleteSubject = nil }
-        } message: {
-            Text("subject.delete.message")
-        }
+            title: "subject.delete.title",
+            message: Text("subject.delete.message"),
+            actions: [
+                HandmadeDialogAction("delete", role: .destructive) {
+                    if let deleteSubject { context.delete(deleteSubject); save() }
+                    deleteSubject = nil
+                },
+                HandmadeDialogAction("cancel", role: .cancel) { deleteSubject = nil }
+            ]
+        )
     }
 
     private var header: some View {

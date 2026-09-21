@@ -72,37 +72,39 @@ struct DeckDetailView: View {
         .sheet(item: $editingCard) { card in
             CardEditorView(initialDeck: deck, card: card)
         }
-        .confirmationDialog(
-            "card.delete.title",
+        .handmadeDialog(
             isPresented: Binding(
                 get: { deleteCard != nil },
                 set: { if !$0 { deleteCard = nil } }
             ),
-            titleVisibility: .visible
-        ) {
-            Button("delete", role: .destructive) {
-                if let deleteCard { context.delete(deleteCard); save() }
-                deleteCard = nil
-            }
-            Button("cancel", role: .cancel) { deleteCard = nil }
-        } message: { Text("card.delete.message") }
-        .confirmationDialog(
-            "card.reset.title",
+            title: "card.delete.title",
+            message: Text("card.delete.message"),
+            actions: [
+                HandmadeDialogAction("delete", role: .destructive) {
+                    if let deleteCard { context.delete(deleteCard); save() }
+                    deleteCard = nil
+                },
+                HandmadeDialogAction("cancel", role: .cancel) { deleteCard = nil }
+            ]
+        )
+        .handmadeDialog(
             isPresented: Binding(
                 get: { resetCard != nil },
                 set: { if !$0 { resetCard = nil } }
             ),
-            titleVisibility: .visible
-        ) {
-            Button("card.reset", role: .destructive) {
-                if let resetCard {
-                    do { try ReviewService().reset(resetCard, context: context) }
-                    catch { appState.errorMessage = error.localizedDescription }
-                }
-                resetCard = nil
-            }
-            Button("cancel", role: .cancel) { resetCard = nil }
-        } message: { Text("card.reset.message") }
+            title: "card.reset.title",
+            message: Text("card.reset.message"),
+            actions: [
+                HandmadeDialogAction("card.reset", role: .destructive) {
+                    if let resetCard {
+                        do { try ReviewService().reset(resetCard, context: context) }
+                        catch { appState.errorMessage = error.localizedDescription }
+                    }
+                    resetCard = nil
+                },
+                HandmadeDialogAction("cancel", role: .cancel) { resetCard = nil }
+            ]
+        )
     }
 
     @ViewBuilder

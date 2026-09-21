@@ -83,22 +83,21 @@ struct SubjectDetailView: View {
                 save()
             }
         }
-        .confirmationDialog(
-            "deck.delete.title",
+        .handmadeDialog(
             isPresented: Binding(
                 get: { deleteDeck != nil },
                 set: { if !$0 { deleteDeck = nil } }
             ),
-            titleVisibility: .visible
-        ) {
-            Button("delete", role: .destructive) {
-                if let deleteDeck { context.delete(deleteDeck); save() }
-                deleteDeck = nil
-            }
-            Button("cancel", role: .cancel) { deleteDeck = nil }
-        } message: {
-            Text("deck.delete.message")
-        }
+            title: "deck.delete.title",
+            message: Text("deck.delete.message"),
+            actions: [
+                HandmadeDialogAction("delete", role: .destructive) {
+                    if let deleteDeck { context.delete(deleteDeck); save() }
+                    deleteDeck = nil
+                },
+                HandmadeDialogAction("cancel", role: .cancel) { deleteDeck = nil }
+            ]
+        )
     }
 
     @ViewBuilder

@@ -55,6 +55,7 @@
 		B97F03BBBBE9EF9EE4E4EB8C /* BackupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2D647215E4ECF91FFE78E5 /* BackupTests.swift */; };
 		CC5875A2D467A031279A6390 /* ReviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB45169EF35C9E4CB79AF60 /* ReviewService.swift */; };
 		CD0FAC7C2A8C07479BCF8F21 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12BCF790E0389FA64512B4B /* SearchView.swift */; };
+		CD3F1776C35ECC20D198BA06 /* HandmadeDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35084084FB10D50F86C775C /* HandmadeDialog.swift */; };
 		D14CE5B916F3BD28CDF737C3 /* OFL-Caveat.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0BFB5C185B552CF4838EF583 /* OFL-Caveat.txt */; };
 		D797D3202B36BEFE11F83B11 /* HandmadeComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACE8C66501FBC9214D431FA /* HandmadeComponents.swift */; };
 		DA0BA9A8F72664485C69EA61 /* RatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588D5C69EA069B1E964F4EB3 /* RatingButton.swift */; };
@@ -141,6 +142,7 @@
 		D290C0256CB30E048474D412 /* TestStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestStore.swift; sourceTree = "<group>"; };
 		D7CDEC6CF690B3CFB8C3008B /* BackupModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupModels.swift; sourceTree = "<group>"; };
 		DB65143066E4333550817388 /* SessionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionService.swift; sourceTree = "<group>"; };
+		E35084084FB10D50F86C775C /* HandmadeDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandmadeDialog.swift; sourceTree = "<group>"; };
 		E43C7C7C815F1AAF39931120 /* MarkdownToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownToolbar.swift; sourceTree = "<group>"; };
 		E92024DC64A85D0ED1D7B6AB /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
 		EE31C963CEF82E56A782734C /* RemnSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnSchema.swift; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 			children = (
 				B74613E361D1008F37D52C7D /* FlashcardSurface.swift */,
 				9ACE8C66501FBC9214D431FA /* HandmadeComponents.swift */,
+				E35084084FB10D50F86C775C /* HandmadeDialog.swift */,
 				73275047DD887BC610647B2A /* RemnColors.swift */,
 				1E99BF5C47CF0005283FDD06 /* RemnNavigationHeader.swift */,
 				3D2767AD6663EDF37938359D /* RemnTypography.swift */,
@@ -527,6 +530,7 @@
 				78F33C9003CA07274546D4C8 /* FlashcardSurface.swift in Sources */,
 				3946DFBC2D26E5AF69D25DC7 /* Formatters.swift in Sources */,
 				D797D3202B36BEFE11F83B11 /* HandmadeComponents.swift in Sources */,
+				CD3F1776C35ECC20D198BA06 /* HandmadeDialog.swift in Sources */,
 				8B57FB701B37D5C1D1BEC6BB /* LibraryRow.swift in Sources */,
 				692C63800919DA68D9627B7E /* LibraryView.swift in Sources */,
 				4E5EF8B6ED839026B92947BE /* MarkdownRenderSource.swift in Sources */,

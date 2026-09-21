@@ -114,11 +114,12 @@ struct StudySetupSheet: View {
                 .background(Color.remnPaper.opacity(0.97))
         }
         .onAppear(perform: restoreSelection)
-        .alert("study.noneAvailable", isPresented: $noCards) {
-            Button("ok", role: .cancel) {}
-        } message: {
-            Text("study.noneAvailable.message")
-        }
+        .handmadeDialog(
+            isPresented: $noCards,
+            title: "study.noneAvailable",
+            message: Text("study.noneAvailable.message"),
+            actions: [HandmadeDialogAction("ok") {}]
+        )
     }
 
     private var subjectsPicker: some View {

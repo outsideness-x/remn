@@ -33,11 +33,12 @@ struct StudySessionView: View {
                 }
             }
             .background(Color.remnPaper.ignoresSafeArea())
-            .alert("study.ratingsHelp.title", isPresented: $showRatingsHelp) {
-                Button("ok", role: .cancel) {}
-            } message: {
-                Text("study.ratingsHelp.message")
-            }
+            .handmadeDialog(
+                isPresented: $showRatingsHelp,
+                title: "study.ratingsHelp.title",
+                message: Text("study.ratingsHelp.message"),
+                actions: [HandmadeDialogAction("ok") {}]
+            )
             .onAppear(perform: prepareQueue)
         }
         .background(Color.remnPaper.ignoresSafeArea())

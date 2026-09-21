@@ -33,16 +33,16 @@ struct RootView: View {
                     .environment(appState)
             }
         }
-        .alert(
-            "error",
+        .handmadeDialog(
             isPresented: Binding(
                 get: { appState.errorMessage != nil },
                 set: { if !$0 { appState.errorMessage = nil } }
-            )
-        ) {
-            Button("ok", role: .cancel) { appState.errorMessage = nil }
-        } message: {
-            Text(appState.errorMessage ?? "")
-        }
+            ),
+            title: "error",
+            message: Text(verbatim: appState.errorMessage ?? ""),
+            actions: [
+                HandmadeDialogAction("ok") { appState.errorMessage = nil }
+            ]
+        )
     }
 }

@@ -93,15 +93,17 @@ struct SettingsView: View {
         .fileImporter(isPresented: $showImporter, allowedContentTypes: [.json]) { result in
             importBackup(result)
         }
-        .alert(
-            "backup.result",
+        .handmadeDialog(
             isPresented: Binding(
                 get: { resultMessage != nil },
                 set: { if !$0 { resultMessage = nil } }
-            )
-        ) {
-            Button("ok", role: .cancel) { resultMessage = nil }
-        } message: { Text(resultMessage ?? "") }
+            ),
+            title: "backup.result",
+            message: Text(verbatim: resultMessage ?? ""),
+            actions: [
+                HandmadeDialogAction("ok") { resultMessage = nil }
+            ]
+        )
         .sheet(isPresented: $showSRSExplanation) {
             SRSExplainerSheet()
         }
