@@ -30,8 +30,9 @@ struct SRSExplainerSheet: View {
                                 .font(RemnTypography.display(32, weight: .semibold, relativeTo: .title))
                                 .remnHandwrittenBounds()
                                 .foregroundStyle(Color.remnAccent)
-                            Text("srs.intro")
-                                .font(.body)
+                            HandwrittenText("srs.intro")
+                                .font(RemnTypography.display(19, relativeTo: .body))
+                                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                                 .foregroundStyle(Color.remnInk)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
@@ -53,8 +54,9 @@ struct SRSExplainerSheet: View {
                         EmptyView()
                     }
 
-                    Text("srs.history")
-                        .font(.footnote)
+                    HandwrittenText("srs.history")
+                        .font(RemnTypography.display(17, relativeTo: .footnote))
+                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(Color.remnGraphite)
                         .padding(.bottom, 18)
                 }
@@ -88,8 +90,9 @@ struct SRSExplainerSheet: View {
                     .remnHandwrittenBounds()
                     .foregroundStyle(Color.remnInk)
             }
-            Text(body)
-                .font(.body)
+            HandwrittenText(body)
+                .font(RemnTypography.display(19, relativeTo: .body))
+                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                 .foregroundStyle(Color.remnInk)
                 .fixedSize(horizontal: false, vertical: true)
             detail()
@@ -137,10 +140,10 @@ struct SRSExplainerSheet: View {
                 .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                 .foregroundStyle(Color.remnAccent)
                 .frame(width: 54, alignment: .leading)
-            Text(note)
-                .font(.subheadline)
+            HandwrittenText(note)
+                .font(RemnTypography.display(17, relativeTo: .subheadline))
+                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                 .foregroundStyle(Color.remnGraphite)
         }
     }
 }
-
