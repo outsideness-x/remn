@@ -55,19 +55,27 @@ struct DoodleIcon: View {
                 context.stroke(lens, with: .color(color), style: stroke)
 
             case .settings:
-                var hub = Path()
-                hub.addEllipse(in: CGRect(x: 8, y: 8.2, width: 8, height: 7.6))
-                context.stroke(hub, with: .color(color), style: stroke)
-                for index in 0..<8 {
-                    let angle = Double(index) * .pi / 4 + 0.04
-                    let inner = CGFloat(5.7 + Double(index % 2) * 0.35)
-                    let outer = CGFloat(9.1 + Double(index % 3) * 0.22)
-                    let cosine = CGFloat(cos(angle))
-                    let sine = CGFloat(sin(angle))
-                    var ray = Path()
-                    ray.move(to: CGPoint(x: 12 + cosine * inner, y: 12 + sine * inner))
-                    ray.addLine(to: CGPoint(x: 12 + cosine * outer, y: 12 + sine * outer))
-                    context.stroke(ray, with: .color(color), style: stroke)
+                // Three uneven mixer controls read as settings at a glance,
+                // without resembling a sun or an appearance toggle.
+                let controls: [(x: CGFloat, y: CGFloat)] = [
+                    (7.0, 5.2), (16.8, 12.0), (9.7, 18.8)
+                ]
+                for control in controls {
+                    var line = Path()
+                    line.move(to: CGPoint(x: 2.6, y: control.y + 0.2))
+                    line.addLine(to: CGPoint(x: control.x - 2.9, y: control.y - 0.1))
+                    line.move(to: CGPoint(x: control.x + 2.9, y: control.y + 0.1))
+                    line.addLine(to: CGPoint(x: 21.3, y: control.y - 0.2))
+                    context.stroke(line, with: .color(color), style: stroke)
+
+                    var knob = Path()
+                    knob.addEllipse(in: CGRect(
+                        x: control.x - 2.2,
+                        y: control.y - 2.2,
+                        width: 4.4,
+                        height: 4.4
+                    ))
+                    context.stroke(knob, with: .color(color), style: stroke)
                 }
 
             case .plus:
@@ -297,4 +305,3 @@ struct DoodleSelectionMark: View {
         .accessibilityHidden(true)
     }
 }
-
