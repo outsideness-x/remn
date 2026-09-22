@@ -21,9 +21,12 @@ struct SettingsView: View {
                     settingsSection("settings.study") {
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
-                                Text("settings.retention")
+                                HandwrittenText("settings.retention")
+                                    .font(RemnTypography.control)
+                                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                                 Spacer()
                                 Text(desiredRetention, format: .percent.precision(.fractionLength(0)))
+                                    .font(RemnTypography.control)
                                     .monospacedDigit()
                             }
                             HandmadeSlider(
@@ -31,8 +34,9 @@ struct SettingsView: View {
                                 range: 0.70...0.97,
                                 step: 0.01
                             )
-                            Text("settings.retention.help")
-                                .font(.footnote)
+                            HandwrittenText("settings.retention.help")
+                                .font(RemnTypography.display(17, relativeTo: .footnote))
+                                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                                 .foregroundStyle(Color.remnGraphite)
 
                             Button { showSRSExplanation = true } label: {
@@ -143,7 +147,9 @@ struct SettingsView: View {
             HStack {
                 DoodleIcon(kind: icon, color: .remnInk, size: 22)
                     .frame(width: 28)
-                Text(title)
+                HandwrittenText(title)
+                    .font(RemnTypography.control)
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                 Spacer()
             }
             .frame(minHeight: 44)
