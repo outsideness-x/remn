@@ -154,34 +154,35 @@ struct SettingsView: View {
 
     private var aboutPanel: some View {
         FlashcardSurface(seed: 734, style: .compact) {
-            VStack(alignment: .leading, spacing: 15) {
-                HStack(alignment: .top, spacing: 14) {
-                    VStack(alignment: .leading, spacing: 5) {
-                        HandwrittenText("remn")
-                            .font(RemnTypography.display(34, weight: .semibold, relativeTo: .title))
-                            .remnHandwrittenBounds()
-                            .foregroundStyle(Color.remnAccent)
-                        Text("about.tagline")
-                            .font(.body)
-                            .foregroundStyle(Color.remnInk)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    Spacer(minLength: 4)
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .center, spacing: 12) {
+                    HandwrittenText("remn")
+                        .font(RemnTypography.display(34, weight: .medium, relativeTo: .title))
+                        .remnHandwrittenBounds()
+                        .foregroundStyle(Color.remnAccent)
+                    Spacer()
                     StackedCardsDoodle()
                         .scaleEffect(0.72)
                         .frame(width: 44, height: 38)
                 }
 
+                HandwrittenText("about.tagline")
+                    .font(RemnTypography.display(20, relativeTo: .body))
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                    .foregroundStyle(Color.remnInk)
+                    .fixedSize(horizontal: false, vertical: true)
+
                 ScribbleDivider(seed: 735)
 
                 HStack(alignment: .center, spacing: 14) {
-                    VStack(alignment: .leading, spacing: 3) {
+                    VStack(alignment: .leading, spacing: 2) {
                         HandwrittenText("about.openSource")
                             .font(RemnTypography.smallControl)
                             .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                             .foregroundStyle(Color.remnGraphite)
-                        Text(versionText)
-                            .font(.caption.monospacedDigit())
+                        HandwrittenText(verbatim: versionText)
+                            .font(RemnTypography.display(15, relativeTo: .caption))
+                            .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                             .foregroundStyle(Color.remnGraphite)
                     }
                     Spacer()
@@ -203,8 +204,9 @@ struct SettingsView: View {
                         .accessibilityLabel(Text("about.mit"))
                 }
 
-                Text("about.ownership")
-                    .font(.footnote)
+                HandwrittenText("about.ownership")
+                    .font(RemnTypography.display(16, relativeTo: .footnote))
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnGraphite)
                     .fixedSize(horizontal: false, vertical: true)
             }
