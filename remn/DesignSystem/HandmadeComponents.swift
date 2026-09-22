@@ -44,17 +44,22 @@ struct StackedCardsDoodle: View {
     var accent: Color = .remnAccent
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 3)
-                .stroke(ink, lineWidth: 2)
-                .frame(width: 43, height: 27)
-                .rotationEffect(.degrees(-7))
-                .offset(x: -3, y: -5)
-            RoundedRectangle(cornerRadius: 3)
-                .stroke(accent, lineWidth: 2.5)
-                .frame(width: 43, height: 27)
-                .rotationEffect(.degrees(4))
-                .offset(x: 4, y: 5)
+        Canvas { context, _ in
+            var back = Path()
+            back.move(to: CGPoint(x: 6, y: 9))
+            back.addQuadCurve(to: CGPoint(x: 47, y: 6), control: CGPoint(x: 27, y: 5))
+            back.addQuadCurve(to: CGPoint(x: 49, y: 32), control: CGPoint(x: 48, y: 19))
+            back.addQuadCurve(to: CGPoint(x: 8, y: 35), control: CGPoint(x: 27, y: 34))
+            back.addQuadCurve(to: CGPoint(x: 6, y: 9), control: CGPoint(x: 5, y: 23))
+            context.stroke(back, with: .color(ink), style: StrokeStyle(lineWidth: 1.9, lineCap: .round, lineJoin: .round))
+
+            var front = Path()
+            front.move(to: CGPoint(x: 11, y: 17))
+            front.addQuadCurve(to: CGPoint(x: 52, y: 18), control: CGPoint(x: 31, y: 15))
+            front.addQuadCurve(to: CGPoint(x: 53, y: 43), control: CGPoint(x: 55, y: 30))
+            front.addQuadCurve(to: CGPoint(x: 12, y: 42), control: CGPoint(x: 33, y: 45))
+            front.addQuadCurve(to: CGPoint(x: 11, y: 17), control: CGPoint(x: 9, y: 29))
+            context.stroke(front, with: .color(accent), style: StrokeStyle(lineWidth: 2.2, lineCap: .round, lineJoin: .round))
         }
         .frame(width: 58, height: 50)
         .accessibilityHidden(true)
