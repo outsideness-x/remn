@@ -36,6 +36,10 @@ struct HandwrittenText: View {
         content = Text(verbatim: value)
     }
 
+    init(text: Text) {
+        content = text
+    }
+
     var body: some View {
         (Text(verbatim: "\u{202F}") + content + Text(verbatim: "\u{202F}"))
             .accessibilityLabel(content)

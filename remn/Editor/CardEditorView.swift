@@ -181,7 +181,7 @@ struct CardEditorView: View {
     private var deckActions: [HandmadeDialogAction] {
         decks.map { deck in
             HandmadeDialogAction(
-                LocalizedStringKey(deckLabel(deck)),
+                verbatim: deckLabel(deck),
                 role: selectedDeckID == deck.id ? .normal : .plain
             ) {
                 selectedDeckID = deck.id

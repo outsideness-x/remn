@@ -9,7 +9,7 @@ enum HandmadeDialogRole {
 
 struct HandmadeDialogAction: Identifiable {
     let id = UUID()
-    let title: LocalizedStringKey
+    let title: Text
     let role: HandmadeDialogRole
     let perform: () -> Void
 
@@ -18,7 +18,17 @@ struct HandmadeDialogAction: Identifiable {
         role: HandmadeDialogRole = .normal,
         perform: @escaping () -> Void
     ) {
-        self.title = title
+        self.title = Text(title)
+        self.role = role
+        self.perform = perform
+    }
+
+    init(
+        verbatim title: String,
+        role: HandmadeDialogRole = .normal,
+        perform: @escaping () -> Void
+    ) {
+        self.title = Text(verbatim: title)
         self.role = role
         self.perform = perform
     }
@@ -111,7 +121,7 @@ private struct HandmadeDialogModifier: ViewModifier {
             action.perform()
             dismiss()
         } label: {
-            HandwrittenText(action.title)
+            HandwrittenText(text: action.title)
                 .font(RemnTypography.control)
                 .remnHandwrittenBounds()
                 .foregroundStyle(foreground(for: action.role))
