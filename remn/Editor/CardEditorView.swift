@@ -39,11 +39,6 @@ struct CardEditorView: View {
         .background(Color.remnPaper.ignoresSafeArea())
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
-                Menu("editor.insert") {
-                    ForEach(MarkdownInsertion.allCases) { insertion in
-                        Button(insertion.localizedLabel) { insert(insertion) }
-                    }
-                }
                 Spacer()
                 Button("done") { focusedSide = nil }
             }
