@@ -164,23 +164,36 @@ struct LibraryView: View {
 
     private var subjectActions: [HandmadeDialogAction] {
         guard let subject = manageSubject else { return [] }
-        return [
+        var actions = [
             HandmadeDialogAction("rename", role: .plain) {
                 manageSubject = nil
                 renameSubject = subject
-            },
-            HandmadeDialogAction("move.up", role: .plain) {
-                move(subject, by: -1)
-            },
-            HandmadeDialogAction("move.down", role: .plain) {
-                move(subject, by: 1)
-            },
+            }
+        ]
+        if let index = subjects.firstIndex(where: { $0.id == subject.id }) {
+            if index > subjects.startIndex {
+                actions.append(
+                    HandmadeDialogAction("move.up", role: .plain) {
+                        move(subject, by: -1)
+                    }
+                )
+            }
+            if index < subjects.index(before: subjects.endIndex) {
+                actions.append(
+                    HandmadeDialogAction("move.down", role: .plain) {
+                        move(subject, by: 1)
+                    }
+                )
+            }
+        }
+        actions.append(contentsOf: [
             HandmadeDialogAction("delete", role: .destructive) {
                 manageSubject = nil
                 deleteSubject = subject
             },
             HandmadeDialogAction("cancel", role: .cancel) { manageSubject = nil }
-        ]
+        ])
+        return actions
     }
 
     private func move(_ subject: SubjectModel, by offset: Int) {

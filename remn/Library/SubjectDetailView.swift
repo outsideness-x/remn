@@ -121,19 +121,33 @@ struct SubjectDetailView: View {
 
     private var deckActions: [HandmadeDialogAction] {
         guard let deck = manageDeck else { return [] }
-        return [
+        var actions = [
             HandmadeDialogAction("rename", role: .plain) {
                 manageDeck = nil
                 renameDeck = deck
-            },
-            HandmadeDialogAction("move.up", role: .plain) { move(deck, by: -1) },
-            HandmadeDialogAction("move.down", role: .plain) { move(deck, by: 1) },
+            }
+        ]
+        let decks = subject.orderedDecks
+        if let index = decks.firstIndex(where: { $0.id == deck.id }) {
+            if index > decks.startIndex {
+                actions.append(
+                    HandmadeDialogAction("move.up", role: .plain) { move(deck, by: -1) }
+                )
+            }
+            if index < decks.index(before: decks.endIndex) {
+                actions.append(
+                    HandmadeDialogAction("move.down", role: .plain) { move(deck, by: 1) }
+                )
+            }
+        }
+        actions.append(contentsOf: [
             HandmadeDialogAction("delete", role: .destructive) {
                 manageDeck = nil
                 deleteDeck = deck
             },
             HandmadeDialogAction("cancel", role: .cancel) { manageDeck = nil }
-        ]
+        ])
+        return actions
     }
 
     private func move(_ deck: Deck, by offset: Int) {
