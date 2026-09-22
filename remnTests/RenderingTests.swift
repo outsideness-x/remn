@@ -103,4 +103,12 @@ struct RenderingTests {
         #expect(image.size.width == 368)
         #expect(image.size.height > 60)
     }
+
+    @Test func externalAttachmentsAreRejectedOffline() {
+        let loader = OfflineAttachmentLoader()
+
+        #expect(throws: OfflineAttachmentError.self) {
+            try loader.rejectedAttachment()
+        }
+    }
 }

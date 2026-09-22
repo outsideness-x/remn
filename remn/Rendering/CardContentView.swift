@@ -36,6 +36,8 @@ struct CardContentView: View {
         )
         .textual.structuredTextStyle(.gitHub)
         .textual.mathProperties(.init(fontScale: mathScale, textAlignment: .center))
+        .textual.imageAttachmentLoader(OfflineAttachmentLoader())
+        .textual.emojiAttachmentLoader(OfflineAttachmentLoader())
         .textual.overflowMode(.scroll)
         .textual.textSelection(.enabled)
         .font(contentFont)
