@@ -66,17 +66,7 @@ struct SettingsView: View {
                         }
                     }
                     settingsSection("settings.about") {
-                        VStack(alignment: .leading, spacing: 10) {
-                            HandwrittenText("remn")
-                                .font(RemnTypography.display(25, weight: .medium, relativeTo: .title2))
-                                .remnHandwrittenBounds()
-                            Text(versionText)
-                                .font(.caption.monospacedDigit())
-                                .foregroundStyle(Color.remnGraphite)
-                            Text("about.openSource")
-                            Text("MIT")
-                                .font(.caption.weight(.semibold))
-                        }
+                        aboutPanel
                     }
                 }
                 .padding(.horizontal, 24)
@@ -160,6 +150,65 @@ struct SettingsView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+    }
+
+    private var aboutPanel: some View {
+        FlashcardSurface(seed: 734, style: .compact) {
+            VStack(alignment: .leading, spacing: 15) {
+                HStack(alignment: .top, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 5) {
+                        HandwrittenText("remn")
+                            .font(RemnTypography.display(34, weight: .semibold, relativeTo: .title))
+                            .remnHandwrittenBounds()
+                            .foregroundStyle(Color.remnAccent)
+                        Text("about.tagline")
+                            .font(.body)
+                            .foregroundStyle(Color.remnInk)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Spacer(minLength: 4)
+                    StackedCardsDoodle()
+                        .scaleEffect(0.72)
+                        .frame(width: 44, height: 38)
+                }
+
+                ScribbleDivider(seed: 735)
+
+                HStack(alignment: .center, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        HandwrittenText("about.openSource")
+                            .font(RemnTypography.smallControl)
+                            .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                            .foregroundStyle(Color.remnGraphite)
+                        Text(versionText)
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(Color.remnGraphite)
+                    }
+                    Spacer()
+                    HandwrittenText(verbatim: "MIT")
+                        .font(RemnTypography.display(25, weight: .semibold, relativeTo: .title3))
+                        .remnHandwrittenBounds()
+                        .foregroundStyle(Color.remnAccent)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background {
+                            WobblyRoundedRectangle(seed: 738, cornerRadius: 7)
+                                .fill(Color.remnAccent.opacity(0.08))
+                        }
+                        .overlay {
+                            WobblyRoundedRectangle(seed: 738, cornerRadius: 7)
+                                .stroke(Color.remnAccent, lineWidth: 1.2)
+                        }
+                        .rotationEffect(.degrees(-2.2))
+                        .accessibilityLabel(Text("about.mit"))
+                }
+
+                Text("about.ownership")
+                    .font(.footnote)
+                    .foregroundStyle(Color.remnGraphite)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
     }
 
     private var versionText: String {

@@ -2,6 +2,9 @@
   "sourceLanguage" : "en",
   "strings" : {
     "about.openSource" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "free & open source" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "бесплатно и с открытым кодом" } } } },
+    "about.mit" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "MIT license" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "лицензия MIT" } } } },
+    "about.ownership" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "your cards stay on this device. backups remain yours." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "карточки остаются на этом устройстве. резервные копии принадлежат вам." } } } },
+    "about.tagline" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "a quiet place for things worth remembering." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "тихое место для того, что стоит запомнить." } } } },
     "about.version" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "version" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "версия" } } } },
     "appearance.dark" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "dark" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "тёмная" } } } },
     "appearance.light" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "light" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "светлая" } } } },
