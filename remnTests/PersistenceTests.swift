@@ -35,4 +35,36 @@ final class PersistenceTests: XCTestCase {
         XCTAssertEqual(try context.fetchCount(FetchDescriptor<Deck>()), 0)
         XCTAssertEqual(try context.fetchCount(FetchDescriptor<Flashcard>()), 0)
     }
+
+    func testActiveStudySessionSurvivesRelaunch() throws {
+        let container = try TestStore.makeContainer()
+        let context = ModelContext(container)
+        let (subject, deck, card) = TestStore.makeCard()
+        context.insert(subject)
+        context.insert(deck)
+        context.insert(card)
+        try context.save()
+
+        let session = try XCTUnwrap(
+            SessionService.start(
+                cards: [card],
+                subjectIDs: [subject.id],
+                deckID: deck.id,
+                targetCount: 20,
+                context: context
+            )
+        )
+        XCTAssertTrue(session.isActive)
+
+        let relaunchedContext = ModelContext(container)
+        let restored = try XCTUnwrap(
+            relaunchedContext.fetch(FetchDescriptor<StudySessionRecord>()).first
+        )
+        XCTAssertTrue(restored.isActive)
+        XCTAssertEqual(restored.subjectIDs, [subject.id])
+        XCTAssertEqual(restored.deckID, deck.id)
+        XCTAssertEqual(restored.admittedCardIDs, [card.id])
+        XCTAssertEqual(restored.queueCardIDs, [card.id])
+        XCTAssertEqual(try relaunchedContext.fetchCount(FetchDescriptor<ReviewLogEntry>()), 0)
+    }
 }
