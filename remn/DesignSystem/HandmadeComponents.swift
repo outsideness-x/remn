@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct ScreenTitle: View {
-    let title: LocalizedStringKey
+    let title: String
 
     var body: some View {
         VStack(alignment: .leading, spacing: 1) {
-            HandwrittenText(title)
+            HandwrittenText(verbatim: title)
                 .font(RemnTypography.pageTitle)
                 .remnHandwrittenBounds()
                 .foregroundStyle(Color.remnInk)

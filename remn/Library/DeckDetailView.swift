@@ -25,7 +25,7 @@ struct DeckDetailView: View {
             }
             ScrollView {
                 VStack(alignment: .leading, spacing: 30) {
-                    ScreenTitle(title: LocalizedStringKey(deck.name))
+                    ScreenTitle(title: deck.name)
                     if deckCards.isEmpty {
                         QuietEmptyState(
                             title: "card.empty",

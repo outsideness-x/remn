@@ -23,7 +23,7 @@ struct SubjectDetailView: View {
             }
             ScrollView {
                 VStack(alignment: .leading, spacing: 30) {
-                    ScreenTitle(title: LocalizedStringKey(subject.name))
+                    ScreenTitle(title: subject.name)
                     if subject.decks.isEmpty {
                         QuietEmptyState(
                             title: "deck.empty",
