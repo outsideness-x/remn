@@ -14,8 +14,9 @@ struct CardRow: View {
                         .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(statusColor)
                 }
-                Text(RemnFormatters.usefulLine(card.frontMarkdown))
-                    .font(.body.weight(.semibold))
+                HandwrittenText(verbatim: RemnFormatters.usefulLine(card.frontMarkdown))
+                    .font(RemnTypography.display(21, weight: .medium, relativeTo: .body))
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnInk)
                     .lineLimit(3)
             }

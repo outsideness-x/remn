@@ -13,7 +13,7 @@ struct SearchView: View {
                 TextField("search.placeholder", text: $query)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
-                    .font(.body)
+                    .font(RemnTypography.control)
             }
             .padding(.horizontal, 4)
             .padding(.vertical, 12)
@@ -73,15 +73,17 @@ private struct SearchResultRow: View {
                     .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnGraphite)
                     .lineLimit(1)
-                Text(RemnFormatters.usefulLine(card.frontMarkdown))
-                    .font(.body.weight(.semibold))
+                HandwrittenText(verbatim: RemnFormatters.usefulLine(card.frontMarkdown))
+                    .font(RemnTypography.display(21, weight: .medium, relativeTo: .body))
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                     .foregroundStyle(Color.remnInk)
                     .lineLimit(3)
                 HStack {
                     FlashcardSideLabel(title: "card.front")
                     Spacer()
-                    Text(RemnFormatters.dueStatus(for: card))
-                        .font(.caption.monospacedDigit())
+                    HandwrittenText(verbatim: RemnFormatters.dueStatus(for: card))
+                        .font(RemnTypography.smallControl)
+                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(Color.remnGraphite)
                 }
             }
