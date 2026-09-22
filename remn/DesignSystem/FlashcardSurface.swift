@@ -18,7 +18,7 @@ enum FlashcardSurfaceStyle {
     var verticalPadding: CGFloat {
         switch self {
         case .compact: 15
-        case .regular: 24
+        case .regular: 20
         case .study: 27
         case .export: 28
         }

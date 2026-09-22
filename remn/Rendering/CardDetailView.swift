@@ -32,17 +32,17 @@ struct CardDetailView: View {
                         .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(Color.remnGraphite)
                     FlashcardSurface(seed: card.id.hashValue) {
-                        VStack(alignment: .leading, spacing: 18) {
+                        VStack(alignment: .leading, spacing: 12) {
                             HStack(alignment: .firstTextBaseline) {
                                 FlashcardSideLabel(title: "card.front")
                                 Spacer()
-                                Text(RemnFormatters.dueStatus(for: card))
-                                    .font(.caption.monospacedDigit())
+                                HandwrittenText(verbatim: RemnFormatters.dueStatus(for: card))
+                                    .font(RemnTypography.smallControl)
+                                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                                     .foregroundStyle(Color.remnGraphite)
                             }
                             CardContentView(markdown: card.frontMarkdown)
                             ScribbleDivider(seed: card.id.hashValue)
-                                .padding(.vertical, 2)
                             FlashcardSideLabel(title: "card.back")
                             CardContentView(markdown: card.backMarkdown)
                         }

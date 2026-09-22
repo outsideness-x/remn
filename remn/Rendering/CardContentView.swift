@@ -15,7 +15,7 @@ struct CardContentView: View {
     @ScaledMetric(relativeTo: .body) private var baseMathSize = 22
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 10) {
             ForEach(Array(MarkdownRenderSource.blocks(in: markdown).enumerated()), id: \.offset) { _, block in
                 switch block {
                 case .markdown(let markdown):
@@ -51,7 +51,6 @@ struct CardContentView: View {
     private func displayMath(_ latex: String) -> some View {
         ViewThatFits(in: .horizontal) {
             HStack(spacing: 0) {
-                Spacer(minLength: 0)
                 math(latex)
                 Spacer(minLength: 0)
             }
@@ -60,8 +59,8 @@ struct CardContentView: View {
                     .padding(.horizontal, 4)
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 4)
         .accessibilityLabel(Text(verbatim: latex))
     }
 
