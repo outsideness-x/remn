@@ -26,6 +26,7 @@
 		582B9734788D4EE00885E407 /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6459C94EE97FBF98F20517 /* SchedulerTests.swift */; };
 		597F56886E9569F06DBE9D60 /* QuietEmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9781E1A59A1E31318F42FAF7 /* QuietEmptyState.swift */; };
 		59FAA8DAA83C5B42EAB32515 /* SpacedRepetitionScheduling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8E21F5B2A822AB13F5AAA2 /* SpacedRepetitionScheduling.swift */; };
+		5AC005F854B7A92D74DFF8ED /* DoodleControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80869EBAE3115C2CB6EAC17B /* DoodleControls.swift */; };
 		65CE99766105949EDEE9FFD4 /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = 7620BA764C7F419A19C59B26 /* Textual */; };
 		692C63800919DA68D9627B7E /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CC1397608ADD45DB488B72 /* LibraryView.swift */; };
 		6A9BE6DCE88C28F6513B9D36 /* SwiftUIMath in Frameworks */ = {isa = PBXBuildFile; productRef = DD7828D10E9294004A691F89 /* SwiftUIMath */; };
@@ -53,6 +54,7 @@
 		B2FD3DF88AFE4FE8B951BAF4 /* DeckDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81440D7398777E78E1B6860F /* DeckDetailView.swift */; };
 		B86480F4C6B017013F1F8DF2 /* RemnSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE31C963CEF82E56A782734C /* RemnSchema.swift */; };
 		B97F03BBBBE9EF9EE4E4EB8C /* BackupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2D647215E4ECF91FFE78E5 /* BackupTests.swift */; };
+		C907C501075A365FE2DBD930 /* SRSExplainerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8FF4FE80679E310B341FDE /* SRSExplainerSheet.swift */; };
 		CC5875A2D467A031279A6390 /* ReviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB45169EF35C9E4CB79AF60 /* ReviewService.swift */; };
 		CD0FAC7C2A8C07479BCF8F21 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12BCF790E0389FA64512B4B /* SearchView.swift */; };
 		CD3F1776C35ECC20D198BA06 /* HandmadeDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35084084FB10D50F86C775C /* HandmadeDialog.swift */; };
@@ -99,6 +101,7 @@
 		3FCD11850748DFAC93771937 /* SubjectDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectDetailView.swift; sourceTree = "<group>"; };
 		43359355A0A7079AF77BC1A9 /* CardRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRow.swift; sourceTree = "<group>"; };
 		467F839F80FCD6C92EEDB102 /* CardImageExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageExporter.swift; sourceTree = "<group>"; };
+		4F8FF4FE80679E310B341FDE /* SRSExplainerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRSExplainerSheet.swift; sourceTree = "<group>"; };
 		50FF9B7EDA1C99BA82A90902 /* PersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceTests.swift; sourceTree = "<group>"; };
 		55A4050B3C2FC8F8B5C1E7E1 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		588D5C69EA069B1E964F4EB3 /* RatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingButton.swift; sourceTree = "<group>"; };
@@ -117,6 +120,7 @@
 		7C02176044374CB1713244F6 /* CardContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContentView.swift; sourceTree = "<group>"; };
 		7C2499DE0F3CF80E54B2E115 /* CardExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardExportView.swift; sourceTree = "<group>"; };
 		7E2D647215E4ECF91FFE78E5 /* BackupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupTests.swift; sourceTree = "<group>"; };
+		80869EBAE3115C2CB6EAC17B /* DoodleControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoodleControls.swift; sourceTree = "<group>"; };
 		81440D7398777E78E1B6860F /* DeckDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailView.swift; sourceTree = "<group>"; };
 		8582F224E564AE10A9C73E52 /* ReviewLogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewLogEntry.swift; sourceTree = "<group>"; };
 		8D4751617CF215BF60BAE16C /* CardSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSearch.swift; sourceTree = "<group>"; };
@@ -189,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				96FB7111FB0DD9D20D2A60B3 /* SettingsView.swift */,
+				4F8FF4FE80679E310B341FDE /* SRSExplainerSheet.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -216,6 +221,7 @@
 		2BF31850F41ECA3351FC57AC /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				80869EBAE3115C2CB6EAC17B /* DoodleControls.swift */,
 				B74613E361D1008F37D52C7D /* FlashcardSurface.swift */,
 				9ACE8C66501FBC9214D431FA /* HandmadeComponents.swift */,
 				E35084084FB10D50F86C775C /* HandmadeDialog.swift */,
@@ -524,6 +530,7 @@
 				E9039D7B2418A258D6593C74 /* CardSearch.swift in Sources */,
 				707019A24C095F95E9E8AA85 /* Deck.swift in Sources */,
 				B2FD3DF88AFE4FE8B951BAF4 /* DeckDetailView.swift in Sources */,
+				5AC005F854B7A92D74DFF8ED /* DoodleControls.swift in Sources */,
 				7ADA5F050256C62E1F361A60 /* FSRSSchedulerService.swift in Sources */,
 				F3E30020DAC50E4107057764 /* Flashcard+Display.swift in Sources */,
 				1530F51EA72ABD44CA007034 /* Flashcard.swift in Sources */,
@@ -545,6 +552,7 @@
 				8C92B2347AADF0C43F2E0D36 /* ReviewLogEntry.swift in Sources */,
 				CC5875A2D467A031279A6390 /* ReviewService.swift in Sources */,
 				F8E44050781AEE3AB274F377 /* RootView.swift in Sources */,
+				C907C501075A365FE2DBD930 /* SRSExplainerSheet.swift in Sources */,
 				ED3DFE877C970B008EFC696E /* ScheduleState.swift in Sources */,
 				F3A03CFFB4ED4783B2DF51C4 /* ScribbleDivider.swift in Sources */,
 				CD0FAC7C2A8C07479BCF8F21 /* SearchView.swift in Sources */,
