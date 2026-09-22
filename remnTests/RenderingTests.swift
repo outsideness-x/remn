@@ -111,4 +111,21 @@ struct RenderingTests {
             try loader.rejectedAttachment()
         }
     }
+
+    @MainActor
+    @Test func cardExportRendersAt1080PixelWidth() throws {
+        let (_, _, card) = TestStore.makeCard(
+            front: "$$E = mc^2$$",
+            back: "```swift\nlet answer = 42\n```"
+        )
+        let renderer = ImageRenderer(content: CardExportView(card: card))
+        renderer.scale = 2
+        renderer.proposedSize = ProposedViewSize(width: 540, height: nil)
+
+        let image = try #require(renderer.uiImage)
+        let cgImage = try #require(image.cgImage)
+
+        #expect(cgImage.width == 1080)
+        #expect(cgImage.height > 0)
+    }
 }
