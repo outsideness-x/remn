@@ -152,13 +152,15 @@ struct CardEditorView: View {
                         .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(Color.remnGraphite)
                     if let selectedDeck {
-                        Text(selectedDeck.name)
-                            .font(.system(.body, design: .default, weight: .semibold))
+                        HandwrittenText(verbatim: selectedDeck.name)
+                            .font(RemnTypography.display(22, weight: .medium, relativeTo: .body))
+                            .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                             .foregroundStyle(Color.remnInk)
                             .lineLimit(1)
                         if let subject = selectedDeck.subject {
-                            Text(subject.name)
-                                .font(.caption)
+                            HandwrittenText(verbatim: subject.name)
+                                .font(RemnTypography.smallControl)
+                                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                                 .foregroundStyle(Color.remnGraphite)
                                 .lineLimit(1)
                         }
@@ -195,7 +197,7 @@ struct CardEditorView: View {
     private var preview: some View {
         ScrollView {
             FlashcardSurface(seed: card?.id.hashValue ?? 88) {
-                VStack(alignment: .leading, spacing: 18) {
+                VStack(alignment: .leading, spacing: 12) {
                     FlashcardSideLabel(title: "card.front")
                     CardContentView(markdown: front, context: .preview)
                     ScribbleDivider(seed: 88)
