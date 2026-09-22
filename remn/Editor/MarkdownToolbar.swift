@@ -48,32 +48,32 @@ struct MarkdownToolbar: View {
     let insert: (MarkdownInsertion) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 9) {
             HandwrittenText("editor.insert")
                 .font(RemnTypography.smallControl)
                 .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                 .foregroundStyle(Color.remnGraphite)
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 0) {
-                    ForEach(Array(MarkdownInsertion.allCases.enumerated()), id: \.element.id) { index, item in
-                        if index > 0 {
-                            Text("/")
-                                .font(.caption.monospaced())
-                                .foregroundStyle(Color.remnGraphite.opacity(0.36))
-                                .accessibilityHidden(true)
-                        }
-                        Button { insert(item) } label: {
-                            Text(item.label)
-                                .font(.system(.caption, design: .monospaced, weight: .medium))
-                                .foregroundStyle(Color.remnInk)
-                                .padding(.horizontal, 10)
-                                .frame(minHeight: 40)
-                                .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(Text(verbatim: item.localizedLabel))
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
+                ForEach(Array(MarkdownInsertion.allCases.enumerated()), id: \.element.id) { index, item in
+                    Button { insert(item) } label: {
+                        HandwrittenText(verbatim: item.label)
+                            .font(RemnTypography.smallControl)
+                            .remnHandwrittenBounds(horizontal: 3, vertical: 1)
+                            .foregroundStyle(Color.remnInk)
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                            .background {
+                                WobblyRoundedRectangle(seed: 601 + index * 29, cornerRadius: 8)
+                                    .fill(Color.remnSurface.opacity(0.5))
+                            }
+                            .overlay {
+                                WobblyRoundedRectangle(seed: 601 + index * 29, cornerRadius: 8)
+                                    .stroke(Color.remnGraphite.opacity(0.55), lineWidth: 1)
+                            }
+                            .rotationEffect(.degrees(Double(index % 3 - 1) * 0.25))
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(Text(verbatim: item.localizedLabel))
                 }
             }
         }
