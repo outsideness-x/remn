@@ -7,7 +7,7 @@ enum RemnTypography {
         weight: Font.Weight = .regular,
         relativeTo textStyle: Font.TextStyle = .body
     ) -> Font {
-        .custom("Caveat-Regular", size: size, relativeTo: textStyle)
+        .custom("Neucha", size: size, relativeTo: textStyle)
             .weight(weight)
     }
 
@@ -18,13 +18,11 @@ enum RemnTypography {
     static var smallControl: Font { display(17, weight: .medium, relativeTo: .subheadline) }
 
     static var isDisplayFontAvailable: Bool {
-        UIFont(name: "Caveat-Regular", size: 17) != nil
+        UIFont(name: "Neucha", size: 17) != nil
     }
 }
 
-/// Reserves real glyph-run width around Caveat. The font intentionally draws many glyphs
-/// past their advance width (for example `?` extends about 16% of an em to the right),
-/// which SwiftUI otherwise clips before ordinary view padding is applied.
+/// Reserve glyph-run width for the irregular overhangs of handwritten type.
 struct HandwrittenText: View {
     private let content: Text
 
@@ -47,8 +45,7 @@ struct HandwrittenText: View {
 }
 
 extension View {
-    /// Caveat has generous handwritten overhangs that sit outside its reported glyph bounds.
-    /// Give those strokes a little canvas so SwiftUI does not shave them off in compact controls.
+    /// Give handwritten strokes room at the edges of compact controls.
     func remnHandwrittenBounds(horizontal: CGFloat = 3, vertical: CGFloat = 2) -> some View {
         padding(.horizontal, horizontal)
             .padding(.vertical, vertical)

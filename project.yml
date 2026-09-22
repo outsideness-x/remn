@@ -40,7 +40,7 @@ targets:
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UIAppFonts:
-          - Caveat-Variable.ttf
+          - Neucha.ttf
         UILaunchScreen:
           UIColorName: LaunchBackground
         UIApplicationSceneManifest:

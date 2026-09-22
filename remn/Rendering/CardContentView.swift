@@ -89,9 +89,9 @@ struct CardContentView: View {
 
     private var contentFont: Font {
         switch context {
-        case .study: .system(.title3, design: .default)
-        case .detail, .preview: .system(.body, design: .default)
-        case .export: .system(size: 17, weight: .regular, design: .default)
+        case .study: RemnTypography.display(25, relativeTo: .title3)
+        case .detail, .preview: RemnTypography.display(22, relativeTo: .body)
+        case .export: RemnTypography.display(22, relativeTo: .body)
         }
     }
 }
