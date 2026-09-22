@@ -270,15 +270,10 @@ struct HandmadeSlider: View {
             )
         }
         .frame(height: 34)
-        .accessibilityElement()
-        .accessibilityLabel(Text("settings.retention"))
-        .accessibilityValue(Text(value, format: .percent.precision(.fractionLength(0))))
-        .accessibilityAdjustableAction { direction in
-            switch direction {
-            case .increment: value = min(range.upperBound, value + step)
-            case .decrement: value = max(range.lowerBound, value - step)
-            @unknown default: break
-            }
+        .accessibilityRepresentation {
+            Slider(value: $value, in: range, step: step)
+                .accessibilityLabel(Text("settings.retention"))
+                .accessibilityValue(Text(value, format: .percent.precision(.fractionLength(0))))
         }
     }
 
