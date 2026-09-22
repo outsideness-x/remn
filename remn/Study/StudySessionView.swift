@@ -52,10 +52,22 @@ struct StudySessionView: View {
             }
             .frame(minWidth: 64, minHeight: 44, alignment: .leading)
             Spacer()
-            HandwrittenText(verbatim: session.isActive ? progress : "remn")
-                .font(session.isActive ? .caption.monospacedDigit() : RemnTypography.navigationTitle)
-                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                .foregroundStyle(Color.remnGraphite)
+            if session.isActive {
+                VStack(spacing: -1) {
+                    HandwrittenText(verbatim: progress)
+                        .font(RemnTypography.control)
+                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                        .foregroundStyle(Color.remnInk)
+                    ScribbleDivider(seed: 271)
+                        .frame(width: 28)
+                }
+                .accessibilityElement(children: .combine)
+            } else {
+                HandwrittenText(verbatim: "remn")
+                    .font(RemnTypography.navigationTitle)
+                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                    .foregroundStyle(Color.remnGraphite)
+            }
             Spacer()
             Group {
                 if showUndo {
