@@ -67,4 +67,8 @@ enum RemnLanguage {
     static func localized(_ key: String) -> String {
         bundle.localizedString(forKey: key, value: key, table: nil)
     }
+
+    static func counted(_ count: Int, singular: String, plural: String) -> String {
+        "\(count) \(localized(count == 1 ? singular : plural))"
+    }
 }

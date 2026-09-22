@@ -51,6 +51,16 @@ struct StudyCompletionView: View {
 
     private var summary: String {
         let reviews = max(0, session.admittedCardIDs.count - session.initialNewCount)
-        return "\(session.admittedCardIDs.count) \(RemnLanguage.localized("library.cards"))  ·  \(session.initialNewCount) \(RemnLanguage.localized("status.new"))  ·  \(reviews) \(RemnLanguage.localized("study.reviews"))"
+        let cardCount = RemnLanguage.counted(
+            session.admittedCardIDs.count,
+            singular: "library.card",
+            plural: "library.cards"
+        )
+        let reviewCount = RemnLanguage.counted(
+            reviews,
+            singular: "study.review",
+            plural: "study.reviews"
+        )
+        return "\(cardCount)  ·  \(session.initialNewCount) \(RemnLanguage.localized("status.new"))  ·  \(reviewCount)"
     }
 }

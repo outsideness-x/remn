@@ -15,7 +15,7 @@ struct LibraryRow: View {
                     .foregroundStyle(Color.remnInk)
                     .lineLimit(2)
                 HandwrittenText(
-                    verbatim: "\(dueCount) \(RemnLanguage.localized("library.due"))  ·  \(totalCount) \(RemnLanguage.localized("library.cards"))"
+                    verbatim: "\(dueCount) \(RemnLanguage.localized("library.due"))  ·  \(RemnLanguage.counted(totalCount, singular: "library.card", plural: "library.cards"))"
                 )
                     .font(RemnTypography.smallControl)
                     .remnHandwrittenBounds(horizontal: 2, vertical: 1)

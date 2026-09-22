@@ -106,7 +106,11 @@ struct StudySetupSheet: View {
                             .accessibilityLabel(Text("decrease"))
 
                             HandwrittenText(
-                                verbatim: "\(customCount) \(RemnLanguage.localized("library.cards"))"
+                                verbatim: RemnLanguage.counted(
+                                    customCount,
+                                    singular: "library.card",
+                                    plural: "library.cards"
+                                )
                             )
                             .font(RemnTypography.control)
                             .remnHandwrittenBounds()
