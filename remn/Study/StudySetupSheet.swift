@@ -88,9 +88,45 @@ struct StudySetupSheet: View {
                         sessionSummary(at: timeline.date)
                     }
                     if countChoice == .custom {
-                        Stepper(value: $customCount, in: 1...500) {
-                            Text("\(customCount) \(RemnLanguage.localized("library.cards"))")
-                                .font(.body.weight(.semibold))
+                        HStack(spacing: 14) {
+                            Button { customCount = max(1, customCount - 1) } label: {
+                                DoodleIcon(kind: .minus, color: .remnInk, size: 19)
+                                    .frame(width: 44, height: 44)
+                                    .background {
+                                        WobblyRoundedRectangle(seed: 517, cornerRadius: 10)
+                                            .fill(Color.remnSurface)
+                                    }
+                                    .overlay {
+                                        WobblyRoundedRectangle(seed: 517, cornerRadius: 10)
+                                            .stroke(Color.remnInk.opacity(0.45), lineWidth: 1)
+                                    }
+                            }
+                            .buttonStyle(.plain)
+                            .disabled(customCount == 1)
+                            .accessibilityLabel(Text("decrease"))
+
+                            HandwrittenText(
+                                verbatim: "\(customCount) \(RemnLanguage.localized("library.cards"))"
+                            )
+                            .font(RemnTypography.control)
+                            .remnHandwrittenBounds()
+                            .frame(maxWidth: .infinity)
+
+                            Button { customCount = min(500, customCount + 1) } label: {
+                                DoodleIcon(kind: .plus, color: .remnInk, size: 19)
+                                    .frame(width: 44, height: 44)
+                                    .background {
+                                        WobblyRoundedRectangle(seed: 529, cornerRadius: 10)
+                                            .fill(Color.remnSurface)
+                                    }
+                                    .overlay {
+                                        WobblyRoundedRectangle(seed: 529, cornerRadius: 10)
+                                            .stroke(Color.remnInk.opacity(0.45), lineWidth: 1)
+                                    }
+                            }
+                            .buttonStyle(.plain)
+                            .disabled(customCount == 500)
+                            .accessibilityLabel(Text("increase"))
                         }
                         .padding(.vertical, 8)
                     }

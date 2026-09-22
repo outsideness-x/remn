@@ -170,9 +170,7 @@ struct CardEditorView: View {
                     }
                 }
                 Spacer(minLength: 8)
-                Image(systemName: "chevron.down")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(Color.remnGraphite)
+                DoodleIcon(kind: .down, color: .remnGraphite, size: 18)
                     .frame(width: 44, height: 44)
             }
             .contentShape(Rectangle())

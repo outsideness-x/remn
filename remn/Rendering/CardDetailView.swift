@@ -57,9 +57,28 @@ struct CardDetailView: View {
         .toolbar(.hidden, for: .navigationBar)
         .overlay {
             if isExporting {
-                ProgressView("export.saving")
-                    .padding(18)
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
+                ZStack {
+                    Color.black.opacity(0.28)
+                        .ignoresSafeArea()
+                    VStack(spacing: 8) {
+                        StackedCardsDoodle()
+                            .scaleEffect(0.72)
+                            .frame(width: 42, height: 34)
+                        HandwrittenText("export.saving")
+                            .font(RemnTypography.control)
+                            .remnHandwrittenBounds()
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 17)
+                    .background {
+                        WobblyRoundedRectangle(seed: 688, cornerRadius: 12)
+                            .fill(Color.remnCardPaper)
+                    }
+                    .overlay {
+                        WobblyRoundedRectangle(seed: 688, cornerRadius: 12)
+                            .stroke(Color.remnInk.opacity(0.72), lineWidth: 1.2)
+                    }
+                }
             }
         }
         .sheet(isPresented: $showEditor) {

@@ -208,7 +208,8 @@ struct StudySessionView: View {
                     .foregroundStyle(Color.remnGraphite)
                 Spacer()
                 Button { showRatingsHelp = true } label: {
-                    Image(systemName: "info.circle").frame(width: 44, height: 32)
+                    DoodleIcon(kind: .info, color: .remnAccent, size: 19)
+                        .frame(width: 44, height: 32)
                 }
                 .accessibilityLabel(Text("study.ratingsHelp.title"))
             }

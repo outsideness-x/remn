@@ -9,8 +9,7 @@ struct SearchView: View {
         VStack(spacing: 0) {
             RemnNavigationHeader(title: "search")
             HStack(spacing: 12) {
-                Image(systemName: "magnifyingglass")
-                    .foregroundStyle(Color.remnGraphite)
+                DoodleIcon(kind: .search, color: .remnGraphite, size: 20)
                 TextField("search.placeholder", text: $query)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()

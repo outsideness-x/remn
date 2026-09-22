@@ -70,6 +70,11 @@ enum DoodleIconKind {
     case forward
     case more
     case flip
+    case down
+    case info
+    case minus
+    case upload
+    case download
 }
 
 struct DoodleIcon: View {
@@ -171,10 +176,148 @@ struct DoodleIcon: View {
                 curve.addLine(to: CGPoint(x: 18.4, y: 10.1))
                 curve.addLine(to: CGPoint(x: 15.3, y: 15.1))
                 context.stroke(curve, with: .color(color), style: stroke)
+
+            case .down:
+                var chevron = Path()
+                chevron.move(to: CGPoint(x: 4.5, y: 8.5))
+                chevron.addLine(to: CGPoint(x: 12.2, y: 16.3))
+                chevron.addLine(to: CGPoint(x: 19.6, y: 8.1))
+                context.stroke(chevron, with: .color(color), style: stroke)
+
+            case .info:
+                var ring = Path()
+                ring.addEllipse(in: CGRect(x: 3.1, y: 3.2, width: 17.8, height: 17.3))
+                ring.move(to: CGPoint(x: 12.1, y: 10.5))
+                ring.addLine(to: CGPoint(x: 11.8, y: 16.4))
+                context.stroke(ring, with: .color(color), style: stroke)
+                var dot = Path()
+                dot.addEllipse(in: CGRect(x: 10.9, y: 6.7, width: 2.2, height: 2.2))
+                context.fill(dot, with: .color(color))
+
+            case .minus:
+                var minus = Path()
+                minus.move(to: CGPoint(x: 4, y: 12.3))
+                minus.addLine(to: CGPoint(x: 20, y: 11.8))
+                context.stroke(minus, with: .color(color), style: stroke)
+
+            case .upload, .download:
+                let pointsUp = kind == .upload
+                var transfer = Path()
+                transfer.move(to: CGPoint(x: 4, y: 19.5))
+                transfer.addLine(to: CGPoint(x: 20, y: 19.1))
+                transfer.move(to: CGPoint(x: 12.1, y: pointsUp ? 18 : 5))
+                transfer.addLine(to: CGPoint(x: 11.8, y: pointsUp ? 5 : 18))
+                let arrowY: CGFloat = pointsUp ? 5 : 18
+                let wingY: CGFloat = pointsUp ? 10.5 : 12.5
+                transfer.move(to: CGPoint(x: 6.8, y: wingY))
+                transfer.addLine(to: CGPoint(x: 11.8, y: arrowY))
+                transfer.addLine(to: CGPoint(x: 17.1, y: wingY))
+                context.stroke(transfer, with: .color(color), style: stroke)
             }
         }
         .frame(width: size, height: size)
         .accessibilityHidden(true)
+    }
+}
+
+struct HandmadeSlider: View {
+    @Binding var value: Double
+    let range: ClosedRange<Double>
+    let step: Double
+
+    var body: some View {
+        GeometryReader { proxy in
+            let thumbSize: CGFloat = 24
+            let travel = max(1, proxy.size.width - thumbSize)
+            let progress = (value - range.lowerBound) / (range.upperBound - range.lowerBound)
+            let thumbX = travel * CGFloat(progress)
+
+            ZStack(alignment: .leading) {
+                Canvas { context, size in
+                    let y = size.height / 2
+                    var track = Path()
+                    track.move(to: CGPoint(x: thumbSize / 2, y: y + 0.6))
+                    track.addCurve(
+                        to: CGPoint(x: size.width - thumbSize / 2, y: y - 0.4),
+                        control1: CGPoint(x: size.width * 0.34, y: y - 1.0),
+                        control2: CGPoint(x: size.width * 0.68, y: y + 0.8)
+                    )
+                    context.stroke(
+                        track,
+                        with: .color(.remnInk.opacity(0.50)),
+                        style: StrokeStyle(lineWidth: 1.25, lineCap: .round)
+                    )
+
+                    var active = Path()
+                    active.move(to: CGPoint(x: thumbSize / 2, y: y + 0.6))
+                    active.addLine(to: CGPoint(x: thumbX + thumbSize / 2, y: y))
+                    context.stroke(
+                        active,
+                        with: .color(.remnAccent),
+                        style: StrokeStyle(lineWidth: 2.1, lineCap: .round)
+                    )
+                }
+
+                DoodleSliderThumb()
+                    .offset(x: thumbX)
+            }
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { gesture in
+                        updateValue(at: gesture.location.x - thumbSize / 2, travel: travel)
+                    }
+            )
+        }
+        .frame(height: 34)
+        .accessibilityElement()
+        .accessibilityLabel(Text("settings.retention"))
+        .accessibilityValue(Text(value, format: .percent.precision(.fractionLength(0))))
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment: value = min(range.upperBound, value + step)
+            case .decrement: value = max(range.lowerBound, value - step)
+            @unknown default: break
+            }
+        }
+    }
+
+    private func updateValue(at x: CGFloat, travel: CGFloat) {
+        let fraction = min(max(Double(x / travel), 0), 1)
+        let raw = range.lowerBound + fraction * (range.upperBound - range.lowerBound)
+        value = min(range.upperBound, max(range.lowerBound, (raw / step).rounded() * step))
+    }
+}
+
+private struct DoodleSliderThumb: View {
+    var body: some View {
+        Canvas { context, size in
+            var path = Path()
+            path.move(to: CGPoint(x: size.width * 0.51, y: 1.2))
+            path.addCurve(
+                to: CGPoint(x: 1.3, y: size.height * 0.52),
+                control1: CGPoint(x: 5.7, y: 0.5),
+                control2: CGPoint(x: 0.5, y: 5.8)
+            )
+            path.addCurve(
+                to: CGPoint(x: size.width * 0.49, y: size.height - 1.0),
+                control1: CGPoint(x: 1.0, y: size.height - 5.4),
+                control2: CGPoint(x: 5.8, y: size.height - 0.4)
+            )
+            path.addCurve(
+                to: CGPoint(x: size.width - 1.2, y: size.height * 0.49),
+                control1: CGPoint(x: size.width - 5.8, y: size.height - 1.1),
+                control2: CGPoint(x: size.width - 0.5, y: size.height - 5.6)
+            )
+            path.addCurve(
+                to: CGPoint(x: size.width * 0.51, y: 1.2),
+                control1: CGPoint(x: size.width - 1.0, y: 5.6),
+                control2: CGPoint(x: size.width - 5.6, y: 0.8)
+            )
+            context.fill(path, with: .color(.remnCardPaper))
+            context.stroke(path, with: .color(.remnAccent), style: StrokeStyle(lineWidth: 1.7))
+        }
+        .frame(width: 24, height: 24)
     }
 }
 

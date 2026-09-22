@@ -26,7 +26,11 @@ struct SettingsView: View {
                                 Text(desiredRetention, format: .percent.precision(.fractionLength(0)))
                                     .monospacedDigit()
                             }
-                            Slider(value: $desiredRetention, in: 0.70...0.97, step: 0.01)
+                            HandmadeSlider(
+                                value: $desiredRetention,
+                                range: 0.70...0.97,
+                                step: 0.01
+                            )
                             Text("settings.retention.help")
                                 .font(.footnote)
                                 .foregroundStyle(Color.remnGraphite)
@@ -54,9 +58,9 @@ struct SettingsView: View {
                     }
                     settingsSection("settings.data") {
                         VStack(spacing: 2) {
-                            settingsButton("backup.export", systemImage: "arrow.up.doc", action: exportBackup)
+                            settingsButton("backup.export", icon: .upload, action: exportBackup)
                             ScribbleDivider(seed: 112)
-                            settingsButton("backup.import", systemImage: "arrow.down.doc") {
+                            settingsButton("backup.import", icon: .download) {
                                 showImporter = true
                             }
                         }
@@ -142,12 +146,13 @@ struct SettingsView: View {
 
     private func settingsButton(
         _ title: LocalizedStringKey,
-        systemImage: String,
+        icon: DoodleIconKind,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
             HStack {
-                Image(systemName: systemImage).frame(width: 28)
+                DoodleIcon(kind: icon, color: .remnInk, size: 22)
+                    .frame(width: 28)
                 Text(title)
                 Spacer()
             }
