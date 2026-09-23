@@ -22,28 +22,6 @@ enum RemnTypography {
     }
 }
 
-/// Reserve glyph-run width for the irregular overhangs of handwritten type.
-struct HandwrittenText: View {
-    private let content: Text
-
-    init(_ key: LocalizedStringKey) {
-        content = Text(key)
-    }
-
-    init(verbatim value: String) {
-        content = Text(verbatim: value)
-    }
-
-    init(text: Text) {
-        content = text
-    }
-
-    var body: some View {
-        (Text(verbatim: "\u{202F}") + content + Text(verbatim: "\u{202F}"))
-            .accessibilityLabel(content)
-    }
-}
-
 extension View {
     /// Give handwritten strokes room at the edges of compact controls.
     func remnHandwrittenBounds(horizontal: CGFloat = 3, vertical: CGFloat = 2) -> some View {

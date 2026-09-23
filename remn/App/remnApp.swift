@@ -26,16 +26,29 @@ struct remnApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                if let container {
-                    RootView()
-                        .modelContainer(container)
+                #if DEBUG
+                if ProcessInfo.processInfo.arguments.contains("-inkLab") {
+                    InkLab()
                 } else {
-                    StartupFailureView(message: startupError ?? "storage.error")
+                    content
                 }
+                #else
+                content
+                #endif
             }
             .preferredColorScheme(AppearanceMode(rawValue: appearanceMode)?.colorScheme)
             .environment(\.locale, RemnLanguage.locale)
             .tint(.remnAccent)
+        }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if let container {
+            RootView()
+                .modelContainer(container)
+        } else {
+            StartupFailureView(message: startupError ?? "storage.error")
         }
     }
 }
