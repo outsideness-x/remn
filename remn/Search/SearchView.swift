@@ -26,7 +26,8 @@ struct SearchView: View {
                     .padding(.trailing, -12)
                 }
             }
-            .padding(.vertical, 10)
+            .frame(minHeight: 44)
+            .padding(.vertical, 4)
             .overlay(alignment: .bottom) {
                 InkLine(seed: 64, pen: .fine)
                     .fill(Color.remnInk.opacity(0.55))
