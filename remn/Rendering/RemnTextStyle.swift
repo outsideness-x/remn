@@ -5,7 +5,7 @@ import Textual
 /// pencilled quotes and code set in a drawn box.
 struct RemnTextStyle: StructuredText.Style {
     let inlineStyle = InlineStyle()
-        .code(.monospaced, .fontScale(0.8), .backgroundColor(.remnCodeWash))
+        .code(.monospaced, .fontScale(0.82))
         .strong(.foregroundColor(.remnStrong))
         .emphasis(.foregroundColor(.remnEmphasis))
         .link(.foregroundColor(.remnStrong), .underlineStyle(.single))
@@ -65,11 +65,11 @@ struct RemnCodeBlockStyle: StructuredText.CodeBlockStyle {
         Overflow {
             configuration.label
                 .textual.lineSpacing(.fontScaled(0.2))
-                .textual.fontScale(0.78)
+                .textual.fontScale(0.68)
                 .fixedSize(horizontal: false, vertical: true)
                 .monospaced()
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 11)
         }
         .textRenderer(InkTextRenderer(wobble: 0))
         .background {
@@ -148,9 +148,5 @@ extension DynamicColor {
     static let remnComment = DynamicColor(
         light: Color(red: 0.369, green: 0.349, blue: 0.322),
         dark: Color(red: 0.639, green: 0.620, blue: 0.584)
-    )
-    static let remnCodeWash = DynamicColor(
-        light: Color(red: 0.114, green: 0.106, blue: 0.098).opacity(0.07),
-        dark: Color(red: 0.937, green: 0.918, blue: 0.875).opacity(0.1)
     )
 }
