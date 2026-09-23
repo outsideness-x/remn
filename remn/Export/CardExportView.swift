@@ -1,53 +1,42 @@
 import SwiftUI
 
+/// A card laid on paper for saving as an image; always in the light kit, so it prints the same everywhere.
 struct CardExportView: View {
     let card: Flashcard
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(context)
-                .font(.system(size: 12, weight: .semibold, design: .rounded))
-                .foregroundStyle(Color.black.opacity(0.58))
-                .textCase(.uppercase)
-            FlashcardSurface(seed: card.id.hashValue, style: .export) {
-                VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 14) {
+            HandwrittenText(verbatim: card.deckContext)
+                .font(RemnTypography.note)
+                .foregroundStyle(Color.remnGraphite)
+            FlashcardSurface(seed: card.id.inkSeed, style: .export) {
+                VStack(alignment: .leading, spacing: 0) {
                     FlashcardSideLabel(title: "card.front")
+                    IndexRule(seed: card.id.inkSeed ^ 0x11)
+                        .padding(.top, 4)
+                        .padding(.bottom, 14)
                     CardContentView(markdown: card.frontMarkdown, context: .export)
-                    exportDivider
+                    InkDashes(seed: card.id.inkSeed ^ 0x22)
+                        .fill(Color.remnGraphite.opacity(0.6))
+                        .frame(height: 6)
+                        .padding(.vertical, 18)
                     FlashcardSideLabel(title: "card.back")
+                        .padding(.bottom, 10)
                     CardContentView(markdown: card.backMarkdown, context: .export)
                 }
             }
-            HandwrittenText("remn")
-                .font(RemnTypography.display(19, weight: .semibold, relativeTo: .body))
-                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                .foregroundStyle(Color.black.opacity(0.55))
-                .frame(maxWidth: .infinity, alignment: .trailing)
+            HStack(spacing: 8) {
+                Spacer()
+                StackedCardsDoodle(width: 30)
+                HandwrittenText("remn", weight: 0.8)
+                    .font(RemnTypography.display(22, relativeTo: .body))
+                    .foregroundStyle(Color.remnInk)
+            }
         }
         .padding(30)
         .frame(width: 540, alignment: .leading)
         .fixedSize(horizontal: false, vertical: true)
-        .background(Color(red: 0.957, green: 0.945, blue: 0.914))
+        .background(Color.remnPaper)
         .environment(\.colorScheme, .light)
-    }
-
-    private var context: String {
-        [card.deck?.subject?.name, card.deck?.name]
-            .compactMap { $0 }
-            .joined(separator: " / ")
-    }
-
-    private var exportDivider: some View {
-        Canvas { context, size in
-            var path = Path()
-            path.move(to: CGPoint(x: 0, y: size.height / 2))
-            for index in 1...22 {
-                let x = size.width * CGFloat(index) / 22
-                let y = size.height / 2 + CGFloat((index * 13) % 5 - 2) * 0.45
-                path.addLine(to: CGPoint(x: x, y: y))
-            }
-            context.stroke(path, with: .color(.black.opacity(0.55)), lineWidth: 1.5)
-        }
-        .frame(height: 10)
     }
 }

@@ -13,16 +13,11 @@ struct SubjectDetailView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            RemnNavigationHeader(title: "remn") {
-                Button { showCreate = true } label: {
-                    DoodleIcon(kind: .plus, color: .remnInk, size: 21)
-                        .frame(width: 44, height: 44)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Text("deck.new"))
+            RemnNavigationHeader(backTitle: String(localized: "library")) {
+                InkIconButton(kind: .plus, label: "deck.new") { showCreate = true }
             }
             ScrollView {
-                VStack(alignment: .leading, spacing: 30) {
+                VStack(alignment: .leading, spacing: 0) {
                     ScreenTitle(title: subject.name)
                     if subject.decks.isEmpty {
                         QuietEmptyState(
@@ -30,53 +25,35 @@ struct SubjectDetailView: View {
                             actionTitle: "deck.make",
                             action: { showCreate = true }
                         )
+                        .padding(.top, 24)
                     } else {
-                        LazyVStack(spacing: 0) {
-                            ForEach(subject.orderedDecks, id: \.id) { deck in
-                                HStack(spacing: 2) {
-                                    NavigationLink {
-                                        DeckDetailView(deck: deck)
-                                    } label: {
-                                        LibraryRow(
-                                            title: deck.name,
-                                            dueCount: dueCount(deck.cards),
-                                            totalCount: deck.cards.count,
-                                            seed: deck.id.hashValue
-                                        )
-                                    }
-                                    .buttonStyle(.plain)
-
-                                    Button { manageDeck = deck } label: {
-                                        DoodleIcon(kind: .more, color: .remnGraphite, size: 20)
-                                            .frame(width: 44, height: 54)
-                                            .contentShape(Rectangle())
-                                    }
-                                    .buttonStyle(.plain)
-                                    .accessibilityLabel(Text("actions"))
-                                }
-                            }
-                        }
+                        deckList
+                            .padding(.top, 22)
                     }
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 20)
-                .padding(.bottom, 90)
+                .padding(.horizontal, 22)
+                .padding(.top, 10)
+                .padding(.bottom, 40)
+                .remnReadableWidth()
             }
         }
-        .background(Color.remnPaper.ignoresSafeArea())
+        .paperBackground()
         .toolbar(.hidden, for: .navigationBar)
         .safeAreaInset(edge: .bottom) {
-            Button {
-                appState.prepareStudy(subjectIDs: [subject.id])
-            } label: {
-                HandwrittenText("study.subject")
-                    .frame(maxWidth: .infinity)
+            if !subject.cards.isEmpty {
+                Button {
+                    appState.prepareStudy(subjectIDs: [subject.id])
+                } label: {
+                    HandwrittenText("study.subject", weight: 0.5)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(InkButtonStyle(kind: .primary, seed: subject.id.inkSeed))
+                .padding(.horizontal, 20)
+                .padding(.top, 14)
+                .padding(.bottom, 8)
+                .remnReadableWidth(600)
+                .background(alignment: .bottom) { PaperFade() }
             }
-            .buttonStyle(WobblyButtonStyle(filled: true, seed: subject.id.hashValue))
-            .disabled(subject.cards.isEmpty)
-            .padding(.horizontal, 20)
-            .padding(.vertical, 10)
-            .background(Color.remnPaper.opacity(0.97))
         }
         .sheet(isPresented: $showCreate) {
             NameEditorSheet(title: "deck.new") { name in
@@ -117,6 +94,33 @@ struct SubjectDetailView: View {
                 HandmadeDialogAction("cancel", role: .cancel) { deleteDeck = nil }
             ]
         )
+    }
+
+    private var deckList: some View {
+        LazyVStack(spacing: 0) {
+            ForEach(Array(subject.orderedDecks.enumerated()), id: \.element.id) { index, deck in
+                if index > 0 {
+                    InkDivider(seed: deck.id.inkSeed)
+                }
+                HStack(spacing: 0) {
+                    NavigationLink {
+                        DeckDetailView(deck: deck)
+                    } label: {
+                        LibraryRow(
+                            title: deck.name,
+                            dueCount: deck.cards.dueTodayCount(),
+                            totalCount: deck.cards.count
+                        )
+                    }
+                    .buttonStyle(InkRowStyle())
+
+                    InkIconButton(kind: .more, label: "actions", color: .remnGraphite, size: 20) {
+                        manageDeck = deck
+                    }
+                    .padding(.trailing, -10)
+                }
+            }
+        }
     }
 
     private var deckActions: [HandmadeDialogAction] {
@@ -160,11 +164,6 @@ struct SubjectDetailView: View {
         deck.manualSortOrder = other.manualSortOrder
         other.manualSortOrder = oldOrder
         save()
-    }
-
-    private func dueCount(_ cards: [Flashcard]) -> Int {
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: .now)) ?? .now
-        return cards.count { $0.state != .new && $0.due < tomorrow }
     }
 
     private func save() {

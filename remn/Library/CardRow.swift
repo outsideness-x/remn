@@ -1,31 +1,28 @@
 import SwiftUI
 
+/// A card in a deck: the first useful line of its front, and when it's due.
 struct CardRow: View {
     let card: Flashcard
 
     var body: some View {
-        FlashcardSurface(seed: card.id.hashValue, style: .compact) {
-            VStack(alignment: .leading, spacing: 9) {
-                HStack(alignment: .firstTextBaseline) {
-                    FlashcardSideLabel(title: "card.front")
-                    Spacer(minLength: 8)
-                    HandwrittenText(verbatim: RemnFormatters.dueStatus(for: card))
-                        .font(RemnTypography.smallControl)
-                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                        .foregroundStyle(statusColor)
-                }
+        FlashcardSurface(seed: card.id.inkSeed, style: .compact) {
+            VStack(alignment: .leading, spacing: 8) {
                 HandwrittenText(verbatim: RemnFormatters.usefulLine(card.frontMarkdown))
-                    .font(RemnTypography.display(21, weight: .medium, relativeTo: .body))
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                    .font(RemnTypography.display(22, relativeTo: .body))
                     .foregroundStyle(Color.remnInk)
                     .lineLimit(3)
+                    .multilineTextAlignment(.leading)
+                    .padding(.trailing, 30)
+                HandwrittenText(verbatim: RemnFormatters.dueStatus(for: card))
+                    .font(RemnTypography.note)
+                    .foregroundStyle(isDue ? Color.remnAccent : Color.remnGraphite)
             }
         }
-        .padding(.vertical, 4)
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
     }
 
-    private var statusColor: Color {
-        card.due <= .now && card.state != .new ? .remnAccent : .remnGraphite
+    private var isDue: Bool {
+        card.state != .new && card.due <= .now
     }
 }

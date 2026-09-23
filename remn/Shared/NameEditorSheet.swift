@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Naming a subject or a deck: one line to write on.
 struct NameEditorSheet: View {
     let title: LocalizedStringKey
     let actionTitle: LocalizedStringKey
@@ -25,51 +26,41 @@ struct NameEditorSheet: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 8) {
-                Button { dismiss() } label: {
-                    HandwrittenText("cancel")
-                        .remnHandwrittenBounds()
-                }
-                .frame(minWidth: 64, minHeight: 44, alignment: .leading)
-                Spacer(minLength: 4)
-                HandwrittenText(title)
-                    .font(RemnTypography.navigationTitle)
-                    .remnHandwrittenBounds()
-                    .foregroundStyle(Color.remnInk)
-                    .lineLimit(1)
-                Spacer(minLength: 4)
+            SheetHeader(title: title) {
+                dismiss()
+            } trailing: {
                 Button(action: save) {
-                    HandwrittenText(actionTitle)
-                        .remnHandwrittenBounds()
+                    HandwrittenText(actionTitle, weight: 0.4)
                 }
-                .frame(minWidth: 64, minHeight: 44, alignment: .trailing)
-                    .disabled(cleanName.isEmpty)
-                    .opacity(cleanName.isEmpty ? 0.35 : 1)
+                .buttonStyle(InkButtonStyle(kind: .quiet, seed: 14))
+                .disabled(cleanName.isEmpty)
+                .opacity(cleanName.isEmpty ? 0.4 : 1)
             }
-            .font(RemnTypography.control)
-            .foregroundStyle(Color.remnAccent)
-            .buttonStyle(.plain)
-            .padding(.horizontal, 22)
-            .padding(.vertical, 8)
 
-            VStack(alignment: .leading, spacing: 22) {
-                TextField("name", text: $name)
-                    .font(.system(.title2, design: .default, weight: .medium))
-                    .textFieldStyle(.plain)
-                    .padding(.vertical, 12)
-                    .overlay(alignment: .bottom) {
-                        ScribbleDivider(seed: 41)
-                    }
-                    .focused($isFocused)
-                    .submitLabel(.done)
-                    .onSubmit(save)
-                Spacer()
-            }
-            .padding(24)
+            TextField("name", text: $name)
+                .font(RemnTypography.display(28, relativeTo: .title2))
+                .foregroundStyle(Color.remnInk)
+                .tint(.remnAccent)
+                .textFieldStyle(.plain)
+                .submitLabel(.done)
+                .focused($isFocused)
+                .onSubmit(save)
+                .padding(.vertical, 10)
+                .overlay(alignment: .bottom) {
+                    InkLine(seed: 41, pen: .fine)
+                        .fill(Color.remnInk.opacity(0.55))
+                        .frame(height: 6)
+                        .offset(y: 2)
+                }
+                .padding(.horizontal, 26)
+                .padding(.top, 22)
+            Spacer(minLength: 0)
         }
-        .background(Color.remnPaper.ignoresSafeArea())
+        .paperBackground()
         .onAppear { isFocused = true }
-        .presentationDetents([.height(220)])
+        .presentationDetents([.height(210)])
+        .presentationDragIndicator(.hidden)
+        .presentationCornerRadius(30)
     }
 
     private var cleanName: String {

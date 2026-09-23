@@ -37,7 +37,6 @@ struct remnApp: App {
                 #endif
             }
             .preferredColorScheme(AppearanceMode(rawValue: appearanceMode)?.colorScheme)
-            .environment(\.locale, RemnLanguage.locale)
             .tint(.remnAccent)
         }
     }
@@ -48,7 +47,7 @@ struct remnApp: App {
             RootView()
                 .modelContainer(container)
         } else {
-            StartupFailureView(message: startupError ?? "storage.error")
+            StartupFailureView(message: startupError ?? String(localized: "storage.error"))
         }
     }
 }
@@ -57,21 +56,20 @@ private struct StartupFailureView: View {
     let message: String
 
     var body: some View {
-        VStack(spacing: 18) {
-            HandwrittenText("remn")
-                .font(RemnTypography.brand)
-                .remnHandwrittenBounds()
-            HandwrittenText("storage.couldNotOpen")
-                .font(RemnTypography.navigationTitle)
-                .remnHandwrittenBounds()
+        VStack(spacing: 20) {
+            StackedCardsDoodle(width: 84)
+            HandwrittenText("storage.couldNotOpen", weight: 0.6)
+                .font(RemnTypography.sectionTitle)
+                .foregroundStyle(Color.remnInk)
+                .multilineTextAlignment(.center)
             Text(message)
                 .font(.footnote)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.remnGraphite)
                 .multilineTextAlignment(.center)
                 .textSelection(.enabled)
         }
         .padding(32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.remnPaper)
+        .paperBackground()
     }
 }

@@ -25,13 +25,12 @@
 		3D8BAD16B6A5ABC6B5CB5E4B /* Neucha.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 42069C92CF073079F40906C8 /* Neucha.ttf */; };
 		3EAD7E7ECAACD7EC1BE53B68 /* InkRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4431F557969C3FEC33F2F38D /* InkRandom.swift */; };
 		44B81357AA1A22C6C5653E71 /* Paper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4B71DE6F2148CD6B96B600 /* Paper.swift */; };
+		4BF33359FF4B421D80BA8F47 /* InkIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7DC6E8928E3FCA113BE902 /* InkIcon.swift */; };
 		4E5EF8B6ED839026B92947BE /* MarkdownRenderSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F72936533B36DABA6988A35 /* MarkdownRenderSource.swift */; };
 		502559E1A39C1AFCB31744F7 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 15A858101FE1C0ACD7EBDF5A /* Localizable.xcstrings */; };
 		573975F1F32C434BFE532823 /* InkBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14085CF2096D3280F9118976 /* InkBrush.swift */; };
 		582B9734788D4EE00885E407 /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6459C94EE97FBF98F20517 /* SchedulerTests.swift */; };
-		597F56886E9569F06DBE9D60 /* QuietEmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9781E1A59A1E31318F42FAF7 /* QuietEmptyState.swift */; };
 		59FAA8DAA83C5B42EAB32515 /* SpacedRepetitionScheduling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8E21F5B2A822AB13F5AAA2 /* SpacedRepetitionScheduling.swift */; };
-		5AC005F854B7A92D74DFF8ED /* DoodleControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80869EBAE3115C2CB6EAC17B /* DoodleControls.swift */; };
 		5DD9219111002EC25AA7D395 /* PaperGrain.metal in Sources */ = {isa = PBXBuildFile; fileRef = 2F16E415713C31E8C0695AF3 /* PaperGrain.metal */; };
 		65CE99766105949EDEE9FFD4 /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = 7620BA764C7F419A19C59B26 /* Textual */; };
 		692C63800919DA68D9627B7E /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CC1397608ADD45DB488B72 /* LibraryView.swift */; };
@@ -49,10 +48,12 @@
 		84A1445B9CBB86947D7B0488 /* MarkdownToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43C7C7C815F1AAF39931120 /* MarkdownToolbar.swift */; };
 		85D56E9E8A625BA104E1A6B5 /* OFL-Neucha.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8E81AAA1C00CC010CB3D6311 /* OFL-Neucha.txt */; };
 		86CC0DCFE16407979C93A586 /* CardImageExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467F839F80FCD6C92EEDB102 /* CardImageExporter.swift */; };
+		880C040EFDCFDAE634DC979D /* MarkdownInsertionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33ACB66E2E41DAF6B7721782 /* MarkdownInsertionTests.swift */; };
 		889D5D212046B2937FA0F092 /* InkLab.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF3BEF328B9EFEE896418CB /* InkLab.swift */; };
 		8B57FB701B37D5C1D1BEC6BB /* LibraryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C929193C5FD8C1D09F20C1 /* LibraryRow.swift */; };
 		8C92B2347AADF0C43F2E0D36 /* ReviewLogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8582F224E564AE10A9C73E52 /* ReviewLogEntry.swift */; };
 		924AB57832B9B4040CED4A11 /* InkShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C746400442FB7DBF6C46CA /* InkShapes.swift */; };
+		931B84337657DF2ABC1C4883 /* InkControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D3F10A81056E2B9BF62CE3 /* InkControls.swift */; };
 		959D77BE232E20D5823CDC85 /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4E40F875B27C4CFBA7E1F1 /* CardDetailView.swift */; };
 		98705C3430B162F02177519A /* TypographyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B436C4FDEB91DA5CE27C987 /* TypographyTests.swift */; };
 		9DAF5A8520707E228551C8B2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FB7111FB0DD9D20D2A60B3 /* SettingsView.swift */; };
@@ -78,11 +79,10 @@
 		E9039D7B2418A258D6593C74 /* CardSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4751617CF215BF60BAE16C /* CardSearch.swift */; };
 		EC5D100A8C97CC473A47287C /* CardExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2499DE0F3CF80E54B2E115 /* CardExportView.swift */; };
 		ED3DFE877C970B008EFC696E /* ScheduleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6589AD8278F3631AB285EE3 /* ScheduleState.swift */; };
-		F3A03CFFB4ED4783B2DF51C4 /* ScribbleDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744BD9B2EFC8DAAB31C6414E /* ScribbleDivider.swift */; };
 		F3E30020DAC50E4107057764 /* Flashcard+Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F95FD1076C503DAC0C2F44 /* Flashcard+Display.swift */; };
+		F7BF1560E4A8642001B0CA86 /* RemnTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D62DB0BDB38E94A38C92D4 /* RemnTextStyle.swift */; };
 		F89C2F844176B56B482A08AA /* CardEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E4DDE9993647270960E6C2 /* CardEditorView.swift */; };
 		F8E44050781AEE3AB274F377 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC017E7D16B771C0C61176D /* RootView.swift */; };
-		FE31CD8C1AF5CE1242F0BC55 /* WobblyRoundedRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C23FD1427BC7881C8E37D61 /* WobblyRoundedRectangle.swift */; };
 		FE3B2A86AD4B7E2969557A84 /* SessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65143066E4333550817388 /* SessionService.swift */; };
 /* End PBXBuildFile section */
 
@@ -109,6 +109,7 @@
 		29F95FD1076C503DAC0C2F44 /* Flashcard+Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flashcard+Display.swift"; sourceTree = "<group>"; };
 		2A92BF2EDB3DC41B3D94FAEB /* remn.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = remn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F16E415713C31E8C0695AF3 /* PaperGrain.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = PaperGrain.metal; sourceTree = "<group>"; };
+		33ACB66E2E41DAF6B7721782 /* MarkdownInsertionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownInsertionTests.swift; sourceTree = "<group>"; };
 		3D2767AD6663EDF37938359D /* RemnTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnTypography.swift; sourceTree = "<group>"; };
 		3FCD11850748DFAC93771937 /* SubjectDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectDetailView.swift; sourceTree = "<group>"; };
 		42069C92CF073079F40906C8 /* Neucha.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Neucha.ttf; sourceTree = "<group>"; };
@@ -121,9 +122,9 @@
 		55A4050B3C2FC8F8B5C1E7E1 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		588D5C69EA069B1E964F4EB3 /* RatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingButton.swift; sourceTree = "<group>"; };
 		5A3E5915E4007738575047C4 /* SearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
-		5C23FD1427BC7881C8E37D61 /* WobblyRoundedRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WobblyRoundedRectangle.swift; sourceTree = "<group>"; };
 		5E651FAD0206B556F1BBD189 /* StudyCompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCompletionView.swift; sourceTree = "<group>"; };
 		5F6459C94EE97FBF98F20517 /* SchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
+		61D62DB0BDB38E94A38C92D4 /* RemnTextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnTextStyle.swift; sourceTree = "<group>"; };
 		6895F64A4DB608E8E9F16891 /* remnApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = remnApp.swift; sourceTree = "<group>"; };
 		6AC017E7D16B771C0C61176D /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		71C746400442FB7DBF6C46CA /* InkShapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkShapes.swift; sourceTree = "<group>"; };
@@ -131,12 +132,10 @@
 		73275047DD887BC610647B2A /* RemnColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnColors.swift; sourceTree = "<group>"; };
 		73C16DF9943FC0278AB4985E /* Flashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
 		73C929193C5FD8C1D09F20C1 /* LibraryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryRow.swift; sourceTree = "<group>"; };
-		744BD9B2EFC8DAAB31C6414E /* ScribbleDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScribbleDivider.swift; sourceTree = "<group>"; };
 		7BB45169EF35C9E4CB79AF60 /* ReviewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewService.swift; sourceTree = "<group>"; };
 		7C02176044374CB1713244F6 /* CardContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContentView.swift; sourceTree = "<group>"; };
 		7C2499DE0F3CF80E54B2E115 /* CardExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardExportView.swift; sourceTree = "<group>"; };
 		7E2D647215E4ECF91FFE78E5 /* BackupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupTests.swift; sourceTree = "<group>"; };
-		80869EBAE3115C2CB6EAC17B /* DoodleControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoodleControls.swift; sourceTree = "<group>"; };
 		81440D7398777E78E1B6860F /* DeckDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailView.swift; sourceTree = "<group>"; };
 		8582F224E564AE10A9C73E52 /* ReviewLogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewLogEntry.swift; sourceTree = "<group>"; };
 		8D4751617CF215BF60BAE16C /* CardSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSearch.swift; sourceTree = "<group>"; };
@@ -146,7 +145,6 @@
 		8E81AAA1C00CC010CB3D6311 /* OFL-Neucha.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-Neucha.txt"; sourceTree = "<group>"; };
 		913E471CBA713001F385716D /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
 		96FB7111FB0DD9D20D2A60B3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		9781E1A59A1E31318F42FAF7 /* QuietEmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietEmptyState.swift; sourceTree = "<group>"; };
 		9ACE8C66501FBC9214D431FA /* HandmadeComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandmadeComponents.swift; sourceTree = "<group>"; };
 		9F4E40F875B27C4CFBA7E1F1 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
 		9F72936533B36DABA6988A35 /* MarkdownRenderSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownRenderSource.swift; sourceTree = "<group>"; };
@@ -160,11 +158,13 @@
 		CEEDBD645D6620FD7D055BF6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CF7E5F5A69C72D8FA0B60435 /* BackupDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupDocument.swift; sourceTree = "<group>"; };
 		D12BCF790E0389FA64512B4B /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		D1D3F10A81056E2B9BF62CE3 /* InkControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkControls.swift; sourceTree = "<group>"; };
 		D251887050864C1276246D18 /* InkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkTests.swift; sourceTree = "<group>"; };
 		D290C0256CB30E048474D412 /* TestStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestStore.swift; sourceTree = "<group>"; };
 		D7CDEC6CF690B3CFB8C3008B /* BackupModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupModels.swift; sourceTree = "<group>"; };
 		DB65143066E4333550817388 /* SessionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionService.swift; sourceTree = "<group>"; };
 		DC4F78330F423132BF9F8598 /* InkGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkGeometry.swift; sourceTree = "<group>"; };
+		DD7DC6E8928E3FCA113BE902 /* InkIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkIcon.swift; sourceTree = "<group>"; };
 		E35084084FB10D50F86C775C /* HandmadeDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandmadeDialog.swift; sourceTree = "<group>"; };
 		E43C7C7C815F1AAF39931120 /* MarkdownToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownToolbar.swift; sourceTree = "<group>"; };
 		E92024DC64A85D0ED1D7B6AB /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
@@ -242,15 +242,14 @@
 			isa = PBXGroup;
 			children = (
 				2E656224D0D53E414737F296 /* Ink */,
-				80869EBAE3115C2CB6EAC17B /* DoodleControls.swift */,
 				B74613E361D1008F37D52C7D /* FlashcardSurface.swift */,
 				9ACE8C66501FBC9214D431FA /* HandmadeComponents.swift */,
 				E35084084FB10D50F86C775C /* HandmadeDialog.swift */,
+				D1D3F10A81056E2B9BF62CE3 /* InkControls.swift */,
+				DD7DC6E8928E3FCA113BE902 /* InkIcon.swift */,
 				73275047DD887BC610647B2A /* RemnColors.swift */,
 				1E99BF5C47CF0005283FDD06 /* RemnNavigationHeader.swift */,
 				3D2767AD6663EDF37938359D /* RemnTypography.swift */,
-				744BD9B2EFC8DAAB31C6414E /* ScribbleDivider.swift */,
-				5C23FD1427BC7881C8E37D61 /* WobblyRoundedRectangle.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -286,6 +285,7 @@
 				9F4E40F875B27C4CFBA7E1F1 /* CardDetailView.swift */,
 				9F72936533B36DABA6988A35 /* MarkdownRenderSource.swift */,
 				1888021129F6DC0B39144A81 /* OfflineAttachmentLoader.swift */,
+				61D62DB0BDB38E94A38C92D4 /* RemnTextStyle.swift */,
 			);
 			path = Rendering;
 			sourceTree = "<group>";
@@ -296,7 +296,6 @@
 				29F95FD1076C503DAC0C2F44 /* Flashcard+Display.swift */,
 				E92024DC64A85D0ED1D7B6AB /* Formatters.swift */,
 				BEA5B762D59F24BB59139A3A /* NameEditorSheet.swift */,
-				9781E1A59A1E31318F42FAF7 /* QuietEmptyState.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -326,6 +325,7 @@
 			children = (
 				7E2D647215E4ECF91FFE78E5 /* BackupTests.swift */,
 				D251887050864C1276246D18 /* InkTests.swift */,
+				33ACB66E2E41DAF6B7721782 /* MarkdownInsertionTests.swift */,
 				50FF9B7EDA1C99BA82A90902 /* PersistenceTests.swift */,
 				FB885D95D9D75D83379CBF88 /* RenderingTests.swift */,
 				5F6459C94EE97FBF98F20517 /* SchedulerTests.swift */,
@@ -542,6 +542,7 @@
 			files = (
 				B97F03BBBBE9EF9EE4E4EB8C /* BackupTests.swift in Sources */,
 				6F8D4E70373F20148A2EB710 /* InkTests.swift in Sources */,
+				880C040EFDCFDAE634DC979D /* MarkdownInsertionTests.swift in Sources */,
 				DC13F65B617F8F51CB68B8C8 /* PersistenceTests.swift in Sources */,
 				E6696187C18A4755619470B3 /* RenderingTests.swift in Sources */,
 				582B9734788D4EE00885E407 /* SchedulerTests.swift in Sources */,
@@ -569,7 +570,6 @@
 				E9039D7B2418A258D6593C74 /* CardSearch.swift in Sources */,
 				707019A24C095F95E9E8AA85 /* Deck.swift in Sources */,
 				B2FD3DF88AFE4FE8B951BAF4 /* DeckDetailView.swift in Sources */,
-				5AC005F854B7A92D74DFF8ED /* DoodleControls.swift in Sources */,
 				7ADA5F050256C62E1F361A60 /* FSRSSchedulerService.swift in Sources */,
 				F3E30020DAC50E4107057764 /* Flashcard+Display.swift in Sources */,
 				1530F51EA72ABD44CA007034 /* Flashcard.swift in Sources */,
@@ -578,7 +578,9 @@
 				D797D3202B36BEFE11F83B11 /* HandmadeComponents.swift in Sources */,
 				CD3F1776C35ECC20D198BA06 /* HandmadeDialog.swift in Sources */,
 				573975F1F32C434BFE532823 /* InkBrush.swift in Sources */,
+				931B84337657DF2ABC1C4883 /* InkControls.swift in Sources */,
 				E4D99213CDEF8C7847690FE2 /* InkGeometry.swift in Sources */,
+				4BF33359FF4B421D80BA8F47 /* InkIcon.swift in Sources */,
 				889D5D212046B2937FA0F092 /* InkLab.swift in Sources */,
 				3EAD7E7ECAACD7EC1BE53B68 /* InkRandom.swift in Sources */,
 				924AB57832B9B4040CED4A11 /* InkShapes.swift in Sources */,
@@ -591,18 +593,17 @@
 				19FD03CC87C582DD051AF70B /* OfflineAttachmentLoader.swift in Sources */,
 				44B81357AA1A22C6C5653E71 /* Paper.swift in Sources */,
 				5DD9219111002EC25AA7D395 /* PaperGrain.metal in Sources */,
-				597F56886E9569F06DBE9D60 /* QuietEmptyState.swift in Sources */,
 				DA0BA9A8F72664485C69EA61 /* RatingButton.swift in Sources */,
 				A9305ED863AAED8616065F46 /* RemnColors.swift in Sources */,
 				DCA22BC85351846C9E8D9392 /* RemnNavigationHeader.swift in Sources */,
 				B86480F4C6B017013F1F8DF2 /* RemnSchema.swift in Sources */,
+				F7BF1560E4A8642001B0CA86 /* RemnTextStyle.swift in Sources */,
 				A3CFDFB7B4BA2F995A627EA2 /* RemnTypography.swift in Sources */,
 				8C92B2347AADF0C43F2E0D36 /* ReviewLogEntry.swift in Sources */,
 				CC5875A2D467A031279A6390 /* ReviewService.swift in Sources */,
 				F8E44050781AEE3AB274F377 /* RootView.swift in Sources */,
 				C907C501075A365FE2DBD930 /* SRSExplainerSheet.swift in Sources */,
 				ED3DFE877C970B008EFC696E /* ScheduleState.swift in Sources */,
-				F3A03CFFB4ED4783B2DF51C4 /* ScribbleDivider.swift in Sources */,
 				CD0FAC7C2A8C07479BCF8F21 /* SearchView.swift in Sources */,
 				FE3B2A86AD4B7E2969557A84 /* SessionService.swift in Sources */,
 				9DAF5A8520707E228551C8B2 /* SettingsView.swift in Sources */,
@@ -614,7 +615,6 @@
 				2186EA12EDEF5D164D4C50DC /* StudySetupSheet.swift in Sources */,
 				A4B8A9D61AAEE3C98E00D5EC /* SubjectDetailView.swift in Sources */,
 				77CE4F9591967D8D25C5A624 /* SubjectModel.swift in Sources */,
-				FE31CD8C1AF5CE1242F0BC55 /* WobblyRoundedRectangle.swift in Sources */,
 				3D2BE4F9D08CA429259D4531 /* remnApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

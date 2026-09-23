@@ -6,32 +6,40 @@ enum FlashcardSurfaceStyle {
     case study
     case export
 
-    var horizontalPadding: CGFloat {
+    var padding: EdgeInsets {
         switch self {
-        case .compact: 17
-        case .regular: 22
-        case .study: 24
-        case .export: 28
-        }
-    }
-
-    var verticalPadding: CGFloat {
-        switch self {
-        case .compact: 15
-        case .regular: 20
-        case .study: 27
-        case .export: 28
+        case .compact: EdgeInsets(top: 14, leading: 18, bottom: 16, trailing: 18)
+        case .regular: EdgeInsets(top: 20, leading: 22, bottom: 24, trailing: 22)
+        case .study: EdgeInsets(top: 24, leading: 26, bottom: 28, trailing: 26)
+        case .export: EdgeInsets(top: 26, leading: 28, bottom: 30, trailing: 28)
         }
     }
 
     var cornerRadius: CGFloat {
         switch self {
-        case .compact: 8
-        case .regular, .study, .export: 10
+        case .compact: 12
+        case .regular, .study, .export: 16
+        }
+    }
+
+    var pen: InkPen {
+        switch self {
+        case .compact: .fine
+        case .regular, .study, .export: .pen
+        }
+    }
+
+    /// Where the card underneath peeks out.
+    var underneath: CGSize {
+        switch self {
+        case .compact: CGSize(width: 3.5, height: 5)
+        case .regular: CGSize(width: 4, height: 6)
+        case .study, .export: CGSize(width: 5, height: 8)
         }
     }
 }
 
+/// An index card: paper, a pen outline, and a hatched card underneath.
 struct FlashcardSurface<Content: View>: View {
     let seed: Int
     let style: FlashcardSurfaceStyle
@@ -50,49 +58,35 @@ struct FlashcardSurface<Content: View>: View {
     var body: some View {
         content
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, style.horizontalPadding)
-            .padding(.vertical, style.verticalPadding)
+            .padding(style.padding)
             .background {
                 ZStack {
-                    WobblyRoundedRectangle(seed: seed &+ 109, cornerRadius: style.cornerRadius)
-                        .fill(Color.remnAccent.opacity(0.13))
-                        .overlay {
-                            WobblyRoundedRectangle(seed: seed &+ 109, cornerRadius: style.cornerRadius)
-                                .stroke(Color.remnAccent.opacity(0.78), lineWidth: 1.15)
-                        }
-                        .offset(x: 3, y: 5)
-
-                    WobblyRoundedRectangle(seed: seed &+ 71, cornerRadius: style.cornerRadius)
-                        .fill(Color.remnInk.opacity(0.08))
-                        .offset(x: 1, y: 2.5)
-
-                    WobblyRoundedRectangle(seed: seed, cornerRadius: style.cornerRadius)
-                        .fill(Color.remnCardPaper)
+                    InkHatch(seed: seed ^ 0x3C1, spacing: style == .compact ? 4 : 4.6)
+                        .fill(Color.remnAccent.opacity(style == .compact ? 0.55 : 0.45))
+                        .clipShape(InkPatch(seed: seed ^ 0x3C2, cornerRadius: style.cornerRadius))
+                        .offset(style.underneath)
+                    InkBox(
+                        seed: seed,
+                        cornerRadius: style.cornerRadius,
+                        fill: .remnCardPaper,
+                        outline: .remnInk,
+                        pen: style.pen,
+                        registration: CGSize(width: 0.8, height: 1.1)
+                    )
                 }
             }
-            .overlay {
-                WobblyRoundedRectangle(seed: seed, cornerRadius: style.cornerRadius)
-                    .stroke(Color.remnInk.opacity(0.72), lineWidth: 1.3)
-            }
-            .rotationEffect(.degrees(tilt))
-            .padding(.horizontal, style == .compact ? 3 : 1)
-            .padding(.bottom, 7)
-    }
-
-    private var tilt: Double {
-        guard style == .compact else { return 0 }
-        let step = Int(UInt(bitPattern: seed) % 5) - 2
-        return Double(step) * 0.18
+            .padding(.trailing, style.underneath.width)
+            .padding(.bottom, style.underneath.height)
     }
 }
 
+/// The small pencil label in the corner of a card.
 struct FlashcardSideLabel: View {
     let title: LocalizedStringKey
 
     var body: some View {
         HandwrittenText(title)
-            .font(RemnTypography.smallControl)
-            .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+            .font(RemnTypography.note)
             .foregroundStyle(Color.remnGraphite)
     }
 }

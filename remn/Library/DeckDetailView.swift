@@ -15,16 +15,11 @@ struct DeckDetailView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            RemnNavigationHeader(title: "remn") {
-                Button { showCreateCard = true } label: {
-                    DoodleIcon(kind: .plus, color: .remnInk, size: 21)
-                        .frame(width: 44, height: 44)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Text("card.new"))
+            RemnNavigationHeader(backTitle: deck.subject?.name) {
+                InkIconButton(kind: .plus, label: "card.new") { showCreateCard = true }
             }
             ScrollView {
-                VStack(alignment: .leading, spacing: 30) {
+                VStack(alignment: .leading, spacing: 0) {
                     ScreenTitle(title: deck.name)
                     if deckCards.isEmpty {
                         QuietEmptyState(
@@ -32,49 +27,57 @@ struct DeckDetailView: View {
                             actionTitle: "card.make",
                             action: { showCreateCard = true }
                         )
+                        .padding(.top, 24)
                     } else {
-                        LazyVStack(spacing: 10) {
+                        HandwrittenText("count.cards \(deckCards.count)")
+                            .font(RemnTypography.note)
+                            .foregroundStyle(Color.remnGraphite)
+                            .padding(.top, 14)
+                        LazyVStack(spacing: 14) {
                             ForEach(deckCards, id: \.id) { card in
-                                HStack(spacing: 2) {
-                                    NavigationLink {
-                                        CardDetailView(card: card)
-                                    } label: {
-                                        CardRow(card: card)
+                                NavigationLink {
+                                    CardDetailView(card: card)
+                                } label: {
+                                    CardRow(card: card)
+                                }
+                                .buttonStyle(InkRowStyle())
+                                .overlay(alignment: .topTrailing) {
+                                    InkIconButton(kind: .more, label: "actions", color: .remnGraphite, size: 19) {
+                                        manageCard = card
                                     }
-                                    .buttonStyle(.plain)
-
-                                    Button { manageCard = card } label: {
-                                        DoodleIcon(kind: .more, color: .remnGraphite, size: 20)
-                                            .frame(width: 42, height: 58)
-                                            .contentShape(Rectangle())
-                                    }
-                                    .buttonStyle(.plain)
-                                    .accessibilityLabel(Text("actions"))
+                                    .padding(.top, 2)
+                                    .padding(.trailing, 8)
                                 }
                             }
                         }
+                        .padding(.top, 16)
                     }
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 20)
-                .padding(.bottom, 90)
+                .padding(.horizontal, 22)
+                .padding(.top, 10)
+                .padding(.bottom, 40)
+                .remnReadableWidth()
             }
         }
-        .background(Color.remnPaper.ignoresSafeArea())
+        .paperBackground()
         .toolbar(.hidden, for: .navigationBar)
         .safeAreaInset(edge: .bottom) {
-            Button {
-                if let subjectID = deck.subject?.id {
-                    appState.prepareStudy(subjectIDs: [subjectID], deckID: deck.id)
+            if !deckCards.isEmpty {
+                Button {
+                    if let subjectID = deck.subject?.id {
+                        appState.prepareStudy(subjectIDs: [subjectID], deckID: deck.id)
+                    }
+                } label: {
+                    HandwrittenText("study.deck", weight: 0.5)
+                        .frame(maxWidth: .infinity)
                 }
-            } label: {
-                HandwrittenText("study.deck").frame(maxWidth: .infinity)
+                .buttonStyle(InkButtonStyle(kind: .primary, seed: deck.id.inkSeed))
+                .padding(.horizontal, 20)
+                .padding(.top, 14)
+                .padding(.bottom, 8)
+                .remnReadableWidth(600)
+                .background(alignment: .bottom) { PaperFade() }
             }
-            .buttonStyle(WobblyButtonStyle(filled: true, seed: deck.id.hashValue))
-            .disabled(deckCards.isEmpty)
-            .padding(.horizontal, 20)
-            .padding(.vertical, 10)
-            .background(Color.remnPaper.opacity(0.97))
         }
         .sheet(isPresented: $showCreateCard) {
             CardEditorView(initialDeck: deck)

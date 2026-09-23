@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// One of the four answers, with the real interval it leads to.
 struct RatingButton: View {
     let rating: StudyRating
     let interval: String
@@ -7,30 +8,51 @@ struct RatingButton: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 3) {
+            VStack(spacing: 2) {
                 HandwrittenText(LocalizedStringKey(rating.titleKey))
-                    .font(RemnTypography.smallControl)
-                    .remnHandwrittenBounds(horizontal: 3, vertical: 1)
+                    .font(RemnTypography.control)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-                Text(interval)
-                    .font(.caption2.monospacedDigit())
+                    .minimumScaleFactor(0.7)
+                HandwrittenText(verbatim: interval)
+                    .font(RemnTypography.caption)
                     .foregroundStyle(Color.remnGraphite)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
-            .foregroundStyle(Color.remnInk)
-            .frame(maxWidth: .infinity, minHeight: 53)
-            .background {
-                WobblyRoundedRectangle(seed: rating.rawValue * 23, cornerRadius: 13)
-                    .fill(rating == .again ? Color.remnAccent.opacity(0.13) : Color.remnSurface)
-            }
-            .overlay {
-                WobblyRoundedRectangle(seed: rating.rawValue * 23, cornerRadius: 13)
-                    .stroke(rating == .again ? Color.remnAccent : Color.remnInk.opacity(0.55), lineWidth: 1.2)
-            }
-            .rotationEffect(.degrees(Double(rating.rawValue - 2) * 0.18))
+            .foregroundStyle(rating == .again ? Color.remnAccent : Color.remnInk)
+            .frame(maxWidth: .infinity, minHeight: 62)
+            .padding(.horizontal, 4)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(RatingButtonStyle(rating: rating))
         .accessibilityLabel(Text(LocalizedStringKey(rating.titleKey)))
-        .accessibilityValue(Text(interval))
+        .accessibilityValue(Text(verbatim: interval))
+    }
+}
+
+private struct RatingButtonStyle: ButtonStyle {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    let rating: StudyRating
+
+    func makeBody(configuration: Configuration) -> some View {
+        let pressed = configuration.isPressed
+        let seed = 2_300 + rating.rawValue * 23
+        configuration.label
+            .background {
+                InkBox(
+                    seed: pressed ? seed &+ 1 : seed,
+                    cornerRadius: 14,
+                    fill: pressed ? tint.opacity(0.12) : .remnCardPaper,
+                    outline: rating == .again ? .remnAccent : .remnInk,
+                    pen: .fine,
+                    registration: pressed ? .zero : CGSize(width: 1.2, height: 1.8)
+                )
+            }
+            .scaleEffect(pressed && !reduceMotion ? 0.95 : 1)
+            .animation(reduceMotion ? nil : .spring(duration: 0.2, bounce: 0.45), value: pressed)
+            .contentShape(Rectangle())
+    }
+
+    private var tint: Color {
+        rating == .again ? .remnAccent : .remnInk
     }
 }

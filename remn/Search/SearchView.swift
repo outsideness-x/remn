@@ -4,61 +4,86 @@ import SwiftUI
 struct SearchView: View {
     @Query private var cards: [Flashcard]
     @State private var query = ""
+    @FocusState private var focused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
-            RemnNavigationHeader(title: "search")
+            RemnNavigationHeader(backTitle: String(localized: "library"))
             HStack(spacing: 12) {
-                DoodleIcon(kind: .search, color: .remnGraphite, size: 20)
+                InkIcon(kind: .search, color: .remnGraphite, size: 21)
                 TextField("search.placeholder", text: $query)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
-                    .font(RemnTypography.control)
+                    .submitLabel(.search)
+                    .font(RemnTypography.display(24, relativeTo: .title3))
+                    .foregroundStyle(Color.remnInk)
+                    .tint(.remnAccent)
+                    .focused($focused)
+                if !query.isEmpty {
+                    InkIconButton(kind: .close, label: "search.clear", color: .remnGraphite, size: 15) {
+                        query = ""
+                    }
+                    .padding(.trailing, -12)
+                }
             }
-            .padding(.horizontal, 4)
-            .padding(.vertical, 12)
-            .overlay(alignment: .bottom) { ScribbleDivider(seed: 64) }
+            .padding(.vertical, 10)
+            .overlay(alignment: .bottom) {
+                InkLine(seed: 64, pen: .fine)
+                    .fill(Color.remnInk.opacity(0.55))
+                    .frame(height: 6)
+                    .offset(y: 2)
+            }
             .padding(.horizontal, 24)
-            .padding(.top, 12)
+            .padding(.top, 6)
+            .remnReadableWidth()
 
             ScrollView {
-                LazyVStack(spacing: 10) {
-                    if query.isEmpty {
+                LazyVStack(alignment: .leading, spacing: 14) {
+                    if query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         HandwrittenText("search.prompt")
-                            .font(RemnTypography.control)
-                            .remnHandwrittenBounds()
+                            .font(RemnTypography.body)
                             .foregroundStyle(Color.remnGraphite)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top, 26)
+                            .padding(.top, 22)
                     } else if results.isEmpty {
-                        HandwrittenText("search.empty")
-                            .font(RemnTypography.display(23, weight: .medium, relativeTo: .title3))
-                            .remnHandwrittenBounds()
-                            .foregroundStyle(Color.remnGraphite)
-                            .padding(.top, 64)
+                        VStack(spacing: 18) {
+                            StackedCardsDoodle(width: 70)
+                            HandwrittenText("search.empty")
+                                .font(RemnTypography.sectionTitle)
+                                .foregroundStyle(Color.remnGraphite)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 56)
                     } else {
+                        HandwrittenText("count.cards \(results.count)")
+                            .font(RemnTypography.note)
+                            .foregroundStyle(Color.remnGraphite)
+                            .padding(.top, 16)
                         ForEach(results, id: \.id) { card in
                             NavigationLink {
                                 CardDetailView(card: card)
                             } label: {
                                 SearchResultRow(card: card)
                             }
-                            .buttonStyle(.plain)
+                            .buttonStyle(InkRowStyle())
                         }
                     }
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 36)
+                .remnReadableWidth()
             }
+            .scrollDismissesKeyboard(.interactively)
         }
-        .background(Color.remnPaper.ignoresSafeArea())
+        .paperBackground()
         .toolbar(.hidden, for: .navigationBar)
+        .onAppear { focused = query.isEmpty }
     }
 
-    var results: [Flashcard] {
+    private var results: [Flashcard] {
         guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return [] }
-        return cards.filter { CardSearch.matches($0, query: query) }
-        .sorted { $0.updatedAt > $1.updatedAt }
+        return cards
+            .filter { CardSearch.matches($0, query: query) }
+            .sorted { $0.updatedAt > $1.updatedAt }
     }
 }
 
@@ -66,34 +91,28 @@ private struct SearchResultRow: View {
     let card: Flashcard
 
     var body: some View {
-        FlashcardSurface(seed: card.id.hashValue, style: .compact) {
-            VStack(alignment: .leading, spacing: 9) {
+        FlashcardSurface(seed: card.id.inkSeed, style: .compact) {
+            VStack(alignment: .leading, spacing: 8) {
                 HandwrittenText(verbatim: context)
-                    .font(RemnTypography.smallControl)
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                    .font(RemnTypography.note)
                     .foregroundStyle(Color.remnGraphite)
                     .lineLimit(1)
                 HandwrittenText(verbatim: RemnFormatters.usefulLine(card.frontMarkdown))
-                    .font(RemnTypography.display(21, weight: .medium, relativeTo: .body))
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                    .font(RemnTypography.display(22, relativeTo: .body))
                     .foregroundStyle(Color.remnInk)
                     .lineLimit(3)
-                HStack {
-                    FlashcardSideLabel(title: "card.front")
-                    Spacer()
-                    HandwrittenText(verbatim: RemnFormatters.dueStatus(for: card))
-                        .font(RemnTypography.smallControl)
-                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                        .foregroundStyle(Color.remnGraphite)
-                }
+                    .multilineTextAlignment(.leading)
+                HandwrittenText(verbatim: RemnFormatters.dueStatus(for: card))
+                    .font(RemnTypography.note)
+                    .foregroundStyle(card.state != .new && card.due <= .now ? Color.remnAccent : Color.remnGraphite)
             }
         }
-        .padding(.vertical, 4)
+        .accessibilityElement(children: .combine)
     }
 
     private var context: String {
-        let subject = card.deck?.subject?.name ?? RemnLanguage.localized("subject.unknown")
-        let deck = card.deck?.name ?? RemnLanguage.localized("deck.unknown")
+        let subject = card.deck?.subject?.name ?? String(localized: "subject.unknown")
+        let deck = card.deck?.name ?? String(localized: "deck.unknown")
         return "\(subject) / \(deck)"
     }
 }

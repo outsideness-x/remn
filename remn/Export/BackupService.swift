@@ -9,10 +9,10 @@ enum BackupError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .unsupportedSchema: RemnLanguage.localized("backup.error.schema")
-        case .duplicateIdentifiers: RemnLanguage.localized("backup.error.duplicates")
-        case .brokenRelationship: RemnLanguage.localized("backup.error.relationships")
-        case .invalidSetting: RemnLanguage.localized("backup.error.settings")
+        case .unsupportedSchema: String(localized: "backup.error.schema")
+        case .duplicateIdentifiers: String(localized: "backup.error.duplicates")
+        case .brokenRelationship: String(localized: "backup.error.relationships")
+        case .invalidSetting: String(localized: "backup.error.settings")
         }
     }
 }

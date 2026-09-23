@@ -13,136 +13,216 @@ struct StudySessionView: View {
     @Bindable var session: StudySessionRecord
     @State private var revealed = false
     @State private var showingBack = false
-    @State private var flipScaleX: CGFloat = 1
-    @State private var flipLift: CGFloat = 0
+    @State private var turn: Double = 0
     @State private var isFlipping = false
+    @State private var answerInk: Double = 1
     @State private var ratingsVisible = false
     @State private var candidates: [StudyRating: ScheduleCandidate] = [:]
     @State private var reviewTime = Date()
     @State private var showRatingsHelp = false
     @State private var showUndo = false
+    @State private var flips = 0
+    @State private var grades = 0
 
     var body: some View {
         VStack(spacing: 0) {
-            studyHeader
-            Group {
-                if session.isActive, let card = currentCard {
-                    study(card)
-                } else {
-                    StudyCompletionView(session: session)
-                }
+            header
+            if session.isActive, let card = currentCard {
+                study(card)
+            } else {
+                StudyCompletionView(session: session)
+                    .transition(.opacity)
             }
-            .background(Color.remnPaper.ignoresSafeArea())
-            .handmadeDialog(
-                isPresented: $showRatingsHelp,
-                title: "study.ratingsHelp.title",
-                message: Text("study.ratingsHelp.message"),
-                actions: [HandmadeDialogAction("ok") {}]
-            )
-            .onAppear(perform: prepareQueue)
         }
-        .background(Color.remnPaper.ignoresSafeArea())
+        .paperBackground()
+        .handmadeDialog(
+            isPresented: $showRatingsHelp,
+            title: "study.ratingsHelp.title",
+            message: Text("study.ratingsHelp.message"),
+            actions: [HandmadeDialogAction("ok") {}]
+        )
+        .onAppear(perform: prepareQueue)
+        .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.55), trigger: flips)
+        .sensoryFeedback(.impact(weight: .light, intensity: 0.8), trigger: grades)
     }
 
-    private var studyHeader: some View {
-        HStack(spacing: 8) {
-            Button { dismiss() } label: {
-                HandwrittenText("close")
-                    .remnHandwrittenBounds()
-            }
-            .frame(minWidth: 64, minHeight: 44, alignment: .leading)
-            Spacer()
-            if session.isActive {
-                VStack(spacing: -1) {
-                    HandwrittenText(verbatim: progress)
+    // MARK: - Header
+
+    private var header: some View {
+        ZStack {
+            if session.isActive, currentCard != nil {
+                VStack(spacing: 2) {
+                    HandwrittenText(verbatim: "\(position)/\(total)")
                         .font(RemnTypography.control)
-                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
                         .foregroundStyle(Color.remnInk)
-                    ScribbleDivider(seed: 271)
-                        .frame(width: 28)
+                        .contentTransition(.numericText())
+                    StudyProgressLine(fraction: progress)
+                        .frame(width: 96, height: 8)
                 }
-                .accessibilityElement(children: .combine)
-            } else {
-                HandwrittenText(verbatim: "remn")
-                    .font(RemnTypography.navigationTitle)
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                    .foregroundStyle(Color.remnGraphite)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("study.progress \(position) \(total)"))
             }
-            Spacer()
-            Group {
+            HStack {
+                Button { dismiss() } label: {
+                    HandwrittenText("close")
+                }
+                .buttonStyle(InkButtonStyle(kind: .quiet, seed: 31))
+                Spacer()
                 if showUndo {
                     Button(action: undo) {
-                        HandwrittenText("undo")
-                            .remnHandwrittenBounds()
+                        HStack(spacing: 5) {
+                            InkIcon(kind: .undo, color: .remnAccent, size: 17)
+                            HandwrittenText("undo")
+                        }
                     }
-                        .transition(.opacity)
-                } else {
-                    Color.clear
+                    .buttonStyle(InkButtonStyle(kind: .quiet, seed: 32))
+                    .transition(.opacity)
                 }
             }
-            .frame(width: 64, height: 44, alignment: .trailing)
         }
-        .font(RemnTypography.control)
-        .foregroundStyle(Color.remnAccent)
-        .buttonStyle(.plain)
-        .padding(.horizontal, 22)
-        .padding(.vertical, 6)
-        .background(Color.remnPaper)
+        .padding(.horizontal, 12)
+        .padding(.top, 6)
     }
+
+    // MARK: - Card
 
     private func study(_ card: Flashcard) -> some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                HandwrittenText(verbatim: card.deckContext)
-                    .font(RemnTypography.smallControl)
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                    .foregroundStyle(Color.remnGraphite)
-                studyCardFace(card, isBack: showingBack)
-                .scaleEffect(x: reduceMotion ? 1 : flipScaleX, y: 1, anchor: .center)
-                .offset(y: reduceMotion ? 0 : flipLift)
-                .contentShape(Rectangle())
-                .onTapGesture { revealOrFlip(card) }
-                .accessibilityHint(Text(showingBack ? "study.tapFlip" : "study.tapReveal"))
-                .accessibilityAction(named: Text(showingBack ? "card.front" : "card.back")) {
-                    revealOrFlip(card)
+        VStack(spacing: 0) {
+            GeometryReader { proxy in
+                let cardHeight = min(max(proxy.size.height * 0.64, 260), 560)
+                ScrollView {
+                    VStack(spacing: 14) {
+                        HandwrittenText(verbatim: card.deckContext)
+                            .font(RemnTypography.note)
+                            .foregroundStyle(Color.remnGraphite)
+                            .lineLimit(1)
+                        studyCard(card, height: cardHeight)
+                    }
+                    .padding(.horizontal, 22)
+                    .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity, minHeight: proxy.size.height)
+                    .remnReadableWidth(620)
+                }
+                .scrollIndicators(.hidden)
+                .scrollBounceBehavior(.basedOnSize)
+            }
+            .id(card.id)
+            .transition(cardTransition)
+
+            answerControls(for: card)
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+                .padding(.bottom, 8)
+                .remnReadableWidth(620)
+        }
+    }
+
+    private func studyCard(_ card: Flashcard, height: CGFloat) -> some View {
+        let header: CGFloat = 52
+        let footer: CGFloat = 40
+        let padding = FlashcardSurfaceStyle.study.padding
+        let contentHeight = max(height - header - footer - padding.top - padding.bottom, 80)
+        return FlashcardSurface(seed: card.id.inkSeed &+ (showingBack ? 1 : 0), style: .study) {
+            CardContentView(
+                markdown: showingBack ? card.backMarkdown : card.frontMarkdown,
+                context: .study
+            )
+            .opacity(showingBack ? answerInk : 1)
+            .blur(radius: showingBack ? (1 - answerInk) * 5 : 0)
+            .offset(y: showingBack ? (1 - answerInk) * 4 : 0)
+            .frame(maxWidth: .infinity, minHeight: contentHeight, alignment: .leading)
+            .padding(.top, header)
+            .padding(.bottom, footer)
+            .overlay(alignment: .top) {
+                VStack(alignment: .leading, spacing: 4) {
+                    FlashcardSideLabel(title: showingBack ? "card.back" : "card.front")
+                    IndexRule(seed: card.id.inkSeed ^ (showingBack ? 0x21 : 0x11))
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-            .padding(.bottom, revealed ? 100 : 40)
+            .overlay(alignment: .bottomTrailing) {
+                if revealed {
+                    HStack(spacing: 7) {
+                        InkIcon(kind: .flip, color: .remnGraphite, size: 17)
+                        HandwrittenText("study.tapFlip")
+                            .font(RemnTypography.caption)
+                            .foregroundStyle(Color.remnGraphite)
+                    }
+                    .accessibilityHidden(true)
+                }
+            }
         }
-        .safeAreaInset(edge: .bottom) {
-            if revealed {
-                ratings(for: card)
-                    .opacity(ratingsVisible ? 1 : 0)
-                    .offset(y: ratingsVisible ? 0 : 8)
-                    .allowsHitTesting(ratingsVisible)
+        .rotation3DEffect(.degrees(turn), axis: (x: 0, y: 1, z: 0), perspective: 0.45)
+        .contentShape(Rectangle())
+        .onTapGesture { revealOrFlip(card) }
+        .accessibilityElement(children: .contain)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHint(Text(revealed ? "study.tapFlip" : "study.tapReveal"))
+        .accessibilityAction(named: Text(showingBack ? "card.front" : "card.back")) {
+            revealOrFlip(card)
+        }
+    }
+
+    private var cardTransition: AnyTransition {
+        guard !reduceMotion else { return .opacity }
+        return .asymmetric(
+            insertion: .offset(x: 60, y: 8).combined(with: .opacity),
+            removal: .offset(x: -80, y: 4).combined(with: .opacity)
+        )
+    }
+
+    // MARK: - Answer
+
+    private func answerControls(for card: Flashcard) -> some View {
+        ZStack(alignment: .bottom) {
+            Button { revealOrFlip(card) } label: {
+                HStack(spacing: 10) {
+                    InkIcon(kind: .flip, color: .remnInk, size: 19)
+                    HandwrittenText("study.showAnswer")
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(InkButtonStyle(kind: .secondary, seed: 57))
+            .opacity(revealed ? 0 : 1)
+            .allowsHitTesting(!revealed)
+            .accessibilityHidden(revealed)
+
+            ratings(for: card)
+                .opacity(ratingsVisible ? 1 : 0)
+                .offset(y: ratingsVisible || reduceMotion ? 0 : 10)
+                .allowsHitTesting(ratingsVisible)
+                .accessibilityHidden(!ratingsVisible)
+        }
+    }
+
+    private func ratings(for card: Flashcard) -> some View {
+        VStack(spacing: 6) {
+            HStack(spacing: 0) {
+                HandwrittenText("study.rate")
+                    .font(RemnTypography.note)
+                    .foregroundStyle(Color.remnGraphite)
+                Spacer()
+                InkIconButton(kind: .info, label: "study.ratingsHelp.title", color: .remnGraphite, size: 19) {
+                    showRatingsHelp = true
+                }
+                .padding(.trailing, -8)
+            }
+            .padding(.leading, 6)
+            HStack(spacing: 8) {
+                ForEach(StudyRating.allCases) { rating in
+                    if let candidate = candidates[rating] {
+                        RatingButton(
+                            rating: rating,
+                            interval: RemnFormatters.interval(from: reviewTime, to: candidate.schedule.due)
+                        ) {
+                            grade(rating, candidate: candidate, card: card)
+                        }
+                    }
+                }
             }
         }
     }
 
-    private func studyCardFace(_ card: Flashcard, isBack: Bool) -> some View {
-        FlashcardSurface(
-            seed: card.id.hashValue &+ (isBack ? 1 : 0),
-            style: .study
-        ) {
-            VStack(alignment: .leading, spacing: 19) {
-                FlashcardSideLabel(title: isBack ? "card.back" : "card.front")
-                CardContentView(
-                    markdown: isBack ? card.backMarkdown : card.frontMarkdown,
-                    context: .study
-                )
-                HStack(spacing: 7) {
-                    Spacer()
-                    DoodleIcon(kind: .flip, color: .remnGraphite, size: 18)
-                    HandwrittenText(isBack ? "study.tapFlip" : "study.tapReveal")
-                        .font(RemnTypography.smallControl)
-                        .remnHandwrittenBounds(horizontal: 3, vertical: 1)
-                }
-                .foregroundStyle(Color.remnGraphite)
-            }
-        }
-    }
+    // MARK: - Actions
 
     private func revealOrFlip(_ card: Flashcard) {
         guard !isFlipping else { return }
@@ -164,7 +244,7 @@ struct StudySessionView: View {
             revealed = true
             ratingsVisible = false
             flipCard(toBack: true) {
-                withAnimation(.easeOut(duration: 0.18)) {
+                withAnimation(.easeOut(duration: 0.22)) {
                     ratingsVisible = true
                 }
                 if needsHelp {
@@ -181,67 +261,43 @@ struct StudySessionView: View {
             completion?()
             return
         }
+        flips += 1
 
         if reduceMotion {
             withAnimation(.easeOut(duration: 0.15)) {
                 showingBack = toBack
+                answerInk = 1
             }
             completion?()
             return
         }
 
         isFlipping = true
-        withAnimation(.timingCurve(0.42, 0, 0.78, 0.38, duration: 0.16)) {
-            flipScaleX = 0.035
-            flipLift = -3
+        withAnimation(.easeIn(duration: 0.14)) {
+            turn = 88
         }
 
         Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(160))
-            showingBack = toBack
-
-            withAnimation(.timingCurve(0.18, 0.72, 0.20, 1, duration: 0.23)) {
-                flipScaleX = 1
-                flipLift = 0
+            try? await Task.sleep(for: .milliseconds(140))
+            var quiet = Transaction()
+            quiet.disablesAnimations = true
+            withTransaction(quiet) {
+                showingBack = toBack
+                turn = -88
+                answerInk = toBack ? 0 : 1
             }
-
-            try? await Task.sleep(for: .milliseconds(230))
+            withAnimation(.spring(duration: 0.42, bounce: 0.3)) {
+                turn = 0
+            }
+            if toBack {
+                withAnimation(.easeOut(duration: 0.5).delay(0.08)) {
+                    answerInk = 1
+                }
+            }
+            try? await Task.sleep(for: .milliseconds(220))
             isFlipping = false
             completion?()
         }
-    }
-
-    private func ratings(for card: Flashcard) -> some View {
-        VStack(spacing: 8) {
-            HStack {
-                HandwrittenText("study.rate")
-                    .font(RemnTypography.smallControl)
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                    .foregroundStyle(Color.remnGraphite)
-                Spacer()
-                Button { showRatingsHelp = true } label: {
-                    DoodleIcon(kind: .info, color: .remnAccent, size: 19)
-                        .frame(width: 44, height: 32)
-                }
-                .accessibilityLabel(Text("study.ratingsHelp.title"))
-            }
-            HStack(spacing: 7) {
-                ForEach(StudyRating.allCases) { rating in
-                    if let candidate = candidates[rating] {
-                        RatingButton(
-                            rating: rating,
-                            interval: RemnFormatters.interval(from: reviewTime, to: candidate.schedule.due)
-                        ) {
-                            grade(rating, candidate: candidate, card: card)
-                        }
-                    }
-                }
-            }
-        }
-        .padding(.horizontal, 14)
-        .padding(.top, 5)
-        .padding(.bottom, 9)
-        .background(Color.remnPaper.opacity(0.97))
     }
 
     private var currentCard: Flashcard? {
@@ -249,47 +305,63 @@ struct StudySessionView: View {
         return cards.first { $0.id == id }
     }
 
-    private var progress: String {
-        "\(min(session.reviewedCount + 1, session.admittedCardIDs.count))/\(session.admittedCardIDs.count)"
+    private var total: Int {
+        max(session.admittedCardIDs.count, 1)
+    }
+
+    private var finished: Int {
+        max(0, session.admittedCardIDs.count - session.queueCardIDs.count)
+    }
+
+    private var position: Int {
+        min(finished + 1, total)
+    }
+
+    private var progress: Double {
+        Double(finished) / Double(total)
     }
 
     private func grade(_ rating: StudyRating, candidate: ScheduleCandidate, card: Flashcard) {
-        do {
-            try ReviewService().apply(
-                rating,
-                candidate: candidate,
-                to: card,
-                in: session,
-                context: context,
-                at: reviewTime
-            )
-            revealed = false
-            showingBack = false
-            ratingsVisible = false
-            flipScaleX = 1
-            flipLift = 0
-            candidates = [:]
-            SessionService.refreshQueue(session, cards: cards)
-            try context.save()
-            withAnimation(reduceMotion ? nil : .easeOut(duration: 0.18)) { showUndo = true }
-        } catch {
-            appState.errorMessage = error.localizedDescription
+        grades += 1
+        withAnimation(reduceMotion ? .easeOut(duration: 0.15) : .spring(duration: 0.42, bounce: 0.18)) {
+            do {
+                try ReviewService().apply(
+                    rating,
+                    candidate: candidate,
+                    to: card,
+                    in: session,
+                    context: context,
+                    at: reviewTime
+                )
+                resetFace()
+                SessionService.refreshQueue(session, cards: cards)
+                try context.save()
+                showUndo = true
+            } catch {
+                appState.errorMessage = error.localizedDescription
+            }
         }
     }
 
     private func undo() {
-        do {
-            try ReviewService().undoLastReview(in: session, context: context)
-            revealed = false
-            showingBack = false
-            ratingsVisible = false
-            flipScaleX = 1
-            flipLift = 0
-            candidates = [:]
-            withAnimation { showUndo = false }
-        } catch {
-            appState.errorMessage = error.localizedDescription
+        withAnimation(reduceMotion ? .easeOut(duration: 0.15) : .spring(duration: 0.42, bounce: 0.18)) {
+            do {
+                try ReviewService().undoLastReview(in: session, context: context)
+                resetFace()
+                showUndo = false
+            } catch {
+                appState.errorMessage = error.localizedDescription
+            }
         }
+    }
+
+    private func resetFace() {
+        revealed = false
+        showingBack = false
+        ratingsVisible = false
+        turn = 0
+        answerInk = 1
+        candidates = [:]
     }
 
     private func prepareQueue() {
@@ -297,5 +369,27 @@ struct StudySessionView: View {
         session.queueCardIDs.removeAll { !existingIDs.contains($0) }
         SessionService.refreshQueue(session, cards: cards)
         try? context.save()
+    }
+}
+
+/// How far through the session you are: a pencil line with red pencil over the part you've done.
+struct StudyProgressLine: View {
+    let fraction: Double
+
+    var body: some View {
+        GeometryReader { proxy in
+            ZStack(alignment: .leading) {
+                InkLine(seed: 2_701, pen: .hairline)
+                    .fill(Color.remnGraphite.opacity(0.7))
+                InkLine(seed: 2_702, pen: .bold)
+                    .fill(Color.remnAccent)
+                    .mask(alignment: .leading) {
+                        Rectangle()
+                            .frame(width: proxy.size.width * min(max(fraction, 0), 1))
+                    }
+            }
+        }
+        .animation(.easeOut(duration: 0.35), value: fraction)
+        .accessibilityHidden(true)
     }
 }

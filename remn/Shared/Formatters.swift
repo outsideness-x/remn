@@ -1,20 +1,28 @@
 import Foundation
 
 enum RemnFormatters {
+    /// A compact, localized distance in time: "10m", "3d" — "10 мин", "3 дн".
     static func interval(from now: Date, to date: Date) -> String {
         let seconds = max(0, date.timeIntervalSince(now))
-        if seconds < 90 { return "1m" }
-        if seconds < 3_600 { return "\(max(1, Int((seconds / 60).rounded())))m" }
-        if seconds < 86_400 { return "\(max(1, Int((seconds / 3_600).rounded())))h" }
-        if seconds < 86_400 * 30 { return "\(max(1, Int((seconds / 86_400).rounded())))d" }
-        if seconds < 86_400 * 365 { return "\(max(1, Int((seconds / (86_400 * 30)).rounded())))mo" }
-        return "\(max(1, Int((seconds / (86_400 * 365)).rounded())))y"
+        if seconds < 3_600 {
+            return String(localized: "interval.minutes \(max(1, Int((seconds / 60).rounded())))")
+        }
+        if seconds < 86_400 {
+            return String(localized: "interval.hours \(max(1, Int((seconds / 3_600).rounded())))")
+        }
+        if seconds < 86_400 * 30 {
+            return String(localized: "interval.days \(max(1, Int((seconds / 86_400).rounded())))")
+        }
+        if seconds < 86_400 * 365 {
+            return String(localized: "interval.months \(max(1, Int((seconds / (86_400 * 30)).rounded())))")
+        }
+        return String(localized: "interval.years \(max(1, Int((seconds / (86_400 * 365)).rounded())))")
     }
 
     static func dueStatus(for card: Flashcard, now: Date = .now) -> String {
-        if card.state == .new { return RemnLanguage.localized("status.new") }
-        if card.due <= now { return RemnLanguage.localized("status.due") }
-        return card.due.formatted(.dateTime.month(.abbreviated).day())
+        if card.state == .new { return String(localized: "status.new") }
+        if card.due <= now { return String(localized: "status.due") }
+        return card.due.formatted(.dateTime.month(.abbreviated).day()).lowercased()
     }
 
     static func usefulLine(_ markdown: String) -> String {
@@ -24,6 +32,6 @@ enum RemnFormatters {
             .first { !$0.trimmingCharacters(in: .whitespaces).isEmpty }?
             .replacingOccurrences(of: #"[#*`_$>]"#, with: "", options: .regularExpression)
             .trimmingCharacters(in: .whitespacesAndNewlines)
-            ?? RemnLanguage.localized("card.untitled")
+            ?? String(localized: "card.untitled")
     }
 }

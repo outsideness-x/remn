@@ -16,71 +16,66 @@ struct CardDetailView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            RemnNavigationHeader(title: "card") {
-                Button { showActions = true } label: {
-                    DoodleIcon(kind: .more, color: .remnInk, size: 21)
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Text("actions"))
+            RemnNavigationHeader(backTitle: card.deck?.name) {
+                InkIconButton(kind: .more, label: "actions") { showActions = true }
             }
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    HandwrittenText(verbatim: card.deckContext)
-                        .font(RemnTypography.smallControl)
-                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                        .foregroundStyle(Color.remnGraphite)
-                    FlashcardSurface(seed: card.id.hashValue) {
-                        VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 18) {
+                    FlashcardSurface(seed: card.id.inkSeed) {
+                        VStack(alignment: .leading, spacing: 0) {
                             HStack(alignment: .firstTextBaseline) {
                                 FlashcardSideLabel(title: "card.front")
                                 Spacer()
                                 HandwrittenText(verbatim: RemnFormatters.dueStatus(for: card))
-                                    .font(RemnTypography.smallControl)
-                                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                                    .foregroundStyle(Color.remnGraphite)
+                                    .font(RemnTypography.note)
+                                    .foregroundStyle(isDue ? Color.remnAccent : Color.remnGraphite)
                             }
+                            IndexRule(seed: card.id.inkSeed ^ 0x11)
+                                .padding(.top, 4)
+                                .padding(.bottom, 14)
                             CardContentView(markdown: card.frontMarkdown)
-                            ScribbleDivider(seed: card.id.hashValue)
+                            InkDashes(seed: card.id.inkSeed ^ 0x22)
+                                .fill(Color.remnGraphite.opacity(0.6))
+                                .frame(height: 6)
+                                .padding(.vertical, 18)
+                                .accessibilityHidden(true)
                             FlashcardSideLabel(title: "card.back")
+                                .padding(.bottom, 10)
                             CardContentView(markdown: card.backMarkdown)
                         }
                     }
+                    HandwrittenText(verbatim: history)
+                        .font(RemnTypography.note)
+                        .foregroundStyle(Color.remnGraphite)
+                        .padding(.horizontal, 4)
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 20)
+                .padding(.top, 12)
                 .padding(.bottom, 44)
+                .remnReadableWidth()
             }
         }
-        .background(Color.remnPaper.ignoresSafeArea())
+        .paperBackground()
         .toolbar(.hidden, for: .navigationBar)
         .overlay {
             if isExporting {
                 ZStack {
                     Color.black.opacity(0.28)
                         .ignoresSafeArea()
-                    VStack(spacing: 8) {
-                        StackedCardsDoodle()
-                            .scaleEffect(0.72)
-                            .frame(width: 42, height: 34)
+                    VStack(spacing: 12) {
+                        StackedCardsDoodle(width: 48)
                         HandwrittenText("export.saving")
                             .font(RemnTypography.control)
-                            .remnHandwrittenBounds()
+                            .foregroundStyle(Color.remnInk)
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 17)
-                    .background {
-                        WobblyRoundedRectangle(seed: 688, cornerRadius: 12)
-                            .fill(Color.remnCardPaper)
-                    }
-                    .overlay {
-                        WobblyRoundedRectangle(seed: 688, cornerRadius: 12)
-                            .stroke(Color.remnInk.opacity(0.72), lineWidth: 1.2)
-                    }
+                    .padding(.horizontal, 30)
+                    .padding(.vertical, 22)
+                    .background { InkBox(seed: 688, cornerRadius: 14) }
                 }
+                .transition(.opacity)
             }
         }
+        .animation(.easeOut(duration: 0.2), value: isExporting)
         .sheet(isPresented: $showEditor) {
             if let deck = card.deck { CardEditorView(initialDeck: deck, card: card) }
         }
@@ -128,6 +123,19 @@ struct CardDetailView: View {
         )
     }
 
+    private var isDue: Bool {
+        card.state != .new && card.due <= .now
+    }
+
+    private var history: String {
+        guard card.state != .new else { return String(localized: "card.notStudied") }
+        let reviews = String(localized: "count.reviews \(card.reviewLogs.count)")
+        let next = card.due <= .now
+            ? String(localized: "card.dueNow")
+            : String(localized: "card.nextReview \(card.due.formatted(.dateTime.month(.wide).day()).lowercased())")
+        return "\(next)  ·  \(reviews)"
+    }
+
     private func duplicate() {
         guard let deck = card.deck else { return }
         context.insert(
@@ -163,7 +171,7 @@ struct CardDetailView: View {
             defer { isExporting = false }
             do {
                 try await CardImageExporter.save(card)
-                exportMessage = RemnLanguage.localized("export.saved")
+                exportMessage = String(localized: "export.saved")
             } catch {
                 exportMessage = error.localizedDescription
             }

@@ -1,38 +1,52 @@
 import SwiftUI
 
+/// A subject or deck on the page: its name, and how much of it is waiting.
 struct LibraryRow: View {
     let title: String
     let dueCount: Int
     let totalCount: Int
-    let seed: Int
 
     var body: some View {
-        HStack(spacing: 16) {
-            VStack(alignment: .leading, spacing: 5) {
-                HandwrittenText(verbatim: title)
-                    .font(RemnTypography.display(27, weight: .semibold, relativeTo: .title3))
-                    .remnHandwrittenBounds(horizontal: 3, vertical: 1)
-                    .foregroundStyle(Color.remnInk)
-                    .lineLimit(2)
-                HandwrittenText(
-                    verbatim: "\(dueCount) \(RemnLanguage.localized("library.due"))  ·  \(RemnLanguage.counted(totalCount, singular: "library.card", plural: "library.cards"))"
-                )
-                    .font(RemnTypography.smallControl)
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+        VStack(alignment: .leading, spacing: 5) {
+            HandwrittenText(verbatim: title, weight: 0.3)
+                .font(RemnTypography.rowTitle)
+                .foregroundStyle(Color.remnInk)
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+            HStack(spacing: 8) {
+                if dueCount > 0 {
+                    HandwrittenText("count.due \(dueCount)")
+                        .foregroundStyle(Color.remnAccent)
+                    HandwrittenText(verbatim: "·")
+                        .foregroundStyle(Color.remnGraphite)
+                        .accessibilityHidden(true)
+                }
+                HandwrittenText("count.cards \(totalCount)")
                     .foregroundStyle(Color.remnGraphite)
             }
-            Spacer(minLength: 8)
-            DoodleIcon(
-                kind: .forward,
-                color: dueCount > 0 ? .remnAccent : .remnGraphite,
-                size: 20
-            )
+            .font(RemnTypography.note)
         }
-        .padding(.horizontal, 3)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 16)
-        .overlay(alignment: .bottom) {
-            ScribbleDivider(seed: seed)
-        }
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+    }
+}
+
+/// Dims a row while it's pressed, the way a page darkens under a finger.
+struct InkRowStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.5 : 1)
+            .animation(.easeOut(duration: configuration.isPressed ? 0.05 : 0.2), value: configuration.isPressed)
+    }
+}
+
+extension Array where Element == Flashcard {
+    /// Reviews that fall due before the end of today.
+    func dueTodayCount(now: Date = .now) -> Int {
+        let calendar = Calendar.current
+        let endOfToday = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now)) ?? now
+        return count { $0.state != .new && $0.due < endOfToday }
     }
 }

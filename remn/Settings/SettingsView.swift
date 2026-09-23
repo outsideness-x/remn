@@ -15,70 +15,26 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            RemnNavigationHeader(title: "settings")
+            RemnNavigationHeader(backTitle: String(localized: "library"))
             ScrollView {
-                VStack(alignment: .leading, spacing: 38) {
-                    settingsSection("settings.study") {
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                HandwrittenText("settings.retention")
-                                    .font(RemnTypography.control)
-                                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                                Spacer()
-                                Text(desiredRetention, format: .percent.precision(.fractionLength(0)))
-                                    .font(RemnTypography.control)
-                                    .monospacedDigit()
-                            }
-                            HandmadeSlider(
-                                value: $desiredRetention,
-                                range: 0.70...0.97,
-                                step: 0.01
-                            )
-                            HandwrittenText("settings.retention.help")
-                                .font(RemnTypography.display(17, relativeTo: .footnote))
-                                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                                .foregroundStyle(Color.remnGraphite)
-
-                            Button { showSRSExplanation = true } label: {
-                                HStack(spacing: 7) {
-                                    HandwrittenText("settings.srs.open")
-                                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                                    Text("→")
-                                        .accessibilityHidden(true)
-                                }
-                                .font(RemnTypography.smallControl)
-                                .foregroundStyle(Color.remnAccent)
-                                .padding(.top, 4)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    settingsSection("settings.appearance") {
-                        HStack(spacing: 24) {
-                            appearanceChoice(.system, title: "appearance.system")
-                            appearanceChoice(.light, title: "appearance.light")
-                            appearanceChoice(.dark, title: "appearance.dark")
-                        }
-                    }
-                    settingsSection("settings.data") {
-                        VStack(spacing: 2) {
-                            settingsButton("backup.export", icon: .upload, action: exportBackup)
-                            ScribbleDivider(seed: 112)
-                            settingsButton("backup.import", icon: .download) {
-                                showImporter = true
-                            }
-                        }
-                    }
-                    settingsSection("settings.about") {
-                        aboutPanel
-                    }
+                VStack(alignment: .leading, spacing: 0) {
+                    ScreenTitle(title: String(localized: "settings"))
+                    section("settings.study") { studySettings }
+                        .padding(.top, 28)
+                    section("settings.appearance") { appearancePicker }
+                        .padding(.top, 38)
+                    section("settings.data") { dataSettings }
+                        .padding(.top, 38)
+                    section("settings.about") { AboutCard() }
+                        .padding(.top, 38)
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 24)
-                .padding(.bottom, 40)
+                .padding(.top, 10)
+                .padding(.bottom, 44)
+                .remnReadableWidth()
             }
         }
-        .background(Color.remnPaper.ignoresSafeArea())
+        .paperBackground()
         .toolbar(.hidden, for: .navigationBar)
         .fileExporter(
             isPresented: $showExporter,
@@ -86,7 +42,10 @@ struct SettingsView: View {
             contentType: .json,
             defaultFilename: backupFilename
         ) { result in
-            if case .failure(let error) = result { resultMessage = error.localizedDescription }
+            switch result {
+            case .success: resultMessage = String(localized: "backup.exported")
+            case .failure(let error): resultMessage = error.localizedDescription
+            }
         }
         .fileImporter(isPresented: $showImporter, allowedContentTypes: [.json]) { result in
             importBackup(result)
@@ -107,122 +66,103 @@ struct SettingsView: View {
         }
     }
 
-    private func settingsSection<Content: View>(
+    private func section<Content: View>(
         _ title: LocalizedStringKey,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HandwrittenText(title)
-                .font(RemnTypography.display(22, weight: .medium, relativeTo: .title3))
-                .remnHandwrittenBounds()
+        VStack(alignment: .leading, spacing: 14) {
+            HandwrittenText(title, weight: 0.4)
+                .font(RemnTypography.sectionTitle)
+                .foregroundStyle(Color.remnInk)
+                .accessibilityAddTraits(.isHeader)
             content()
-                .padding(.top, 4)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
-    private func appearanceChoice(_ mode: AppearanceMode, title: LocalizedStringKey) -> some View {
-        Button { appearanceMode = mode.rawValue } label: {
-            VStack(spacing: 7) {
-                HandwrittenText(title)
-                    .font(RemnTypography.smallControl)
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                    .foregroundStyle(appearanceMode == mode.rawValue ? Color.remnInk : Color.remnGraphite)
-                Capsule()
-                    .fill(appearanceMode == mode.rawValue ? Color.remnAccent : Color.clear)
-                    .frame(height: 1.5)
+    private var studySettings: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline) {
+                HandwrittenText("settings.retention")
+                    .font(RemnTypography.control)
+                    .foregroundStyle(Color.remnInk)
+                Spacer()
+                HandwrittenText(verbatim: desiredRetention.formatted(.percent.precision(.fractionLength(0))), weight: 0.6)
+                    .font(RemnTypography.display(26, relativeTo: .title3))
+                    .foregroundStyle(Color.remnAccent)
+                    .contentTransition(.numericText())
+                    .animation(.snappy, value: desiredRetention)
             }
-            .frame(maxWidth: .infinity)
-            .contentShape(Rectangle())
+            InkSlider(
+                value: $desiredRetention,
+                range: 0.70...0.97,
+                step: 0.01,
+                accessibilityLabel: Text("settings.retention"),
+                marks: [0.90]
+            )
+            HandwrittenText("settings.retention.help")
+                .font(RemnTypography.note)
+                .foregroundStyle(Color.remnGraphite)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, 2)
+            Button { showSRSExplanation = true } label: {
+                HStack(spacing: 8) {
+                    HandwrittenText("settings.srs.open")
+                    InkIcon(kind: .forward, color: .remnAccent, size: 17)
+                }
+            }
+            .buttonStyle(InkButtonStyle(kind: .quiet, seed: 144))
+            .padding(.leading, -10)
         }
-        .buttonStyle(.plain)
     }
 
-    private func settingsButton(
+    private var appearancePicker: some View {
+        InkChoiceRow(
+            selection: $appearanceMode,
+            options: [
+                .init(value: AppearanceMode.system.rawValue, title: Text("appearance.system")),
+                .init(value: AppearanceMode.light.rawValue, title: Text("appearance.light")),
+                .init(value: AppearanceMode.dark.rawValue, title: Text("appearance.dark")),
+            ],
+            seed: 380
+        )
+    }
+
+    private var dataSettings: some View {
+        VStack(spacing: 0) {
+            dataRow("backup.export", note: "backup.export.note", icon: .upload, action: exportBackup)
+            InkDivider(seed: 112)
+            dataRow("backup.import", note: "backup.import.note", icon: .download) {
+                showImporter = true
+            }
+        }
+    }
+
+    private func dataRow(
         _ title: LocalizedStringKey,
-        icon: DoodleIconKind,
+        note: LocalizedStringKey,
+        icon: InkIconKind,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
-            HStack {
-                DoodleIcon(kind: icon, color: .remnInk, size: 22)
-                    .frame(width: 28)
-                HandwrittenText(title)
-                    .font(RemnTypography.control)
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                Spacer()
+            HStack(alignment: .top, spacing: 14) {
+                InkIcon(kind: icon, color: .remnInk, size: 22)
+                    .frame(width: 28, height: 28)
+                VStack(alignment: .leading, spacing: 2) {
+                    HandwrittenText(title)
+                        .font(RemnTypography.control)
+                        .foregroundStyle(Color.remnInk)
+                    HandwrittenText(note)
+                        .font(RemnTypography.note)
+                        .foregroundStyle(Color.remnGraphite)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer(minLength: 0)
             }
-            .frame(minHeight: 44)
+            .padding(.vertical, 12)
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
-    }
-
-    private var aboutPanel: some View {
-        FlashcardSurface(seed: 734, style: .compact) {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .center, spacing: 12) {
-                    HandwrittenText("remn")
-                        .font(RemnTypography.display(34, weight: .medium, relativeTo: .title))
-                        .remnHandwrittenBounds()
-                        .foregroundStyle(Color.remnAccent)
-                    Spacer()
-                    StackedCardsDoodle()
-                        .scaleEffect(0.72)
-                        .frame(width: 44, height: 38)
-                }
-
-                HandwrittenText("about.tagline")
-                    .font(RemnTypography.display(20, relativeTo: .body))
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                    .foregroundStyle(Color.remnInk)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                ScribbleDivider(seed: 735)
-
-                HStack(alignment: .center, spacing: 14) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        HandwrittenText("about.openSource")
-                            .font(RemnTypography.smallControl)
-                            .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                            .foregroundStyle(Color.remnGraphite)
-                        HandwrittenText(verbatim: versionText)
-                            .font(RemnTypography.display(15, relativeTo: .caption))
-                            .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                            .foregroundStyle(Color.remnGraphite)
-                    }
-                    Spacer()
-                    HandwrittenText(verbatim: "MIT")
-                        .font(RemnTypography.display(25, weight: .semibold, relativeTo: .title3))
-                        .remnHandwrittenBounds()
-                        .foregroundStyle(Color.remnAccent)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .background {
-                            WobblyRoundedRectangle(seed: 738, cornerRadius: 7)
-                                .fill(Color.remnAccent.opacity(0.08))
-                        }
-                        .overlay {
-                            WobblyRoundedRectangle(seed: 738, cornerRadius: 7)
-                                .stroke(Color.remnAccent, lineWidth: 1.2)
-                        }
-                        .rotationEffect(.degrees(-2.2))
-                        .accessibilityLabel(Text("about.mit"))
-                }
-
-                HandwrittenText("about.ownership")
-                    .font(RemnTypography.display(16, relativeTo: .footnote))
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                    .foregroundStyle(Color.remnGraphite)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }
-    }
-
-    private var versionText: String {
-        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
-        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
-        return "\(RemnLanguage.localized("about.version")) \(version) (\(build))"
+        .buttonStyle(InkRowStyle())
     }
 
     private var backupFilename: String {
@@ -255,9 +195,61 @@ struct SettingsView: View {
             let settings = try BackupService.importArchive(archive, context: context)
             desiredRetention = settings.desiredRetention
             appearanceMode = settings.appearanceMode
-            resultMessage = RemnLanguage.localized("backup.imported")
+            resultMessage = String(localized: "backup.imported")
         } catch {
             resultMessage = error.localizedDescription
         }
+    }
+}
+
+/// The colophon: what remn is, and whose cards these are.
+private struct AboutCard: View {
+    var body: some View {
+        FlashcardSurface(seed: 734, style: .regular) {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(alignment: .center) {
+                    HandwrittenText("remn", weight: 1)
+                        .font(RemnTypography.display(40, relativeTo: .title))
+                        .foregroundStyle(Color.remnInk)
+                    Spacer()
+                    StackedCardsDoodle(width: 50)
+                }
+                HandwrittenText("about.tagline")
+                    .font(RemnTypography.body)
+                    .foregroundStyle(Color.remnInk)
+                    .fixedSize(horizontal: false, vertical: true)
+                InkDashes(seed: 735)
+                    .fill(Color.remnGraphite.opacity(0.6))
+                    .frame(height: 6)
+                HStack(alignment: .center, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        HandwrittenText("about.openSource")
+                            .font(RemnTypography.note)
+                            .foregroundStyle(Color.remnInk)
+                        HandwrittenText(verbatim: versionText)
+                            .font(RemnTypography.caption)
+                            .foregroundStyle(Color.remnGraphite)
+                    }
+                    Spacer()
+                    HandwrittenText(verbatim: "MIT", weight: 0.8)
+                        .font(RemnTypography.display(24, relativeTo: .title3))
+                        .foregroundStyle(Color.remnAccent)
+                        .inkCircled(seed: 738, inset: CGSize(width: -12, height: -6))
+                        .rotationEffect(.degrees(-4))
+                        .padding(.trailing, 10)
+                        .accessibilityLabel(Text("about.mit"))
+                }
+                HandwrittenText("about.ownership")
+                    .font(RemnTypography.note)
+                    .foregroundStyle(Color.remnGraphite)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+
+    private var versionText: String {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
+        return String(localized: "about.version \(version) \(build)")
     }
 }

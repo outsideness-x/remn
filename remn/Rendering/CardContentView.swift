@@ -9,6 +9,7 @@ enum CardRenderingContext {
     case export
 }
 
+/// The Markdown on one side of a card, set in remn's hand.
 struct CardContentView: View {
     let markdown: String
     var context: CardRenderingContext = .detail
@@ -34,7 +35,8 @@ struct CardContentView: View {
             markdown: markdown,
             patternOptions: .init(mathExpressions: true)
         )
-        .textual.structuredTextStyle(.gitHub)
+        .textual.structuredTextStyle(RemnTextStyle())
+        .textual.highlighterTheme(.remn)
         .textual.mathProperties(.init(fontScale: mathScale, textAlignment: .center))
         .textual.imageAttachmentLoader(OfflineAttachmentLoader())
         .textual.emojiAttachmentLoader(OfflineAttachmentLoader())
@@ -42,9 +44,10 @@ struct CardContentView: View {
         .textual.textSelection(.enabled)
         .font(contentFont)
         .foregroundStyle(Color.remnInk)
+        .tint(.remnAccent)
+        .textRenderer(InkTextRenderer(wobble: 0.6))
         .environment(\.openURL, OpenURLAction { _ in .discarded })
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, 4)
         .accessibilityLabel(Text(markdown))
     }
 
@@ -60,7 +63,7 @@ struct CardContentView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, 4)
+        .padding(.vertical, 6)
         .accessibilityLabel(Text(verbatim: latex))
     }
 
@@ -88,9 +91,8 @@ struct CardContentView: View {
 
     private var contentFont: Font {
         switch context {
-        case .study: RemnTypography.display(25, relativeTo: .title3)
-        case .detail, .preview: RemnTypography.display(22, relativeTo: .body)
-        case .export: RemnTypography.display(22, relativeTo: .body)
+        case .study: RemnTypography.studyText
+        case .detail, .preview, .export: RemnTypography.cardText
         }
     }
 }

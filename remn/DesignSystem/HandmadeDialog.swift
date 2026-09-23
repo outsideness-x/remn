@@ -1,8 +1,11 @@
 import SwiftUI
 
 enum HandmadeDialogRole {
+    /// The one thing the dialog is for.
     case normal
+    /// Another option.
     case plain
+    /// Something that can't be taken back.
     case destructive
     case cancel
 }
@@ -34,6 +37,7 @@ struct HandmadeDialogAction: Identifiable {
     }
 }
 
+/// A card laid over the screen with a question on it.
 private struct HandmadeDialogModifier: ViewModifier {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Binding var isPresented: Bool
@@ -47,111 +51,87 @@ private struct HandmadeDialogModifier: ViewModifier {
             .overlay {
                 if isPresented {
                     ZStack {
-                        Color.black.opacity(0.46)
+                        Color.black.opacity(0.38)
                             .ignoresSafeArea()
                             .contentShape(Rectangle())
                             .onTapGesture { dismiss() }
+                            .accessibilityHidden(true)
+                            .transition(.opacity)
 
-                        VStack(alignment: .leading, spacing: 18) {
-                            HStack(alignment: .top, spacing: 14) {
-                                HandwrittenText(title)
-                                    .font(RemnTypography.display(29, weight: .semibold, relativeTo: .title2))
-                                    .remnHandwrittenBounds()
-                                    .foregroundStyle(Color.remnInk)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                Spacer(minLength: 6)
-                                StackedCardsDoodle()
-                                    .scaleEffect(0.48)
-                                    .frame(width: 28, height: 24)
-                            }
-
-                            if let message {
-                                message
-                                    .font(.body)
-                                    .foregroundStyle(Color.remnInk)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
-
-                            ScribbleDivider(seed: 913)
-
-                            ScrollView {
-                                VStack(spacing: 9) {
-                                    ForEach(actions) { action in
-                                        dialogButton(action)
-                                    }
-                                }
-                            }
-                            .scrollIndicators(.hidden)
-                            .frame(height: min(CGFloat(actions.count) * 53, 360))
-                        }
-                        .padding(.horizontal, 22)
-                        .padding(.vertical, 20)
-                        .background {
-                            ZStack {
-                                WobblyRoundedRectangle(seed: 822, cornerRadius: 13)
-                                    .fill(Color.remnAccent.opacity(0.18))
-                                    .offset(x: 3, y: 5)
-                                WobblyRoundedRectangle(seed: 771, cornerRadius: 13)
-                                    .fill(Color.remnCardPaper)
-                            }
-                        }
-                        .overlay {
-                            WobblyRoundedRectangle(seed: 771, cornerRadius: 13)
-                                .stroke(Color.remnInk.opacity(0.78), lineWidth: 1.35)
-                        }
-                        .padding(.horizontal, 30)
-                        .frame(maxWidth: 390)
-                        .transition(
-                            reduceMotion
-                                ? .opacity
-                                : .scale(scale: 0.96).combined(with: .opacity)
-                        )
+                        card
+                            .padding(.horizontal, 26)
+                            .frame(maxWidth: 440)
+                            .transition(
+                                reduceMotion
+                                    ? .opacity
+                                    : .scale(scale: 0.94).combined(with: .opacity).combined(with: .offset(y: 12))
+                            )
                     }
                     .zIndex(1000)
+                    .accessibilityAddTraits(.isModal)
                 }
             }
             .animation(
-                reduceMotion ? .easeOut(duration: 0.12) : .spring(duration: 0.28, bounce: 0.12),
+                reduceMotion ? .easeOut(duration: 0.12) : .spring(duration: 0.3, bounce: 0.18),
                 value: isPresented
             )
     }
 
-    private func dialogButton(_ action: HandmadeDialogAction) -> some View {
-        Button {
-            action.perform()
-            dismiss()
-        } label: {
-            HandwrittenText(text: action.title)
-                .font(RemnTypography.control)
-                .remnHandwrittenBounds()
-                .foregroundStyle(foreground(for: action.role))
-                .frame(maxWidth: .infinity, minHeight: 44)
-                .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .background {
-            if action.role != .cancel {
-                WobblyRoundedRectangle(seed: action.role == .destructive ? 883 : 851, cornerRadius: 11)
-                    .fill(action.role == .normal ? Color.remnAccent : Color.remnSurface)
-            }
-        }
-        .overlay {
-            if action.role == .destructive || action.role == .plain {
-                WobblyRoundedRectangle(seed: action.role == .destructive ? 883 : 851, cornerRadius: 11)
-                    .stroke(
-                        action.role == .destructive ? Color.remnAccent : Color.remnInk.opacity(0.42),
-                        lineWidth: 1.15
-                    )
+    private var card: some View {
+        FlashcardSurface(seed: 771, style: .regular) {
+            VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 8) {
+                    HandwrittenText(title, weight: 0.5)
+                        .font(RemnTypography.display(28, relativeTo: .title2))
+                        .foregroundStyle(Color.remnInk)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
+                    if let message {
+                        HandwrittenText(text: message)
+                            .font(RemnTypography.body)
+                            .foregroundStyle(Color.remnGraphite)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .inkWritesOn(duration: 0.4)
+
+                if actions.count > 6 {
+                    ScrollView {
+                        actionStack
+                            .padding(.vertical, 4)
+                    }
+                    .scrollIndicators(.hidden)
+                    .frame(maxHeight: 380)
+                } else {
+                    actionStack
+                }
             }
         }
     }
 
-    private func foreground(for role: HandmadeDialogRole) -> Color {
+    private var actionStack: some View {
+        VStack(spacing: 10) {
+            ForEach(Array(actions.enumerated()), id: \.element.id) { index, action in
+                Button {
+                    action.perform()
+                    dismiss()
+                } label: {
+                    HandwrittenText(text: action.title)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(style(for: action.role, index: index))
+            }
+        }
+    }
+
+    private func style(for role: HandmadeDialogRole, index: Int) -> InkButtonStyle {
         switch role {
-        case .normal: .remnPaper
-        case .plain: .remnInk
-        case .destructive: .remnAccent
-        case .cancel: .remnGraphite
+        case .normal: InkButtonStyle(kind: .primary, seed: 850 + index)
+        case .plain: InkButtonStyle(kind: .secondary, seed: 850 + index)
+        case .destructive: InkButtonStyle(kind: .destructive, seed: 850 + index)
+        case .cancel: InkButtonStyle(kind: .quiet, seed: 850 + index)
         }
     }
 

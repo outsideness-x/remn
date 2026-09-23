@@ -5,127 +5,80 @@ struct SRSExplainerSheet: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                HandwrittenText("srs.title")
-                    .font(RemnTypography.navigationTitle)
-                    .remnHandwrittenBounds()
-                Spacer()
-                Button { dismiss() } label: {
-                    HandwrittenText("done")
-                        .font(RemnTypography.smallControl)
-                        .remnHandwrittenBounds()
-                }
-                    .foregroundStyle(Color.remnAccent)
-                    .buttonStyle(.plain)
-                    .frame(minWidth: 44, minHeight: 44, alignment: .trailing)
-            }
-            .padding(.horizontal, 24)
-            .padding(.vertical, 8)
-
+            SheetHeader(title: "srs.title", leadingTitle: "done") { dismiss() }
             ScrollView {
-                VStack(alignment: .leading, spacing: 32) {
-                    FlashcardSurface(seed: 606, style: .compact) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HandwrittenText(verbatim: "FSRS-6")
-                                .font(RemnTypography.display(32, weight: .semibold, relativeTo: .title))
-                                .remnHandwrittenBounds()
+                VStack(alignment: .leading, spacing: 36) {
+                    FlashcardSurface(seed: 606, style: .regular) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HandwrittenText(verbatim: "FSRS-6", weight: 1)
+                                .font(RemnTypography.display(36, relativeTo: .title))
                                 .foregroundStyle(Color.remnAccent)
                             HandwrittenText("srs.intro")
-                                .font(RemnTypography.display(19, relativeTo: .body))
-                                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                                .font(RemnTypography.body)
                                 .foregroundStyle(Color.remnInk)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }
 
-                    explainerSection(number: "1", title: "srs.memory.title", body: "srs.memory.body") {
-                        memoryDoodle
+                    section(number: 1, title: "srs.memory.title", body: "srs.memory.body") {
+                        GrowingIntervals()
                     }
-
-                    explainerSection(number: "2", title: "srs.ratings.title", body: "srs.ratings.body") {
+                    section(number: 2, title: "srs.ratings.title", body: "srs.ratings.body") {
                         ratingLegend
                     }
-
-                    explainerSection(number: "3", title: "srs.queue.title", body: "srs.queue.body") {
+                    section(number: 3, title: "srs.queue.title", body: "srs.queue.body") {
                         EmptyView()
                     }
-
-                    explainerSection(number: "4", title: "srs.retention.title", body: "srs.retention.body") {
+                    section(number: 4, title: "srs.retention.title", body: "srs.retention.body") {
                         EmptyView()
                     }
 
                     HandwrittenText("srs.history")
-                        .font(RemnTypography.display(17, relativeTo: .footnote))
-                        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                        .font(RemnTypography.note)
                         .foregroundStyle(Color.remnGraphite)
-                        .padding(.bottom, 18)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 18)
+                .padding(.bottom, 40)
+                .remnReadableWidth(640)
             }
         }
-        .background(Color.remnPaper.ignoresSafeArea())
+        .paperBackground()
+        .presentationDragIndicator(.hidden)
+        .presentationCornerRadius(30)
     }
 
-    private func explainerSection<Detail: View>(
-        number: String,
+    private func section<Detail: View>(
+        number: Int,
         title: LocalizedStringKey,
         body: LocalizedStringKey,
         @ViewBuilder detail: () -> Detail
     ) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .firstTextBaseline, spacing: 9) {
-                HandwrittenText(verbatim: number)
-                    .font(RemnTypography.display(18, weight: .semibold, relativeTo: .headline))
-                    .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline, spacing: 16) {
+                HandwrittenText(verbatim: "\(number)", weight: 0.8)
+                    .font(RemnTypography.display(22, relativeTo: .headline))
                     .foregroundStyle(Color.remnAccent)
-                    .frame(width: 25, height: 25)
-                    .overlay {
-                        Circle()
-                            .stroke(Color.remnAccent, lineWidth: 1.4)
-                    }
-                    .rotationEffect(.degrees(number == "2" ? 4 : -3))
-                HandwrittenText(title)
-                    .font(RemnTypography.display(25, weight: .semibold, relativeTo: .title3))
-                    .remnHandwrittenBounds()
+                    .inkCircled(seed: 620 + number, inset: CGSize(width: -9, height: -5))
+                    .padding(.leading, 6)
+                HandwrittenText(title, weight: 0.4)
+                    .font(RemnTypography.sectionTitle)
                     .foregroundStyle(Color.remnInk)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
             }
             HandwrittenText(body)
-                .font(RemnTypography.display(19, relativeTo: .body))
-                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                .font(RemnTypography.body)
                 .foregroundStyle(Color.remnInk)
                 .fixedSize(horizontal: false, vertical: true)
             detail()
         }
     }
 
-    private var memoryDoodle: some View {
-        HStack(spacing: 7) {
-            memoryStep("srs.now", width: 46)
-            Text("→").foregroundStyle(Color.remnAccent)
-            memoryStep("srs.later", width: 62)
-            Text("→").foregroundStyle(Color.remnAccent)
-            memoryStep("srs.muchLater", width: 88)
-        }
-        .font(RemnTypography.smallControl)
-        .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-        .padding(.top, 4)
-        .accessibilityElement(children: .combine)
-    }
-
-    private func memoryStep(_ title: LocalizedStringKey, width: CGFloat) -> some View {
-        HandwrittenText(title)
-            .frame(width: width)
-            .padding(.vertical, 7)
-            .background {
-                WobblyRoundedRectangle(seed: Int(width), cornerRadius: 10)
-                    .fill(Color.remnSurface)
-            }
-    }
-
     private var ratingLegend: some View {
-        VStack(alignment: .leading, spacing: 7) {
-            ratingLine("rating.again", note: "srs.again")
+        VStack(alignment: .leading, spacing: 10) {
+            ratingLine("rating.again", note: "srs.again", accent: true)
             ratingLine("rating.hard", note: "srs.hard")
             ratingLine("rating.good", note: "srs.good")
             ratingLine("rating.easy", note: "srs.easy")
@@ -133,17 +86,48 @@ struct SRSExplainerSheet: View {
         .padding(.top, 4)
     }
 
-    private func ratingLine(_ rating: LocalizedStringKey, note: LocalizedStringKey) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 10) {
-            HandwrittenText(rating)
-                .font(RemnTypography.smallControl)
-                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
-                .foregroundStyle(Color.remnAccent)
-                .frame(width: 54, alignment: .leading)
+    private func ratingLine(_ rating: LocalizedStringKey, note: LocalizedStringKey, accent: Bool = false) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
+            HandwrittenText(rating, weight: 0.4)
+                .font(RemnTypography.control)
+                .foregroundStyle(accent ? Color.remnAccent : Color.remnInk)
+                .frame(minWidth: 70, alignment: .leading)
             HandwrittenText(note)
-                .font(RemnTypography.display(17, relativeTo: .subheadline))
-                .remnHandwrittenBounds(horizontal: 2, vertical: 1)
+                .font(RemnTypography.note)
                 .foregroundStyle(Color.remnGraphite)
+                .fixedSize(horizontal: false, vertical: true)
         }
+    }
+}
+
+/// Now, later, much later: each successful recall pushes the next one further out.
+private struct GrowingIntervals: View {
+    var body: some View {
+        HStack(alignment: .center, spacing: 6) {
+            step("srs.now", width: 58, seed: 1)
+            arrow(seed: 1)
+            step("srs.later", width: 84, seed: 2)
+            arrow(seed: 2)
+            step("srs.muchLater", width: 118, seed: 3)
+        }
+        .padding(.top, 6)
+        .accessibilityElement(children: .combine)
+    }
+
+    private func step(_ title: LocalizedStringKey, width: CGFloat, seed: Int) -> some View {
+        HandwrittenText(title)
+            .font(RemnTypography.note)
+            .foregroundStyle(Color.remnInk)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+            .frame(minWidth: width * 0.8, maxWidth: width)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 4)
+            .background { InkBox(seed: 640 + seed, cornerRadius: 10, pen: .fine) }
+    }
+
+    private func arrow(seed: Int) -> some View {
+        InkIcon(kind: .forward, color: .remnAccent, size: 18)
+            .accessibilityHidden(true)
     }
 }

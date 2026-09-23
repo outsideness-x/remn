@@ -7,8 +7,8 @@ enum CardImageExportError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .renderingFailed: RemnLanguage.localized("export.renderFailed")
-        case .photoAccessDenied: RemnLanguage.localized("export.photosDenied")
+        case .renderingFailed: String(localized: "export.renderFailed")
+        case .photoAccessDenied: String(localized: "export.photosDenied")
         }
     }
 }

@@ -6,6 +6,7 @@ struct LibraryView: View {
     @Environment(AppState.self) private var appState
     @Query(sort: [SortDescriptor(\SubjectModel.manualSortOrder), SortDescriptor(\SubjectModel.createdAt)])
     private var subjects: [SubjectModel]
+    @Query private var cards: [Flashcard]
     @Query private var sessions: [StudySessionRecord]
 
     @State private var showCreate = false
@@ -15,7 +16,7 @@ struct LibraryView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 22) {
+            VStack(alignment: .leading, spacing: 0) {
                 header
                 if subjects.isEmpty {
                     QuietEmptyState(
@@ -23,41 +24,30 @@ struct LibraryView: View {
                         actionTitle: "subject.make",
                         action: { showCreate = true }
                     )
+                    .padding(.top, 36)
                 } else {
-                    LazyVStack(spacing: 0) {
-                        ForEach(subjects, id: \.id) { subject in
-                            HStack(spacing: 2) {
-                                NavigationLink {
-                                    SubjectDetailView(subject: subject)
-                                } label: {
-                                    LibraryRow(
-                                        title: subject.name,
-                                        dueCount: dueCount(subject.cards),
-                                        totalCount: subject.cards.count,
-                                        seed: subject.id.hashValue
-                                    )
-                                }
-                                .buttonStyle(.plain)
-
-                                Button { manageSubject = subject } label: {
-                                    DoodleIcon(kind: .more, color: .remnGraphite, size: 20)
-                                        .frame(width: 44, height: 54)
-                                        .contentShape(Rectangle())
-                                }
-                                .buttonStyle(.plain)
-                                .accessibilityLabel(Text("actions"))
-                            }
-                        }
+                    TimelineView(.everyMinute) { timeline in
+                        today(at: timeline.date)
                     }
+                    .padding(.top, 2)
+                    subjectList
+                        .padding(.top, 30)
+                    newSubjectButton
+                        .padding(.top, 10)
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 12)
-            .padding(.bottom, 130)
+            .padding(.horizontal, 22)
+            .padding(.top, 6)
+            .padding(.bottom, 40)
+            .remnReadableWidth()
         }
-        .background(Color.remnPaper.ignoresSafeArea())
+        .paperBackground()
         .toolbar(.hidden, for: .navigationBar)
-        .safeAreaInset(edge: .bottom) { bottomActions }
+        .safeAreaInset(edge: .bottom) {
+            if !cards.isEmpty {
+                bottomActions
+            }
+        }
         .sheet(isPresented: $showCreate) {
             NameEditorSheet(title: "subject.new") { name in
                 let order = (subjects.map(\.manualSortOrder).max() ?? -1) + 1
@@ -99,63 +89,123 @@ struct LibraryView: View {
     }
 
     private var header: some View {
-        HStack(alignment: .firstTextBaseline) {
-            HandwrittenText("remn")
-                .font(RemnTypography.brand)
-                .remnHandwrittenBounds()
+        HStack(alignment: .center, spacing: 0) {
+            HandwrittenText("remn", weight: 1)
+                .font(RemnTypography.wordmark)
                 .foregroundStyle(Color.remnInk)
                 .accessibilityAddTraits(.isHeader)
+                .inkWritesOn(duration: 0.55)
             Spacer()
             NavigationLink { SearchView() } label: {
-                DoodleIcon(kind: .search, color: .remnInk, size: 21)
+                InkIcon(kind: .search, size: 23)
                     .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
             }
+            .buttonStyle(InkPressStyle())
             .accessibilityLabel(Text("search"))
             NavigationLink { SettingsView() } label: {
-                DoodleIcon(kind: .settings, color: .remnInk, size: 22)
+                InkIcon(kind: .settings, size: 24)
                     .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
             }
+            .buttonStyle(InkPressStyle())
             .accessibilityLabel(Text("settings"))
         }
-        .foregroundStyle(Color.remnInk)
-        .padding(.bottom, 22)
+        .padding(.trailing, -10)
     }
 
     @ViewBuilder
+    private func today(at date: Date) -> some View {
+        let due = cards.dueTodayCount(now: date)
+        let fresh = cards.count { $0.state == .new }
+        Group {
+            if due > 0 {
+                HandwrittenText("home.dueToday \(due)")
+            } else if fresh > 0 {
+                HandwrittenText("home.newReady \(fresh)")
+            } else if let next = cards.map(\.due).filter({ $0 > date }).min() {
+                HandwrittenText("home.caughtUp \(next.formatted(.relative(presentation: .named)))")
+            } else {
+                HandwrittenText("home.noCards")
+            }
+        }
+        .font(RemnTypography.body)
+        .foregroundStyle(Color.remnGraphite)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var subjectList: some View {
+        LazyVStack(spacing: 0) {
+            ForEach(Array(subjects.enumerated()), id: \.element.id) { index, subject in
+                if index > 0 {
+                    InkDivider(seed: subject.id.inkSeed)
+                }
+                HStack(spacing: 0) {
+                    NavigationLink {
+                        SubjectDetailView(subject: subject)
+                    } label: {
+                        LibraryRow(
+                            title: subject.name,
+                            dueCount: subject.cards.dueTodayCount(),
+                            totalCount: subject.cards.count
+                        )
+                    }
+                    .buttonStyle(InkRowStyle())
+
+                    InkIconButton(kind: .more, label: "actions", color: .remnGraphite, size: 20) {
+                        manageSubject = subject
+                    }
+                    .padding(.trailing, -10)
+                }
+            }
+        }
+    }
+
+    private var newSubjectButton: some View {
+        Button { showCreate = true } label: {
+            HStack(spacing: 8) {
+                InkIcon(kind: .plus, color: .remnAccent, size: 18)
+                HandwrittenText("subject.new")
+            }
+        }
+        .buttonStyle(InkButtonStyle(kind: .quiet, seed: 44))
+        .padding(.leading, -10)
+    }
+
     private var bottomActions: some View {
-        VStack(spacing: 8) {
-            if let activeSession = activeSession {
+        VStack(spacing: 10) {
+            if let activeSession {
                 Button {
                     appState.presentedSession = activeSession
                 } label: {
                     HandwrittenText("study.continue")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(WobblyButtonStyle(filled: false, seed: 72))
+                .buttonStyle(InkButtonStyle(kind: .secondary, seed: 72))
             }
             Button {
                 appState.prepareStudy()
             } label: {
-                HStack {
-                    StackedCardsDoodle(ink: .remnPaper, accent: .remnPaper.opacity(0.62))
-                        .scaleEffect(0.55)
-                        .frame(width: 34, height: 30)
-                    HandwrittenText("study")
+                HStack(spacing: 14) {
+                    StackedCardsDoodle(
+                        ink: .remnOnAccent,
+                        accent: .remnOnAccent,
+                        paper: .remnAccent,
+                        width: 36
+                    )
+                    HandwrittenText("study", weight: 0.6)
                     Spacer()
-                    DoodleIcon(kind: .forward, color: .remnPaper, size: 21)
+                    InkIcon(kind: .forward, color: .remnOnAccent, size: 22)
                 }
                 .frame(maxWidth: .infinity)
             }
-            .buttonStyle(WobblyButtonStyle(filled: true, seed: 8))
-            .disabled(subjects.isEmpty)
+            .buttonStyle(InkButtonStyle(kind: .primary, seed: 8))
         }
         .padding(.horizontal, 20)
-        .padding(.top, 10)
+        .padding(.top, 14)
         .padding(.bottom, 8)
-        .background(Color.remnPaper.opacity(0.97))
-        .overlay(alignment: .top) {
-            Rectangle().fill(Color.remnInk.opacity(0.08)).frame(height: 0.5)
-        }
+        .remnReadableWidth(600)
+        .background(alignment: .bottom) { PaperFade() }
     }
 
     private var activeSession: StudySessionRecord? {
@@ -207,12 +257,26 @@ struct LibraryView: View {
         save()
     }
 
-    private func dueCount(_ cards: [Flashcard]) -> Int {
-        let endOfToday = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: .now)) ?? .now
-        return cards.count { $0.state != .new && $0.due < endOfToday }
-    }
-
     private func save() {
         do { try context.save() } catch { appState.errorMessage = error.localizedDescription }
+    }
+}
+
+/// Paper that fades in behind controls pinned to the bottom of a scrolling page.
+struct PaperFade: View {
+    var body: some View {
+        PaperBackground()
+            .mask {
+                LinearGradient(
+                    stops: [
+                        .init(color: .clear, location: 0),
+                        .init(color: .black, location: 0.28),
+                        .init(color: .black, location: 1),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+            }
     }
 }
