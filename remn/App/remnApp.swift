@@ -9,6 +9,13 @@ struct remnApp: App {
 
     init() {
         do {
+            #if DEBUG
+            if DemoLibrary.isRequested {
+                container = try DemoLibrary.makeContainer()
+                startupError = nil
+                return
+            }
+            #endif
             let schema = Schema(versionedSchema: RemnSchemaV1.self)
             let configuration = ModelConfiguration("remn", schema: schema)
             container = try ModelContainer(

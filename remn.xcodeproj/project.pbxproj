@@ -31,6 +31,7 @@
 		573975F1F32C434BFE532823 /* InkBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14085CF2096D3280F9118976 /* InkBrush.swift */; };
 		582B9734788D4EE00885E407 /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6459C94EE97FBF98F20517 /* SchedulerTests.swift */; };
 		59FAA8DAA83C5B42EAB32515 /* SpacedRepetitionScheduling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8E21F5B2A822AB13F5AAA2 /* SpacedRepetitionScheduling.swift */; };
+		5CDFE84241142050814B8F81 /* DemoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE85CD67E822CBBAE756B71F /* DemoLibrary.swift */; };
 		5DD9219111002EC25AA7D395 /* PaperGrain.metal in Sources */ = {isa = PBXBuildFile; fileRef = 2F16E415713C31E8C0695AF3 /* PaperGrain.metal */; };
 		65CE99766105949EDEE9FFD4 /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = 7620BA764C7F419A19C59B26 /* Textual */; };
 		692C63800919DA68D9627B7E /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CC1397608ADD45DB488B72 /* LibraryView.swift */; };
@@ -173,6 +174,7 @@
 		FA4B71DE6F2148CD6B96B600 /* Paper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paper.swift; sourceTree = "<group>"; };
 		FB885D95D9D75D83379CBF88 /* RenderingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderingTests.swift; sourceTree = "<group>"; };
 		FB918FC5E723ACBE1B50FC2E /* FSRSSchedulerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSSchedulerService.swift; sourceTree = "<group>"; };
+		FE85CD67E822CBBAE756B71F /* DemoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoLibrary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -425,6 +427,7 @@
 			isa = PBXGroup;
 			children = (
 				BC69D30D20A30414C1CAF279 /* AppState.swift */,
+				FE85CD67E822CBBAE756B71F /* DemoLibrary.swift */,
 				6895F64A4DB608E8E9F16891 /* remnApp.swift */,
 				6AC017E7D16B771C0C61176D /* RootView.swift */,
 			);
@@ -570,6 +573,7 @@
 				E9039D7B2418A258D6593C74 /* CardSearch.swift in Sources */,
 				707019A24C095F95E9E8AA85 /* Deck.swift in Sources */,
 				B2FD3DF88AFE4FE8B951BAF4 /* DeckDetailView.swift in Sources */,
+				5CDFE84241142050814B8F81 /* DemoLibrary.swift in Sources */,
 				7ADA5F050256C62E1F361A60 /* FSRSSchedulerService.swift in Sources */,
 				F3E30020DAC50E4107057764 /* Flashcard+Display.swift in Sources */,
 				1530F51EA72ABD44CA007034 /* Flashcard.swift in Sources */,
