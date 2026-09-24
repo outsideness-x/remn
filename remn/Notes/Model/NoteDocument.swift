@@ -84,7 +84,7 @@ enum NoteText {
                 continue
             }
             let clean = trimmed
-                .replacingOccurrences(of: #"^(#{1,6}|>|[-*+]|\d+\.)\s+"#, with: "", options: .regularExpression)
+                .replacingOccurrences(of: #"^(#{1,6}|>|[-*+]|\d+\.)\s+(\[[ xX]\]\s+)?"#, with: "", options: .regularExpression)
                 .replacingOccurrences(of: #"[*_`~=]"#, with: "", options: .regularExpression)
                 .replacingOccurrences(of: #"\[([^\]]*)\]\([^)]*\)"#, with: "$1", options: .regularExpression)
                 .trimmingCharacters(in: .whitespaces)
