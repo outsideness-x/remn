@@ -203,48 +203,63 @@ struct LiveMarkdown: Equatable {
     }
 
     private static func simpleBlock(_ line: Line) -> Block {
-        let text = line.text as NSString
         func marker(_ length: Int) -> NSRange {
             NSRange(location: line.range.location, length: length)
         }
+        func match(_ pattern: NSRegularExpression) -> NSTextCheckingResult? {
+            let text = line.text as NSString
+            return pattern.firstMatch(in: line.text, range: NSRange(location: 0, length: text.length))
+        }
 
-        if line.trimmed.isEmpty {
+        guard let first = line.trimmed.first else {
             return Block(kind: .blank, range: line.range)
         }
-        if let match = line.text.firstMatch(of: #/^(#{1,6})[ \t]+/#) {
-            let length = (String(line.text[match.range]) as NSString).length
-            return Block(kind: .heading(level: match.output.1.count), range: line.range, marker: marker(length))
-        }
-        if line.text.firstMatch(of: #/^ {0,3}([-*_])( *\1){2,} *$/#) != nil {
-            return Block(kind: .rule, range: line.range, marker: marker(text.length))
-        }
-        if let match = line.text.firstMatch(of: #/^ {0,3}(> ?)+/#) {
-            let length = (String(line.text[match.range]) as NSString).length
-            return Block(kind: .quote, range: line.range, marker: marker(length))
-        }
-        if let match = line.text.firstMatch(of: #/^(\s*)([-*+]|\d{1,9}[.)])[ \t]+(\[([ xX])\][ \t]+)?/#) {
-            let length = (String(line.text[match.range]) as NSString).length
-            if let box = match.output.4 {
-                let boxStart = (String(line.text[..<match.output.3!.startIndex]) as NSString).length
-                return Block(
-                    kind: .task(checked: box != " "),
-                    range: line.range,
-                    marker: marker(length),
-                    checkbox: NSRange(location: line.range.location + boxStart, length: 3)
-                )
+        // Most lines are prose: only look closer at lines that start with Markdown punctuation.
+        switch first {
+        case "#":
+            if let found = match(headingLine) {
+                return Block(kind: .heading(level: found.range(at: 1).length), range: line.range, marker: marker(found.range.length))
             }
-            let bullet = match.output.2
-            return Block(kind: .listItem(ordered: bullet.first?.isNumber == true), range: line.range, marker: marker(length))
-        }
-        if line.text.firstMatch(of: #/^\s*!\[[^\]]*\]\([^)]+\)\s*$/#) != nil
-            || line.text.firstMatch(of: #/^\s*!\[\[[^\]]+\]\]\s*$/#) != nil {
-            return Block(kind: .image, range: line.range)
-        }
-        if line.trimmed.hasPrefix("|"), line.trimmed.hasSuffix("|"), line.trimmed.count > 1 {
-            return Block(kind: .table, range: line.range)
+        case ">":
+            if let found = match(quoteLine) {
+                return Block(kind: .quote, range: line.range, marker: marker(found.range.length))
+            }
+        case "-", "*", "_", "+", "0"..."9":
+            if first != "+", !first.isNumber, match(ruleLine) != nil {
+                return Block(kind: .rule, range: line.range, marker: marker((line.text as NSString).length))
+            }
+            if let found = match(listLine) {
+                if found.range(at: 4).location != NSNotFound {
+                    let box = (line.text as NSString).substring(with: found.range(at: 4))
+                    return Block(
+                        kind: .task(checked: box != " "),
+                        range: line.range,
+                        marker: marker(found.range.length),
+                        checkbox: NSRange(location: line.range.location + found.range(at: 3).location, length: 3)
+                    )
+                }
+                let bullet = (line.text as NSString).substring(with: found.range(at: 2))
+                return Block(kind: .listItem(ordered: bullet.first?.isNumber == true), range: line.range, marker: marker(found.range.length))
+            }
+        case "!":
+            if match(imageLine) != nil {
+                return Block(kind: .image, range: line.range)
+            }
+        case "|":
+            if line.trimmed.hasSuffix("|"), line.trimmed.count > 1 {
+                return Block(kind: .table, range: line.range)
+            }
+        default:
+            break
         }
         return Block(kind: .paragraph, range: line.range)
     }
+
+    private static let headingLine = regex(#"^(#{1,6})[ \t]+"#)
+    private static let ruleLine = regex(#"^ {0,3}([-*_])( *\1){2,} *$"#)
+    private static let quoteLine = regex(#"^ {0,3}(> ?)+"#)
+    private static let listLine = regex(#"^(\s*)([-*+]|\d{1,9}[.)])[ \t]+(\[([ xX])\][ \t]+)?"#)
+    private static let imageLine = regex(#"^\s*!(?:\[[^\]]*\]\([^)]+\)|\[\[[^\]]+\]\])\s*$"#)
 
     // MARK: - Inline
 
@@ -252,6 +267,9 @@ struct LiveMarkdown: Equatable {
         let text = string.substring(with: range)
         let base = range.location
         var taken = IndexSet()
+        // Paragraphs arrive in order, so sorting each one's own spans keeps the whole list sorted.
+        var found: [Inline] = []
+        defer { inlines += found.sorted { $0.range.location < $1.range.location } }
 
         func claim(_ local: NSRange) -> Bool {
             let span = local.location..<NSMaxRange(local)
@@ -269,7 +287,7 @@ struct LiveMarkdown: Equatable {
                 NSRange(location: whole.location, length: inner.location - whole.location),
                 NSRange(location: NSMaxRange(inner), length: NSMaxRange(whole) - NSMaxRange(inner)),
             ]
-            inlines.append(Inline(
+            found.append(Inline(
                 kind: kind,
                 range: absolute(whole),
                 markers: hidden.filter { $0.length > 0 }.map(absolute),
@@ -279,21 +297,34 @@ struct LiveMarkdown: Equatable {
 
         let nsText = text as NSString
         let all = NSRange(location: 0, length: nsText.length)
+        // Most paragraphs are plain words; skip every pattern whose punctuation isn't there.
+        var present = Set<unichar>()
+        for index in 0..<nsText.length {
+            let character = nsText.character(at: index)
+            if character < 128, "`$![*_~=#".utf16.contains(character) { present.insert(character) }
+        }
+        guard !present.isEmpty else { return }
+        func has(_ characters: String) -> Bool { characters.utf16.contains { present.contains($0) } }
 
         // Code and math first: nothing inside them is Markdown.
-        for match in Self.codeSpan.matches(in: text, range: all) where claim(match.range) {
-            add(.code, match, content: 2)
+        if has("`") {
+            for match in Self.codeSpan.matches(in: text, range: all) where claim(match.range) {
+                add(.code, match, content: 2)
+            }
         }
-        for match in Self.inlineMath.matches(in: text, range: all) where claim(match.range) {
-            add(.math, match, content: 1)
+        if has("$") {
+            for match in Self.inlineMath.matches(in: text, range: all) where claim(match.range) {
+                add(.math, match, content: 1)
+            }
         }
+        guard has("![*_~=#") else { return }
         for match in Self.image.matches(in: text, range: all) where claim(match.range) {
             let url = nsText.substring(with: match.range(at: 2))
-            inlines.append(Inline(kind: .image(url: url), range: absolute(match.range), markers: [absolute(match.range)], content: absolute(match.range(at: 1))))
+            found.append(Inline(kind: .image(url: url), range: absolute(match.range), markers: [absolute(match.range)], content: absolute(match.range(at: 1))))
         }
         for match in Self.embed.matches(in: text, range: all) where claim(match.range) {
             let name = nsText.substring(with: match.range(at: 1))
-            inlines.append(Inline(kind: .image(url: name), range: absolute(match.range), markers: [absolute(match.range)], content: absolute(match.range(at: 1))))
+            found.append(Inline(kind: .image(url: name), range: absolute(match.range), markers: [absolute(match.range)], content: absolute(match.range(at: 1))))
         }
         for match in Self.wikiLink.matches(in: text, range: all) where claim(match.range) {
             let target = nsText.substring(with: match.range(at: 1))
@@ -302,7 +333,7 @@ struct LiveMarkdown: Equatable {
                 NSRange(location: match.range.location, length: shown.location - match.range.location),
                 NSRange(location: NSMaxRange(shown), length: NSMaxRange(match.range) - NSMaxRange(shown)),
             ]
-            inlines.append(Inline(
+            found.append(Inline(
                 kind: .wikiLink(target: target),
                 range: absolute(match.range),
                 markers: markers.filter { $0.length > 0 }.map(absolute),
@@ -313,16 +344,16 @@ struct LiveMarkdown: Equatable {
             let url = nsText.substring(with: match.range(at: 2))
             add(.link(url: url), match, content: 1)
         }
-        for (pattern, kind) in [
-            (Self.strong, Inline.Kind.strong),
-            (Self.strikethrough, .strikethrough),
-            (Self.highlight, .highlight),
-            (Self.emphasis, .emphasis),
-        ] {
+        for (pattern, kind, trigger) in [
+            (Self.strong, Inline.Kind.strong, "*_"),
+            (Self.strikethrough, .strikethrough, "~"),
+            (Self.highlight, .highlight, "="),
+            (Self.emphasis, .emphasis, "*_"),
+        ] where has(trigger) {
             for match in pattern.matches(in: text, range: all) {
                 // Emphasis can sit inside strong text, so only code, math and links block it.
                 let span = match.range.location..<NSMaxRange(match.range)
-                let blocked = inlines.contains { inline in
+                let blocked = found.contains { inline in
                     switch inline.kind {
                     case .code, .math, .image, .link, .wikiLink:
                         let local = inline.range.location - base
@@ -335,11 +366,10 @@ struct LiveMarkdown: Equatable {
                 add(kind, match, content: 2)
             }
         }
-        for match in Self.tag.matches(in: text, range: all) where claim(match.range(at: 1)) {
+        for match in (has("#") ? Self.tag.matches(in: text, range: all) : []) where claim(match.range(at: 1)) {
             let tag = match.range(at: 1)
-            inlines.append(Inline(kind: .tag, range: absolute(tag), markers: [], content: absolute(tag)))
+            found.append(Inline(kind: .tag, range: absolute(tag), markers: [], content: absolute(tag)))
         }
-        inlines.sort { $0.range.location < $1.range.location }
     }
 
     private static func regex(_ pattern: String) -> NSRegularExpression {
