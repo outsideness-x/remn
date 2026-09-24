@@ -28,6 +28,7 @@ struct NoteView: View {
     @State private var pickingPhoto = false
     @State private var pickingImageFile = false
     @State private var photoItem: PhotosPickerItem?
+    @State private var showTypstGallery = false
 
     /// A passage of the note on its way to becoming a flashcard.
     private struct CardDraft: Identifiable {
@@ -78,7 +79,7 @@ struct NoteView: View {
         .remnHidesSystemBar()
         .safeAreaInset(edge: .bottom) {
             if isLoaded, showsToolbar {
-                NoteToolbar(controller: controller, onInsertImage: {
+                NoteToolbar(controller: controller, onInsertTypst: { showTypstGallery = true }, onInsertImage: {
                     #if os(iOS)
                     chooseImageSource = true
                     #else
@@ -155,6 +156,16 @@ struct NoteView: View {
                 }
             }
         }
+        .sheet(isPresented: $showTypstGallery) {
+            TypstGallerySheet { source in
+                // A blank block is for writing in; a template is shown drawn straight away.
+                if source.isEmpty {
+                    controller.apply(.typst("$ E = m c^2 $"))
+                } else {
+                    controller.apply(.typst(source.trimmingCharacters(in: .whitespacesAndNewlines)), cursorAfter: true)
+                }
+            }
+        }
         .sheet(item: $cardDraft) { draft in
             CardEditorView(fromNote: path, selection: draft.text)
         }
@@ -179,6 +190,7 @@ struct NoteView: View {
         controller.onMakeCard = { text in cardDraft = CardDraft(text: text) }
         controller.onPasteImage = { data in Task { await insertImage(data) } }
         controller.renderer.resolveImage = { [vault, path] link in vault.resolveLink(link, fromNoteAt: path) }
+        controller.renderer.noteFolder = vault.url(for: VaultPath.parent(of: path))
         do {
             let loaded = try await vault.load(path)
             document = loaded

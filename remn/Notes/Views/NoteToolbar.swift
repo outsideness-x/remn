@@ -3,8 +3,8 @@ import SwiftUI
 /// The pens along the bottom of a note: headings, emphasis, lists, code, formulas.
 struct NoteToolbar: View {
     let controller: LiveEditorController
-    var onInsertImage: (() -> Void)?
     var onInsertTypst: (() -> Void)?
+    var onInsertImage: (() -> Void)?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -106,8 +106,8 @@ struct NoteToolbar: View {
                         InkLine(seed: 8_403, pen: .fine).fill(Color.remnInk).frame(height: 4)
                     }
                 }
+                .padding(.horizontal, glyph.count > 3 ? 8 : 2)
                 .frame(minWidth: 38, minHeight: 38)
-                .padding(.horizontal, 2)
                 .background {
                     InkBox(seed: glyph.inkSeed, cornerRadius: 10, fill: .remnCardPaper, outline: .remnGraphite.opacity(0.8), pen: .hairline, registration: CGSize(width: 0.8, height: 1.1))
                 }

@@ -4,6 +4,8 @@ import SwiftUI
 struct LivePictureRequest: Hashable {
     var kind: LivePicture.Kind
     var source: String
+    /// Which block of its kind this is, so a block being edited keeps its last picture until the new one is ready.
+    var slot = 0
 }
 
 /// Turns parsed Markdown into TextKit attributes. Away from the cursor, punctuation disappears and
@@ -43,10 +45,10 @@ struct LiveStyler {
     }
 
     /// Which pieces the cursor is in; restyling is only needed when this changes.
-    static func activeSignature(of markdown: LiveMarkdown, selection: NSRange?) -> [NSRange] {
+    static func activeSignature(of markdown: LiveMarkdown, selection: NSRange?, in string: NSString) -> [NSRange] {
         guard let selection else { return [] }
         var active: [NSRange] = []
-        for block in markdown.blocks where touches(selection, block.range) {
+        for block in markdown.blocks where touches(selection, textRange(of: block, in: string)) {
             active.append(block.range)
         }
         for inline in markdown.inlines where touches(selection, inline.range) {
@@ -57,6 +59,11 @@ struct LiveStyler {
 
     static func touches(_ selection: NSRange, _ range: NSRange) -> Bool {
         selection.location <= NSMaxRange(range) && NSMaxRange(selection) >= range.location
+    }
+
+    /// A block without its last newline: a cursor at the start of the next line isn't in it.
+    static func textRange(of block: LiveMarkdown.Block, in string: NSString) -> NSRange {
+        NSRange(location: block.range.location, length: LiveMarkdown.lineEnd(of: block.range, in: string) - block.range.location)
     }
 
     // MARK: - Base
@@ -95,7 +102,7 @@ struct LiveStyler {
         quoteIndex: inout Int,
         hidden: inout [NSRange]
     ) {
-        let active = isActive(block.range, selection)
+        let active = isActive(Self.textRange(of: block, in: string), selection)
         let textEnd = LiveMarkdown.lineEnd(of: block.range, in: string)
         let text = NSRange(location: block.range.location, length: textEnd - block.range.location)
         let seed = Int(block.range.location) &* 31 &+ 7
@@ -204,12 +211,12 @@ struct LiveStyler {
             let index = codeIndex
             codeIndex += 1
             if language == "typst", !active {
-                showPicture(.typst, source: block.content.map { string.substring(with: $0) } ?? "", block: block, in: storage, string: string, hidden: &hidden)
+                showPicture(.typst, source: block.content.map { string.substring(with: $0) } ?? "", slot: index, block: block, in: storage, string: string, hidden: &hidden)
                 return
             }
             styleCode(block, language: language, index: index, active: active, in: storage, string: string, hidden: &hidden)
             if language == "typst", let content = block.content {
-                addPreview(.typst, source: string.substring(with: content), under: block, in: storage, string: string)
+                addPreview(.typst, source: string.substring(with: content), slot: index, under: block, in: storage, string: string)
             }
 
         case .math:
@@ -285,13 +292,14 @@ struct LiveStyler {
     private func showPicture(
         _ kind: LivePicture.Kind,
         source: String,
+        slot: Int = 0,
         block: LiveMarkdown.Block,
         in storage: NSTextStorage,
         string: NSString,
         hidden: inout [NSRange]
     ) {
         hidden.append(block.range)
-        let picture = picture(LivePictureRequest(kind: kind, source: source))
+        let picture = picture(LivePictureRequest(kind: kind, source: source, slot: slot))
         let firstLine = string.lineRange(for: NSRange(location: block.range.location, length: 0))
         let firstEnd = LiveMarkdown.lineEnd(of: firstLine, in: string)
         // The line is exactly as tall as the picture plus a margin, so the picture sits evenly between paragraphs.
@@ -320,12 +328,13 @@ struct LiveStyler {
     private func addPreview(
         _ kind: LivePicture.Kind,
         source: String,
+        slot: Int = 0,
         under block: LiveMarkdown.Block,
         in storage: NSTextStorage,
         string: NSString
     ) {
         guard livePreview, !source.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-        let picture = picture(LivePictureRequest(kind: kind, source: source))
+        let picture = picture(LivePictureRequest(kind: kind, source: source, slot: slot))
         let lastLine = string.lineRange(for: NSRange(location: max(block.range.location, NSMaxRange(block.range) - 1), length: 0))
         let style = ((storage.attribute(.paragraphStyle, at: lastLine.location, effectiveRange: nil) as? NSParagraphStyle)
             ?? theme.paragraphStyle()).mutableCopy() as! NSMutableParagraphStyle

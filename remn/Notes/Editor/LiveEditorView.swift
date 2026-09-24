@@ -186,12 +186,17 @@ final class LiveTextView: UITextView, LiveTextHost, UIGestureRecognizerDelegate 
 
     var hostIsFocused: Bool { isFirstResponder }
 
+    /// Edits made by the app go straight into the text, past the keyboard's autocorrection and smart quotes,
+    /// which would otherwise turn a template's `"` into `«`.
     func hostReplace(_ range: NSRange, with text: String) {
-        guard let start = position(from: beginningOfDocument, offset: range.location),
-              let end = position(from: start, offset: range.length),
-              let textRange = textRange(from: start, to: end)
-        else { return }
-        replace(textRange, withText: text)
+        guard NSMaxRange(range) <= textStorage.length else { return }
+        let original = textStorage.attributedSubstring(from: range).string
+        let inserted = NSRange(location: range.location, length: (text as NSString).length)
+        undoManager?.registerUndo(withTarget: self) { view in
+            view.hostReplace(inserted, with: original)
+            view.selectedRange = NSRange(location: range.location + (original as NSString).length, length: 0)
+        }
+        textStorage.replaceCharacters(in: range, with: NSAttributedString(string: text, attributes: controller.typingAttributes))
         controller.textDidChange()
     }
 

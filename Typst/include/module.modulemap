@@ -1,0 +1,5 @@
+module RemnTypstC {
+    header "remn_typst.h"
+    link "remn_typst"
+    export *
+}

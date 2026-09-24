@@ -1,0 +1,25 @@
+[package]
+name = "remn-typst"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Typst for remn's notes: compiles a block of Typst to a picture, offline."
+license = "MIT"
+
+[lib]
+name = "remn_typst"
+crate-type = ["staticlib", "rlib"]
+
+[dependencies]
+typst = "0.15.1"
+typst-render = "0.15.1"
+typst-assets = { version = "0.15.1", features = ["fonts"] }
+typst-layout = "0.15.1"
+tiny-skia = "0.12"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true

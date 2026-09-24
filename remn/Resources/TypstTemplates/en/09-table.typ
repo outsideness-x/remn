@@ -1,0 +1,15 @@
+#table(
+  columns: (1fr, auto),
+  stroke: none,
+  align: (left, right),
+  table.hline(),
+  [], [*Value, €*],
+  table.hline(stroke: .5pt),
+  [Initial value], [38 110,79],
+  [Ending value], [65 727,79],
+  [Deposits], [18 000],
+  [Yield], [9 617],
+  table.hline(stroke: .5pt),
+  [*Cumulative return*], [*25,23 %*],
+  table.hline(),
+)

@@ -119,6 +119,32 @@ enum DemoLibrary {
         `Task` inherits the actor it was created on; `Task.detached` does not.
         """),
         ("Biology/The cell.md", "# The cell\n\n**ATP synthase** turns the proton gradient into ATP.\n\n![](attachments/cell.png)\n\n---\n\nRibosomes read mRNA three bases at a time. #biology\n"),
+        ("Linear Algebra/Pictures.md", """
+        # Pictures in Typst
+
+        A sine and a cosine, drawn by the Typst engine inside remn:
+
+        ```typst
+        #import "@preview/cetz:0.5.2": canvas
+        #import "@preview/cetz-plot:0.1.4": plot
+        #align(center, canvas({
+          plot.plot(size: (7, 3.5), x-tick-step: 1, y-tick-step: 1, legend: "inner-north-east", {
+            plot.add(domain: (0, 6.28), samples: 120, x => calc.sin(x), label: $sin x$, style: (stroke: 1.4pt + red))
+            plot.add(domain: (0, 6.28), samples: 120, x => calc.cos(x), label: $cos x$, style: (stroke: 1.4pt + blue))
+          })
+        }))
+        ```
+
+        And a diagram:
+
+        ```typst
+        #import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
+        #align(center, diagram(spacing: (10mm, 7mm), node-stroke: 1pt, node-corner-radius: 4pt,
+          node((0, 0), [Input], fill: red.lighten(75%)), edge("-|>"),
+          node((1, 0), [Attention], fill: orange.lighten(65%)), edge("-|>"),
+          node((2, 0), [Output], fill: green.lighten(60%))))
+        ```
+        """),
         ("Reading list.md", "# Reading list\n\n- [ ] *Gödel, Escher, Bach*\n- [x] *The Art of Doing Science and Engineering*\n"),
     ]
 
@@ -173,6 +199,32 @@ enum DemoLibrary {
         `Task` наследует актор места создания, `Task.detached` — нет.
         """),
         ("Биология/Клетка.md", "# Клетка\n\n**АТФ-синтаза** превращает протонный градиент в АТФ.\n\n![](attachments/cell.png)\n\n---\n\nРибосомы читают мРНК по три нуклеотида. #биология\n"),
+        ("Линейная алгебра/Картинки.md", """
+        # Картинки на Typst
+
+        Синус и косинус — их рисует Typst прямо внутри remn:
+
+        ```typst
+        #import "@preview/cetz:0.5.2": canvas
+        #import "@preview/cetz-plot:0.1.4": plot
+        #align(center, canvas({
+          plot.plot(size: (7, 3.5), x-tick-step: 1, y-tick-step: 1, legend: "inner-north-east", {
+            plot.add(domain: (0, 6.28), samples: 120, x => calc.sin(x), label: $sin x$, style: (stroke: 1.4pt + red))
+            plot.add(domain: (0, 6.28), samples: 120, x => calc.cos(x), label: $cos x$, style: (stroke: 1.4pt + blue))
+          })
+        }))
+        ```
+
+        И схема:
+
+        ```typst
+        #import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
+        #align(center, diagram(spacing: (10mm, 7mm), node-stroke: 1pt, node-corner-radius: 4pt,
+          node((0, 0), [Вход], fill: red.lighten(75%)), edge("-|>"),
+          node((1, 0), [Внимание], fill: orange.lighten(65%)), edge("-|>"),
+          node((2, 0), [Выход], fill: green.lighten(60%))))
+        ```
+        """),
         ("Что почитать.md", "# Что почитать\n\n- [ ] *Гёдель, Эшер, Бах*\n- [x] *Искусство научной и инженерной работы*\n"),
     ]
 

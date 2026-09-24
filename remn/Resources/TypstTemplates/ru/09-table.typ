@@ -1,0 +1,15 @@
+#table(
+  columns: (1fr, auto),
+  stroke: none,
+  align: (left, right),
+  table.hline(),
+  [], [*Сумма, €*],
+  table.hline(stroke: .5pt),
+  [Начальная сумма], [38 110,79],
+  [Итоговая сумма], [65 727,79],
+  [Пополнения], [18 000],
+  [Доход], [9 617],
+  table.hline(stroke: .5pt),
+  [*Доходность*], [*25,23 %*],
+  table.hline(),
+)

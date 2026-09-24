@@ -122,7 +122,8 @@ final class LiveEditorController: NSObject {
     func restyle(force: Bool) -> Bool {
         guard !isStyling else { return false }
         let selection = selectionForStyling
-        let signature = LiveStyler.activeSignature(of: markdown, selection: selection) + (selection == nil ? [] : [NSRange(location: -1, length: 0)])
+        let signature = LiveStyler.activeSignature(of: markdown, selection: selection, in: storage.string as NSString)
+            + (selection == nil ? [] : [NSRange(location: -1, length: 0)])
         guard force || signature != activeSignature else { return false }
         activeSignature = signature
         isStyling = true
@@ -153,12 +154,15 @@ final class LiveEditorController: NSObject {
 
     // MARK: - Edits
 
-    func apply(_ insertion: NoteInsertion) {
+    /// Makes a toolbar edit. With `cursorAfter`, the cursor lands after what was put in instead of selecting inside it.
+    func apply(_ insertion: NoteInsertion, cursorAfter: Bool = false) {
         guard let host else { return }
         let string = storage.string as NSString
         let edit = insertion.edit(in: string, selection: host.hostSelectedRange)
         host.hostReplace(edit.range, with: edit.replacement)
-        host.hostSelectedRange = edit.selection
+        host.hostSelectedRange = cursorAfter
+            ? NSRange(location: edit.range.location + (edit.replacement as NSString).length, length: 0)
+            : edit.selection
         host.hostFocus()
         host.hostScrollToSelection()
     }

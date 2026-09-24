@@ -4,6 +4,8 @@ remn is a focused, free and open-source flashcard app for iPhone, iPad and Mac. 
 
 > create knowledge → review knowledge → remember knowledge
 
+It has two sides: **cards**, reviewed with FSRS, and **notes**, written in a live Markdown editor and kept as plain `.md` files in a folder you choose — so Obsidian or any other editor can open them too. Select a passage in a note to turn it into a card.
+
 There is no account, subscription, advertising, analytics, tracking, or backend. Study data lives in a local SwiftData store and syncs between your devices through your own private iCloud database; remn itself never talks to any server.
 
 ## Requirements
@@ -11,6 +13,13 @@ There is no account, subscription, advertising, analytics, tracking, or backend.
 - Xcode 26 or newer
 - iOS 18 or newer, macOS 15 or newer
 - Swift 6
+- Rust through [rustup](https://rustup.rs), for the built-in Typst engine:
+
+  ```sh
+  rustup target add aarch64-apple-ios aarch64-apple-ios-sim aarch64-apple-darwin x86_64-apple-darwin
+  ```
+
+  Xcode builds the engine itself (`Scripts/build-typst.sh`); the first build takes several minutes.
 
 ## Build
 
@@ -67,6 +76,18 @@ Cards are stored as plain Markdown. Supported content includes:
   ````
 
 Rendering is native SwiftUI via Textual. The editor keeps Markdown as the source of truth and includes insertion controls for the most useful syntax.
+
+## Notes
+
+Notes are Markdown files in a folder: iCloud Drive (`iCloud Drive/remn`, shared by every device on the same account), a folder on the device, or any folder you pick, such as an Obsidian vault. Folders are subjects and can nest. Front matter holds `tags` and the note's `font`; every other key is kept as it was.
+
+The editor is one live field in the spirit of Obsidian's Live Preview: Markdown punctuation disappears away from the cursor, formulas are typeset, pictures are shown, and each comes back as source when the cursor enters it. It's TextKit 1 underneath (`remn/Notes/Editor`): the text storage always holds the exact Markdown, and hidden characters, pictures and folded lines are handled at the glyph and line-fragment level.
+
+Pictures pasted, dropped or picked go into an `attachments` folder beside the note. Obsidian's `![[image.png]]` embeds work too.
+
+### Typst
+
+A fenced ` ```typst ` block is compiled on the device by the real [Typst](https://typst.app) compiler (Rust, in `Typst/`, called through a small C interface) and drawn in the note. Everything works offline: fonts are built in, and a curated set of `@preview` packages — CeTZ and cetz-plot, fletcher, quill, timeliney, lilaq, mannot, physica and more — ships inside the app (`remn/Resources/TypstPackages`, refreshed by `Scripts/fetch-typst-packages.py`). Paths in a block are relative to the note's folder, so `#image("attachments/plot.png")` works.
 
 ## Backups
 

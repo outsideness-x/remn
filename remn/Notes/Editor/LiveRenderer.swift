@@ -14,9 +14,13 @@ final class LiveRenderer {
     var resolveImage: (String) -> URL? = { _ in nil }
     /// Called when a picture that was still being made is ready, so the editor can lay out again.
     var onPictureReady: () -> Void = {}
+    /// The note's folder, where paths inside Typst blocks start.
+    var noteFolder: URL?
 
     private var cache: [String: LivePicture] = [:]
     private var loading: Set<String> = []
+    private var lastTypst: [Int: LivePicture] = [:]
+    private var typstJobs: [Int: (key: String, task: Task<Void, Never>)] = [:]
 
     init(theme: LiveTheme) {
         self.theme = theme
@@ -34,8 +38,9 @@ final class LiveRenderer {
             picture = placeholder(for: request, key: key)
             loadImage(request.source, key: key)
         case .typst:
-            picture = placeholder(for: request, key: key)
-            renderTypst(request.source, key: key)
+            // Keep showing the block's last picture while the new one is drawn.
+            picture = lastTypst[request.slot] ?? placeholder(for: request, key: key)
+            renderTypst(request.source, key: key, slot: request.slot)
         }
         return picture
     }
@@ -43,6 +48,7 @@ final class LiveRenderer {
     /// Forgets pictures drawn for another appearance or page width.
     func invalidate() {
         cache.removeAll()
+        lastTypst.removeAll()
     }
 
     private func cacheKey(for request: LivePictureRequest) -> String {
@@ -102,10 +108,13 @@ final class LiveRenderer {
         let view = Text(verbatim: source)
             .font(.system(size: theme.codeSize, design: .monospaced))
             .foregroundStyle(Color(LiveTheme.accent))
-            .fixedSize()
+            .fixedSize(horizontal: inline, vertical: true)
             .environment(\.colorScheme, isDark ? .dark : .light)
         let renderer = ImageRenderer(content: view)
         renderer.scale = displayScale
+        if !inline {
+            renderer.proposedSize = ProposedViewSize(width: max(pageWidth - 8, 120), height: nil)
+        }
         let image = renderer.cgImage
         let size = image.map { CGSize(width: CGFloat($0.width) / displayScale, height: CGFloat($0.height) / displayScale) } ?? .zero
         return LivePicture(kind: inline ? .inlineMath : .blockMath, key: key, size: size, descent: size.height * 0.25, image: image)
@@ -157,8 +166,53 @@ final class LiveRenderer {
 
     // MARK: - Typst
 
-    private func renderTypst(_ source: String, key: String) {
-        // Filled in by the Typst engine.
-        cache[key] = renderError("typst", inline: false, key: key)
+    private func renderTypst(_ source: String, key: String, slot: Int) {
+        if typstJobs[slot]?.key == key { return }
+        typstJobs[slot]?.task.cancel()
+        let isEditing = lastTypst[slot] != nil
+        let width = max(pageWidth - 8, 120)
+        let fontSize = theme.font == .neucha ? theme.size * 0.82 : theme.size * 0.9
+        let handwritten = theme.font == .neucha
+        let folder = noteFolder
+        let scale = displayScale
+        let dark = isDark
+        let task = Task { [weak self] in
+            // While typing, wait for a pause instead of compiling every keystroke.
+            if isEditing { try? await Task.sleep(for: .milliseconds(350)) }
+            guard !Task.isCancelled else { return }
+            let outcome: Result<CGImage, Error>
+            do {
+                outcome = .success(try await TypstEngine.shared.render(
+                    source, width: width, fontSize: fontSize, handwritten: handwritten,
+                    folder: folder, scale: scale, dark: dark
+                ))
+            } catch {
+                outcome = .failure(error)
+            }
+            guard !Task.isCancelled, let self else { return }
+            self.finishTypst(outcome, key: key, slot: slot)
+        }
+        typstJobs[slot] = (key, task)
+    }
+
+    private func finishTypst(_ outcome: Result<CGImage, Error>, key: String, slot: Int) {
+        let picture: LivePicture
+        switch outcome {
+        case .success(let image):
+            picture = LivePicture(
+                kind: .typst,
+                key: key,
+                size: CGSize(width: CGFloat(image.width) / displayScale, height: CGFloat(image.height) / displayScale),
+                image: image
+            )
+            lastTypst[slot] = picture
+        case .failure(let error):
+            let message = (error as? TypstEngine.Failure)?.message ?? error.localizedDescription
+            let failure = renderError("typst: " + String(message.prefix(240)), inline: false, key: key)
+            picture = LivePicture(kind: .typst, key: key, size: failure.size, image: failure.image)
+        }
+        cache[key] = picture
+        typstJobs[slot] = nil
+        onPictureReady()
     }
 }
