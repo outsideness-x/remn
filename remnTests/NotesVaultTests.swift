@@ -123,7 +123,8 @@ struct VaultTests {
         let folder = try await vault.createFolder(named: "Biology", in: "")
         let note = try await vault.createNote(in: folder, title: "Cell")
         let link = try await vault.saveAttachment(Data([0x89, 0x50]), fileExtension: "png", forNoteAt: note)
-        #expect(link.hasPrefix("attachments/image "))
+        #expect(link.hasPrefix("attachments/image-"))
+        #expect(!link.contains(" "))
         #expect(vault.resolveLink(link, fromNoteAt: note)?.lastPathComponent == VaultPath.name(of: link))
         #expect(vault.resolveLink("../../etc/passwd", fromNoteAt: note) == nil)
 
