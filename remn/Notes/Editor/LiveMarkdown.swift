@@ -400,3 +400,20 @@ extension LiveMarkdown.Block {
         }
     }
 }
+
+extension LiveMarkdown.Block {
+    /// The same block after `delta` characters were added before it, or taken away.
+    func shifted(by delta: Int) -> Self {
+        func move(_ range: NSRange?) -> NSRange? {
+            range.map { NSRange(location: $0.location + delta, length: $0.length) }
+        }
+        var block = self
+        block.range = NSRange(location: range.location + delta, length: range.length)
+        block.marker = move(marker)
+        block.openFence = move(openFence)
+        block.closeFence = move(closeFence)
+        block.content = move(content)
+        block.checkbox = move(checkbox)
+        return block
+    }
+}

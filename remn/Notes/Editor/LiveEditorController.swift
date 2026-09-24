@@ -28,6 +28,8 @@ final class LiveEditorController: NSObject {
     @ObservationIgnored private var activeSignature: [NSRange] = []
     @ObservationIgnored private var isStyling = false
     @ObservationIgnored private var parsedText: String?
+    /// The cursor the note was last styled for, when it was styled at all.
+    @ObservationIgnored private var styledSelection: NSRange??
 
     /// Called with the note's Markdown after every edit.
     @ObservationIgnored var onTextChange: (String) -> Void = { _ in }
@@ -60,7 +62,7 @@ final class LiveEditorController: NSObject {
         container.lineFragmentPadding = 0
         storage.addLayoutManager(layoutManager)
         layoutManager.addTextContainer(container)
-        renderer.onPictureReady = { [weak self] in self?.restyle(force: true) }
+        renderer.onPictureReady = { [weak self] in self?.restyle(.pictures) }
     }
 
     var text: String { storage.string }
@@ -81,9 +83,14 @@ final class LiveEditorController: NSObject {
     func textDidChange(notify: Bool = true) {
         let current = storage.string
         guard current != parsedText else { return }
+        let previous = (text: parsedText, markdown: markdown)
         parsedText = current
         markdown = LiveMarkdown(current)
-        restyle(force: true)
+        if let text = previous.text {
+            restyle(.edit(LiveStyler.Edit(from: text, to: current), before: previous.markdown))
+        } else {
+            restyle(.everything)
+        }
         if notify { onTextChange(storage.string) }
     }
 
@@ -120,18 +127,52 @@ final class LiveEditorController: NSObject {
     /// Styles the note again; returns whether anything was restyled.
     @discardableResult
     func restyle(force: Bool) -> Bool {
+        restyle(force ? .everything : .cursor)
+    }
+
+    private enum Restyle {
+        /// Something that touches every line changed, like the font or the page width.
+        case everything
+        /// Only the cursor moved.
+        case cursor
+        /// The text changed.
+        case edit(LiveStyler.Edit, before: LiveMarkdown)
+        /// A formula, picture or Typst block finished drawing.
+        case pictures
+    }
+
+    @discardableResult
+    private func restyle(_ reason: Restyle) -> Bool {
         guard !isStyling else { return false }
         let selection = selectionForStyling
         let signature = LiveStyler.activeSignature(of: markdown, selection: selection, in: storage.string as NSString)
             + (selection == nil ? [] : [NSRange(location: -1, length: 0)])
-        guard force || signature != activeSignature else { return false }
+        if case .cursor = reason, signature == activeSignature { return false }
         activeSignature = signature
+
+        // Long notes stay quick to type in: only the blocks that can look different are styled again.
+        var blocks: IndexSet?
+        if let styled = styledSelection {
+            switch reason {
+            case .everything:
+                blocks = nil
+            case .cursor:
+                blocks = LiveStyler.blocksToRestyle(from: markdown, to: markdown, edit: nil, oldSelection: styled, newSelection: selection)
+            case .edit(let edit, let before):
+                blocks = LiveStyler.blocksToRestyle(from: before, to: markdown, edit: edit, oldSelection: styled, newSelection: selection)
+            case .pictures:
+                blocks = LiveStyler.blocksToRestyle(from: markdown, to: markdown, edit: nil, oldSelection: styled, newSelection: selection)?
+                    .union(LiveStyler.blocksWithPictures(in: markdown))
+            }
+        }
+        styledSelection = .some(selection)
+
         isStyling = true
         defer { isStyling = false }
         let styler = LiveStyler(theme: renderer.theme, livePreview: livePreview) { [renderer] request in
             renderer.picture(for: request)
         }
-        styler.style(storage, markdown: markdown, selection: selection)
+        styler.style(storage, markdown: markdown, selection: selection, blocks: blocks)
         return true
     }
 

@@ -8,6 +8,13 @@ struct LivePictureRequest: Hashable {
     var slot = 0
 }
 
+/// Where a block stands in its note: its place among all blocks, and among the code blocks and quotes.
+struct LiveOrdinal {
+    var block: Int
+    var code: Int
+    var quote: Int
+}
+
 /// Turns parsed Markdown into TextKit attributes. Away from the cursor, punctuation disappears and
 /// formulas, pictures and Typst become drawings; wherever the cursor is, the Markdown comes back.
 @MainActor
@@ -18,28 +25,42 @@ struct LiveStyler {
     let picture: (LivePictureRequest) -> LivePicture
 
     /// `selection` is nil when the editor isn't focused: then the whole note is shown finished.
-    func style(_ storage: NSTextStorage, markdown: LiveMarkdown, selection: NSRange?) {
+    /// `blocks` limits the work to those blocks (by index) when the rest of the note is already styled.
+    func style(_ storage: NSTextStorage, markdown: LiveMarkdown, selection: NSRange?, blocks only: IndexSet? = nil) {
         let string = storage.string as NSString
-        let full = NSRange(location: 0, length: string.length)
         storage.beginEditing()
-        storage.setAttributes(baseAttributes, range: full)
+        if only == nil {
+            storage.setAttributes(baseAttributes, range: NSRange(location: 0, length: string.length))
+        }
         var codeBlocks = 0
         var quoteBlocks = 0
-        var hiddenRanges: [NSRange] = []
+        var nextInline = 0
+        let inlines = markdown.inlines
 
-        for block in markdown.blocks {
-            styleBlock(
-                block,
-                in: storage,
-                string: string,
-                selection: selection,
-                codeIndex: &codeBlocks,
-                quoteIndex: &quoteBlocks,
-                hidden: &hiddenRanges
-            )
-        }
-        for inline in markdown.inlines where !hiddenRanges.contains(where: { NSIntersectionRange($0, inline.range).length > 0 }) {
-            styleInline(inline, in: storage, string: string, selection: selection)
+        for (index, block) in markdown.blocks.enumerated() {
+            // Counted for every block, so a block keeps its look whether or not its neighbours are restyled.
+            let ordinal = LiveOrdinal(block: index, code: codeBlocks, quote: quoteBlocks)
+            switch block.kind {
+            case .code: codeBlocks += 1
+            case .quote: quoteBlocks += 1
+            default: break
+            }
+            // Both lists run in text order and every inline lies inside one block.
+            var own: [LiveMarkdown.Inline] = []
+            while nextInline < inlines.count, inlines[nextInline].range.location < NSMaxRange(block.range) {
+                own.append(inlines[nextInline])
+                nextInline += 1
+            }
+            guard only?.contains(index) ?? true else { continue }
+
+            if only != nil {
+                storage.setAttributes(baseAttributes, range: block.range)
+            }
+            var hidden: [NSRange] = []
+            styleBlock(block, ordinal: ordinal, in: storage, string: string, selection: selection, hidden: &hidden)
+            for (position, inline) in own.enumerated() where !hidden.contains(where: { NSIntersectionRange($0, inline.range).length > 0 }) {
+                styleInline(inline, seed: index &* 64 &+ position, in: storage, string: string, selection: selection)
+            }
         }
         storage.endEditing()
     }
@@ -55,6 +76,92 @@ struct LiveStyler {
             active.append(inline.range)
         }
         return active
+    }
+
+    /// An edit: `range` is what changed in the new text, `delta` how much longer the text got.
+    struct Edit: Equatable {
+        var range: NSRange
+        var delta: Int
+
+        /// What changed between two versions of a note, found by trimming what they share at both ends.
+        init(from old: String, to new: String) {
+            let before = Array(old.utf16)
+            let after = Array(new.utf16)
+            let shorter = min(before.count, after.count)
+            var prefix = 0
+            while prefix < shorter, before[prefix] == after[prefix] {
+                prefix += 1
+            }
+            var suffix = 0
+            while suffix < shorter - prefix, before[before.count - 1 - suffix] == after[after.count - 1 - suffix] {
+                suffix += 1
+            }
+            range = NSRange(location: prefix, length: after.count - suffix - prefix)
+            delta = after.count - before.count
+        }
+
+        /// Where a range of the old text ended up; a range inside the change lands on it.
+        func map(_ old: NSRange) -> NSRange {
+            func position(_ location: Int) -> Int {
+                if location <= range.location { return location }
+                if location >= NSMaxRange(range) - delta { return location + delta }
+                return range.location
+            }
+            let start = position(old.location)
+            return NSRange(location: start, length: max(0, position(NSMaxRange(old)) - start))
+        }
+    }
+
+    /// The blocks whose look can differ after `edit` (if any) and with the cursor moving from `oldSelection`
+    /// to `newSelection`, or nil when the note changed shape and everything needs styling again.
+    static func blocksToRestyle(
+        from before: LiveMarkdown,
+        to after: LiveMarkdown,
+        edit: Edit?,
+        oldSelection: NSRange?,
+        newSelection: NSRange?
+    ) -> IndexSet? {
+        var blocks = IndexSet()
+        if let edit {
+            guard before.blocks.count == after.blocks.count else { return nil }
+            for (index, (old, new)) in zip(before.blocks, after.blocks).enumerated() {
+                guard old.kind == new.kind else { return nil }
+                if touches(edit.range, new.range) {
+                    blocks.insert(index)
+                    continue
+                }
+                // Away from the edit, a block must be the same one, moved along with the text after the edit.
+                let moved = new.range.location >= NSMaxRange(edit.range) ? old.shifted(by: edit.delta) : old
+                guard moved == new else { return nil }
+            }
+        }
+        let selections = [oldSelection.map { edit?.map($0) ?? $0 }, newSelection].compactMap { $0 }
+        for (index, block) in after.blocks.enumerated() where selections.contains(where: { touches($0, block.range) }) {
+            blocks.insert(index)
+        }
+        return blocks
+    }
+
+    /// The blocks that show a drawing: formulas, pictures and Typst.
+    static func blocksWithPictures(in markdown: LiveMarkdown) -> IndexSet {
+        var blocks = IndexSet()
+        var nextInline = 0
+        for (index, block) in markdown.blocks.enumerated() {
+            var drawn = false
+            switch block.kind {
+            case .code, .math, .image: drawn = true
+            default: break
+            }
+            while nextInline < markdown.inlines.count, markdown.inlines[nextInline].range.location < NSMaxRange(block.range) {
+                switch markdown.inlines[nextInline].kind {
+                case .math, .image: drawn = true
+                default: break
+                }
+                nextInline += 1
+            }
+            if drawn { blocks.insert(index) }
+        }
+        return blocks
     }
 
     static func touches(_ selection: NSRange, _ range: NSRange) -> Bool {
@@ -95,17 +202,17 @@ struct LiveStyler {
 
     private func styleBlock(
         _ block: LiveMarkdown.Block,
+        ordinal: LiveOrdinal,
         in storage: NSTextStorage,
         string: NSString,
         selection: NSRange?,
-        codeIndex: inout Int,
-        quoteIndex: inout Int,
         hidden: inout [NSRange]
     ) {
         let active = isActive(Self.textRange(of: block, in: string), selection)
         let textEnd = LiveMarkdown.lineEnd(of: block.range, in: string)
         let text = NSRange(location: block.range.location, length: textEnd - block.range.location)
-        let seed = Int(block.range.location) &* 31 &+ 7
+        // By position among the blocks, not in the text, so typing above doesn't redraw every bullet below.
+        let seed = ordinal.block &* 31 &+ 7
 
         switch block.kind {
         case .paragraph:
@@ -147,8 +254,7 @@ struct LiveStyler {
             }
 
         case .quote:
-            let seed = 4_200 + quoteIndex
-            quoteIndex += 1
+            let seed = 4_200 + ordinal.quote
             storage.addAttributes([
                 .foregroundColor: LiveTheme.graphite,
                 .paragraphStyle: theme.paragraphStyle(indent: 20, after: theme.size * 0.25),
@@ -208,8 +314,7 @@ struct LiveStyler {
             highlightTablePipes(in: text, storage: storage, string: string)
 
         case .code(let language):
-            let index = codeIndex
-            codeIndex += 1
+            let index = ordinal.code
             if language == "typst", !active {
                 showPicture(.typst, source: block.content.map { string.substring(with: $0) } ?? "", slot: index, block: block, in: storage, string: string, hidden: &hidden)
                 return
@@ -354,7 +459,7 @@ struct LiveStyler {
 
     // MARK: - Inline
 
-    private func styleInline(_ inline: LiveMarkdown.Inline, in storage: NSTextStorage, string: NSString, selection: NSRange?) {
+    private func styleInline(_ inline: LiveMarkdown.Inline, seed: Int, in storage: NSTextStorage, string: NSString, selection: NSRange?) {
         let active = isActive(inline.range, selection)
         func hideOrDim(_ ranges: [NSRange]) {
             for range in ranges {
@@ -381,13 +486,13 @@ struct LiveStyler {
             ], range: inline.content)
             hideOrDim(inline.markers)
         case .highlight:
-            storage.addAttribute(.remnDecoration, value: LiveDecoration(.highlight, seed: inline.range.location), range: inline.content)
+            storage.addAttribute(.remnDecoration, value: LiveDecoration(.highlight, seed: seed), range: inline.content)
             hideOrDim(inline.markers)
         case .code:
             storage.addAttributes([
                 .font: theme.codeFont,
                 .foregroundColor: LiveTheme.ink,
-                .remnDecoration: LiveDecoration(.inlineCode, seed: inline.range.location),
+                .remnDecoration: LiveDecoration(.inlineCode, seed: seed),
             ], range: inline.content)
             storage.removeAttribute(.strokeWidth, range: inline.range)
             if active {

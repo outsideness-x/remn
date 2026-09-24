@@ -22,6 +22,7 @@
 		19FD03CC87C582DD051AF70B /* OfflineAttachmentLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1888021129F6DC0B39144A81 /* OfflineAttachmentLoader.swift */; };
 		1E4D4541793BEF1485AE1EBB /* StudyQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1094BA94AB0FA576E2719827 /* StudyQueueTests.swift */; };
 		2186EA12EDEF5D164D4C50DC /* StudySetupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CC62A0E6A629ABDA580F04 /* StudySetupSheet.swift */; };
+		2491E2258A75792464F48C33 /* LiveRestyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB915D1D420B9A059AC5983 /* LiveRestyleTests.swift */; };
 		24D9F202B1BE5B61EC368BE9 /* NoteFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458D01B507BC930CE47B5B16 /* NoteFont.swift */; };
 		2677F9747943172FD033A62D /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA80540B1A8E082DB6AF1429 /* Platform.swift */; };
 		28013FB6B872F09210C975FE /* CardContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C02176044374CB1713244F6 /* CardContentView.swift */; };
@@ -135,6 +136,7 @@
 
 /* Begin PBXFileReference section */
 		0B436C4FDEB91DA5CE27C987 /* TypographyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypographyTests.swift; sourceTree = "<group>"; };
+		0CB915D1D420B9A059AC5983 /* LiveRestyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRestyleTests.swift; sourceTree = "<group>"; };
 		1080BDD46E762B55739E7201 /* RemnSchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnSchemaV1.swift; sourceTree = "<group>"; };
 		1094BA94AB0FA576E2719827 /* StudyQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyQueueTests.swift; sourceTree = "<group>"; };
 		11CC1397608ADD45DB488B72 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
@@ -427,6 +429,7 @@
 				D251887050864C1276246D18 /* InkTests.swift */,
 				B6EE6E0A79E447449CF8B9E6 /* LiveMarkdownTests.swift */,
 				8EBA7916C8227395AC5B4A57 /* LivePerformanceTests.swift */,
+				0CB915D1D420B9A059AC5983 /* LiveRestyleTests.swift */,
 				33ACB66E2E41DAF6B7721782 /* MarkdownInsertionTests.swift */,
 				C5A86F88F564DD468EE4A170 /* MigrationTests.swift */,
 				3883F3714493B8CE91778CA3 /* NotesVaultTests.swift */,
@@ -725,6 +728,7 @@
 				6F8D4E70373F20148A2EB710 /* InkTests.swift in Sources */,
 				F9CEF11156B6FDB2BFD829A6 /* LiveMarkdownTests.swift in Sources */,
 				110CFD04763FBAE1D6C46BD8 /* LivePerformanceTests.swift in Sources */,
+				2491E2258A75792464F48C33 /* LiveRestyleTests.swift in Sources */,
 				880C040EFDCFDAE634DC979D /* MarkdownInsertionTests.swift in Sources */,
 				33AD97F101650ED72CC8054C /* MigrationTests.swift in Sources */,
 				DE6833B38569F78D0F7F5EB9 /* NotesVaultTests.swift in Sources */,
