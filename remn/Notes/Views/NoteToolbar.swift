@@ -26,7 +26,7 @@ struct NoteToolbar: View {
                         iconTool(.check, label: "insert.tasks") { controller.apply(.tasks) }
                         tool("❝", label: "insert.quote", shortcut: nil) { controller.apply(.quote) }
                         separator
-                        tool("x²", label: "insert.inlineMath", shortcut: "m") { controller.apply(.inlineMath) }
+                        tool("x²", label: "insert.inlineMath", shortcut: nil) { controller.apply(.inlineMath) }
                         tool("∑", label: "insert.mathBlock", shortcut: nil) { controller.apply(.mathBlock) }
                         tool("</>", label: "insert.code", shortcut: nil) { controller.apply(.inlineCode) }
                         tool("{ }", label: "insert.codeBlock", shortcut: nil) { controller.apply(.codeBlock) }

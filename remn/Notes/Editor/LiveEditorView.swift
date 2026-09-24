@@ -234,7 +234,7 @@ private struct PlatformLiveEditor: NSViewRepresentable {
         controller.host = textView
         textView.setHeader(header.environment(\.self, context.environment))
 
-        let scrollView = NSScrollView()
+        let scrollView = LiveScrollView(frame: NSRect(x: 0, y: 0, width: 600, height: 400))
         scrollView.drawsBackground = false
         scrollView.hasVerticalScroller = true
         scrollView.autohidesScrollers = true
@@ -264,6 +264,15 @@ private struct PlatformLiveEditor: NSViewRepresentable {
             controller.selectionDidChange()
             (notification.object as? NSTextView)?.typingAttributes = controller.typingAttributes
         }
+    }
+}
+
+/// Keeps the text exactly as wide as the visible page, however the window is resized.
+private final class LiveScrollView: NSScrollView {
+    override func tile() {
+        super.tile()
+        guard let documentView, documentView.frame.width != contentView.bounds.width else { return }
+        documentView.setFrameSize(NSSize(width: contentView.bounds.width, height: documentView.frame.height))
     }
 }
 
