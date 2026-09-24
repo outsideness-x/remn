@@ -24,6 +24,6 @@ static float remnValueNoise(float2 p) {
     float tooth = remnHash(floor(position * 2.0)) - 0.5;
     float fibres = remnValueNoise(position * float2(0.055, 0.12)) - 0.5;
     float pulp = remnValueNoise(position * 0.011) - 0.5;
-    float shade = tooth * 0.8 + fibres * 0.3 + pulp * 0.85;
+    float shade = tooth * 0.8 + fibres * 0.36 + pulp * 0.42;
     return half4(color.rgb + half3(shade * strength) * color.a, color.a);
 }
