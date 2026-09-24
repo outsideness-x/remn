@@ -64,6 +64,13 @@ targets:
         NSPhotoLibraryAddUsageDescription: Save flashcards as images to your photo library.
         UIBackgroundModes:
           - remote-notification
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+        NSUbiquitousContainers:
+          iCloud.com.chemical-pink.remn:
+            NSUbiquitousContainerIsDocumentScopePublic: true
+            NSUbiquitousContainerName: remn
+            NSUbiquitousContainerSupportedFolderLevels: Any
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.chemical-pink.remn

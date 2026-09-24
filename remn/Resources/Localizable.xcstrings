@@ -1845,6 +1845,70 @@
         }
       }
     },
+    "notes.error.folder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "the notes folder can't be opened"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "не удаётся открыть папку с конспектами"
+          }
+        }
+      }
+    },
+    "notes.error.icloud" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud Drive isn't available on this device"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud Drive недоступен на этом устройстве"
+          }
+        }
+      }
+    },
+    "notes.folder.untitled" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "new folder"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "новая папка"
+          }
+        }
+      }
+    },
+    "notes.note.untitled" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "untitled"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "без названия"
+          }
+        }
+      }
+    },
     "ok" : {
       "localizations" : {
         "en" : {
