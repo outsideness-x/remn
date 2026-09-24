@@ -20,6 +20,7 @@
 		28013FB6B872F09210C975FE /* CardContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C02176044374CB1713244F6 /* CardContentView.swift */; };
 		2C977A18EA5D91596EA5BBA5 /* StudyQueueBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71376D3FF1CD1E3DA17A415 /* StudyQueueBuilder.swift */; };
 		315C8545FC80419C34388BD6 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3E5915E4007738575047C4 /* SearchTests.swift */; };
+		33AD97F101650ED72CC8054C /* MigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A86F88F564DD468EE4A170 /* MigrationTests.swift */; };
 		3649F9D0E5378CBAA4B5DAB9 /* FSRS in Frameworks */ = {isa = PBXBuildFile; productRef = 9C872FA061B2B00407064909 /* FSRS */; };
 		3946DFBC2D26E5AF69D25DC7 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92024DC64A85D0ED1D7B6AB /* Formatters.swift */; };
 		3D2BE4F9D08CA429259D4531 /* remnApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6895F64A4DB608E8E9F16891 /* remnApp.swift */; };
@@ -61,12 +62,14 @@
 		9DAF5A8520707E228551C8B2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FB7111FB0DD9D20D2A60B3 /* SettingsView.swift */; };
 		A18F701791A31A7E5F408E09 /* Textual in Frameworks */ = {isa = PBXBuildFile; productRef = 5174D1AE01955FB0D3DBD0A8 /* Textual */; };
 		A1DC0E473AC893DF6CA46127 /* StudySessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250732A28B966A2ACF6C75F /* StudySessionView.swift */; };
+		A2371635291D0076C4D56119 /* RemnSchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1080BDD46E762B55739E7201 /* RemnSchemaV1.swift */; };
 		A3CFDFB7B4BA2F995A627EA2 /* RemnTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2767AD6663EDF37938359D /* RemnTypography.swift */; };
 		A4B8A9D61AAEE3C98E00D5EC /* SubjectDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCD11850748DFAC93771937 /* SubjectDetailView.swift */; };
 		A9305ED863AAED8616065F46 /* RemnColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73275047DD887BC610647B2A /* RemnColors.swift */; };
 		B2FD3DF88AFE4FE8B951BAF4 /* DeckDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81440D7398777E78E1B6860F /* DeckDetailView.swift */; };
 		B86480F4C6B017013F1F8DF2 /* RemnSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE31C963CEF82E56A782734C /* RemnSchema.swift */; };
 		B97F03BBBBE9EF9EE4E4EB8C /* BackupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2D647215E4ECF91FFE78E5 /* BackupTests.swift */; };
+		BFB0576E60E740FE20C511ED /* LibraryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A633B00400E44408AFB4DD4B /* LibraryStore.swift */; };
 		C907C501075A365FE2DBD930 /* SRSExplainerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8FF4FE80679E310B341FDE /* SRSExplainerSheet.swift */; };
 		CC5875A2D467A031279A6390 /* ReviewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB45169EF35C9E4CB79AF60 /* ReviewService.swift */; };
 		CD0FAC7C2A8C07479BCF8F21 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12BCF790E0389FA64512B4B /* SearchView.swift */; };
@@ -101,6 +104,7 @@
 
 /* Begin PBXFileReference section */
 		0B436C4FDEB91DA5CE27C987 /* TypographyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypographyTests.swift; sourceTree = "<group>"; };
+		1080BDD46E762B55739E7201 /* RemnSchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnSchemaV1.swift; sourceTree = "<group>"; };
 		1094BA94AB0FA576E2719827 /* StudyQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyQueueTests.swift; sourceTree = "<group>"; };
 		11CC1397608ADD45DB488B72 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		14085CF2096D3280F9118976 /* InkBrush.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkBrush.swift; sourceTree = "<group>"; };
@@ -111,6 +115,7 @@
 		1E99BF5C47CF0005283FDD06 /* RemnNavigationHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnNavigationHeader.swift; sourceTree = "<group>"; };
 		21FF9D89B5DA9AC233E8B060 /* SubjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectModel.swift; sourceTree = "<group>"; };
 		23A3FFBF0BC7C0304F7C1D13 /* remn-macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "remn-macOS.entitlements"; sourceTree = "<group>"; };
+		27F704B7B8F11803E5DE940C /* remn-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "remn-iOS.entitlements"; sourceTree = "<group>"; };
 		29F95FD1076C503DAC0C2F44 /* Flashcard+Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flashcard+Display.swift"; sourceTree = "<group>"; };
 		2A92BF2EDB3DC41B3D94FAEB /* remn.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = remn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F16E415713C31E8C0695AF3 /* PaperGrain.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = PaperGrain.metal; sourceTree = "<group>"; };
@@ -153,11 +158,13 @@
 		9ACE8C66501FBC9214D431FA /* HandmadeComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandmadeComponents.swift; sourceTree = "<group>"; };
 		9F4E40F875B27C4CFBA7E1F1 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
 		9F72936533B36DABA6988A35 /* MarkdownRenderSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownRenderSource.swift; sourceTree = "<group>"; };
+		A633B00400E44408AFB4DD4B /* LibraryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStore.swift; sourceTree = "<group>"; };
 		A6E4DDE9993647270960E6C2 /* CardEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEditorView.swift; sourceTree = "<group>"; };
 		B74613E361D1008F37D52C7D /* FlashcardSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardSurface.swift; sourceTree = "<group>"; };
 		BA80540B1A8E082DB6AF1429 /* Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		BC69D30D20A30414C1CAF279 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		BEA5B762D59F24BB59139A3A /* NameEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameEditorSheet.swift; sourceTree = "<group>"; };
+		C5A86F88F564DD468EE4A170 /* MigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationTests.swift; sourceTree = "<group>"; };
 		C6589AD8278F3631AB285EE3 /* ScheduleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleState.swift; sourceTree = "<group>"; };
 		C71376D3FF1CD1E3DA17A415 /* StudyQueueBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyQueueBuilder.swift; sourceTree = "<group>"; };
 		CCF3BEF328B9EFEE896418CB /* InkLab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkLab.swift; sourceTree = "<group>"; };
@@ -240,7 +247,9 @@
 		2AE3EC0536D602277477390A /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				A633B00400E44408AFB4DD4B /* LibraryStore.swift */,
 				EE31C963CEF82E56A782734C /* RemnSchema.swift */,
+				1080BDD46E762B55739E7201 /* RemnSchemaV1.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -324,6 +333,7 @@
 				CEEDBD645D6620FD7D055BF6 /* Assets.xcassets */,
 				8E542A22B3B0207CEDE1E98D /* Info.plist */,
 				15A858101FE1C0ACD7EBDF5A /* Localizable.xcstrings */,
+				27F704B7B8F11803E5DE940C /* remn-iOS.entitlements */,
 				23A3FFBF0BC7C0304F7C1D13 /* remn-macOS.entitlements */,
 			);
 			path = Resources;
@@ -335,6 +345,7 @@
 				7E2D647215E4ECF91FFE78E5 /* BackupTests.swift */,
 				D251887050864C1276246D18 /* InkTests.swift */,
 				33ACB66E2E41DAF6B7721782 /* MarkdownInsertionTests.swift */,
+				C5A86F88F564DD468EE4A170 /* MigrationTests.swift */,
 				50FF9B7EDA1C99BA82A90902 /* PersistenceTests.swift */,
 				FB885D95D9D75D83379CBF88 /* RenderingTests.swift */,
 				5F6459C94EE97FBF98F20517 /* SchedulerTests.swift */,
@@ -554,6 +565,7 @@
 				B97F03BBBBE9EF9EE4E4EB8C /* BackupTests.swift in Sources */,
 				6F8D4E70373F20148A2EB710 /* InkTests.swift in Sources */,
 				880C040EFDCFDAE634DC979D /* MarkdownInsertionTests.swift in Sources */,
+				33AD97F101650ED72CC8054C /* MigrationTests.swift in Sources */,
 				DC13F65B617F8F51CB68B8C8 /* PersistenceTests.swift in Sources */,
 				E6696187C18A4755619470B3 /* RenderingTests.swift in Sources */,
 				582B9734788D4EE00885E407 /* SchedulerTests.swift in Sources */,
@@ -598,6 +610,7 @@
 				924AB57832B9B4040CED4A11 /* InkShapes.swift in Sources */,
 				18122817421751BC644D80BB /* InkText.swift in Sources */,
 				8B57FB701B37D5C1D1BEC6BB /* LibraryRow.swift in Sources */,
+				BFB0576E60E740FE20C511ED /* LibraryStore.swift in Sources */,
 				692C63800919DA68D9627B7E /* LibraryView.swift in Sources */,
 				4E5EF8B6ED839026B92947BE /* MarkdownRenderSource.swift in Sources */,
 				84A1445B9CBB86947D7B0488 /* MarkdownToolbar.swift in Sources */,
@@ -611,6 +624,7 @@
 				EE8B34F39CAB36A385A6AE39 /* RemnCommands.swift in Sources */,
 				DCA22BC85351846C9E8D9392 /* RemnNavigationHeader.swift in Sources */,
 				B86480F4C6B017013F1F8DF2 /* RemnSchema.swift in Sources */,
+				A2371635291D0076C4D56119 /* RemnSchemaV1.swift in Sources */,
 				F7BF1560E4A8642001B0CA86 /* RemnTextStyle.swift in Sources */,
 				A3CFDFB7B4BA2F995A627EA2 /* RemnTypography.swift in Sources */,
 				8C92B2347AADF0C43F2E0D36 /* ReviewLogEntry.swift in Sources */,
@@ -648,6 +662,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphone*]" = "remn/Resources/remn-iOS.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "remn/Resources/remn-macOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -672,6 +687,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphone*]" = "remn/Resources/remn-iOS.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "remn/Resources/remn-macOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				ENABLE_HARDENED_RUNTIME = YES;

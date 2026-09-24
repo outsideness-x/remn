@@ -19,7 +19,7 @@ struct SubjectDetailView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     ScreenTitle(title: subject.name)
-                    if subject.decks.isEmpty {
+                    if subject.allDecks.isEmpty {
                         QuietEmptyState(
                             title: "deck.empty",
                             actionTitle: "deck.make",
@@ -61,7 +61,7 @@ struct SubjectDetailView: View {
         }
         .sheet(isPresented: $showCreate) {
             NameEditorSheet(title: "deck.new") { name in
-                let order = (subject.decks.map(\.manualSortOrder).max() ?? -1) + 1
+                let order = (subject.allDecks.map(\.manualSortOrder).max() ?? -1) + 1
                 context.insert(Deck(subject: subject, name: name, manualSortOrder: order))
                 subject.updatedAt = .now
                 save()
@@ -112,8 +112,8 @@ struct SubjectDetailView: View {
                     } label: {
                         LibraryRow(
                             title: deck.name,
-                            dueCount: deck.cards.dueTodayCount(),
-                            totalCount: deck.cards.count
+                            dueCount: deck.allCards.dueTodayCount(),
+                            totalCount: deck.allCards.count
                         )
                     }
                     .buttonStyle(InkRowStyle())

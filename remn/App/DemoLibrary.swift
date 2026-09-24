@@ -11,8 +11,8 @@ enum DemoLibrary {
     }
 
     static func makeContainer() throws -> ModelContainer {
-        let schema = Schema(versionedSchema: RemnSchemaV1.self)
-        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        let schema = Schema(versionedSchema: RemnSchemaV2.self)
+        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
         let container = try ModelContainer(
             for: schema,
             migrationPlan: RemnMigrationPlan.self,

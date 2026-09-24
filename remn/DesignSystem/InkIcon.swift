@@ -16,6 +16,7 @@ enum InkIconKind: Int, CaseIterable {
     case check
     case close
     case undo
+    case cloud
 }
 
 /// A small drawing in the same pen as the rest of the interface, on a 24-point grid.
@@ -171,6 +172,14 @@ private struct InkIconDrawing {
             InkIconDrawing(strokes: [
                 Stroke(points: [p(5.2, 5.0), p(19.0, 19.2)]),
                 Stroke(points: [p(19.1, 5.2), p(5.0, 18.9)]),
+            ])
+        case .cloud:
+            InkIconDrawing(strokes: [
+                Stroke(points: [
+                    p(7.0, 17.6), p(4.4, 16.6), p(3.7, 13.8), p(5.4, 11.5), p(8.1, 11.1),
+                    p(9.3, 7.7), p(12.5, 6.0), p(15.6, 7.3), p(16.9, 10.3), p(19.4, 10.9),
+                    p(20.7, 13.6), p(19.7, 16.6), p(17.0, 17.7), p(7.4, 17.5),
+                ], smooth: true),
             ])
         case .undo:
             InkIconDrawing(strokes: [

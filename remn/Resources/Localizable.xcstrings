@@ -38,13 +38,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "your cards stay on this device. backups remain yours."
+            "value" : "your cards stay yours: on your devices and in your own iCloud. backups remain yours too."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "карточки остаются на этом устройстве. резервные копии принадлежат вам."
+            "value" : "карточки остаются вашими: на ваших устройствах и в вашем iCloud. резервные копии — тоже."
           }
         }
       }
@@ -3035,6 +3035,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "неизвестный предмет"
+          }
+        }
+      }
+    },
+    "sync.icloud" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud"
+          }
+        }
+      }
+    },
+    "sync.off" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud is off on this device, so everything stays here. sign in to iCloud to sync"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud на этом устройстве выключен, поэтому всё хранится здесь. войдите в iCloud, чтобы включить синхронизацию"
+          }
+        }
+      }
+    },
+    "sync.on" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "your cards and notes sync through your own iCloud, on every device you use"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "карточки и конспекты синхронизируются через ваш iCloud на всех ваших устройствах"
           }
         }
       }

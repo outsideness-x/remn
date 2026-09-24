@@ -16,13 +16,7 @@ struct remnApp: App {
                 return
             }
             #endif
-            let schema = Schema(versionedSchema: RemnSchemaV1.self)
-            let configuration = ModelConfiguration("remn", schema: schema)
-            container = try ModelContainer(
-                for: schema,
-                migrationPlan: RemnMigrationPlan.self,
-                configurations: [configuration]
-            )
+            container = try LibraryStore.makeContainer()
             startupError = nil
         } catch {
             container = nil

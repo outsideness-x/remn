@@ -3,14 +3,14 @@ import SwiftData
 
 @Model
 final class SubjectModel: Identifiable {
-    @Attribute(.unique) var id: UUID
-    var name: String
-    var createdAt: Date
-    var updatedAt: Date
-    var manualSortOrder: Int
+    var id: UUID = UUID()
+    var name: String = ""
+    var createdAt: Date = Date.now
+    var updatedAt: Date = Date.now
+    var manualSortOrder: Int = 0
 
     @Relationship(deleteRule: .cascade, inverse: \Deck.subject)
-    var decks: [Deck] = []
+    var decks: [Deck]? = []
 
     init(
         id: UUID = UUID(),
@@ -26,12 +26,14 @@ final class SubjectModel: Identifiable {
         self.manualSortOrder = manualSortOrder
     }
 
+    var allDecks: [Deck] { decks ?? [] }
+
     var orderedDecks: [Deck] {
-        decks.sorted {
+        allDecks.sorted {
             if $0.manualSortOrder == $1.manualSortOrder { return $0.createdAt < $1.createdAt }
             return $0.manualSortOrder < $1.manualSortOrder
         }
     }
 
-    var cards: [Flashcard] { decks.flatMap(\.cards) }
+    var cards: [Flashcard] { allDecks.flatMap(\.allCards) }
 }

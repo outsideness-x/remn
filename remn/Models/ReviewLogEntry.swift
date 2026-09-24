@@ -3,34 +3,34 @@ import SwiftData
 
 @Model
 final class ReviewLogEntry: Identifiable {
-    @Attribute(.unique) var id: UUID
+    var id: UUID = UUID()
     var card: Flashcard?
-    var timestamp: Date
-    var ratingRaw: Int
-    var elapsedInterval: Double
-    var scheduledInterval: Double
+    var timestamp: Date = Date.now
+    var ratingRaw: Int = 0
+    var elapsedInterval: Double = 0
+    var scheduledInterval: Double = 0
 
-    var previousStateRaw: Int
-    var previousDue: Date
+    var previousStateRaw: Int = 0
+    var previousDue: Date = Date.now
     var previousLastReview: Date?
-    var previousStability: Double
-    var previousDifficulty: Double
-    var previousElapsedDays: Double
-    var previousScheduledDays: Double
-    var previousLearningStep: Int
-    var previousRepetitions: Int
-    var previousLapses: Int
+    var previousStability: Double = 0
+    var previousDifficulty: Double = 0
+    var previousElapsedDays: Double = 0
+    var previousScheduledDays: Double = 0
+    var previousLearningStep: Int = 0
+    var previousRepetitions: Int = 0
+    var previousLapses: Int = 0
 
-    var resultingStateRaw: Int
-    var resultingDue: Date
+    var resultingStateRaw: Int = 0
+    var resultingDue: Date = Date.now
     var resultingLastReview: Date?
-    var resultingStability: Double
-    var resultingDifficulty: Double
-    var resultingElapsedDays: Double
-    var resultingScheduledDays: Double
-    var resultingLearningStep: Int
-    var resultingRepetitions: Int
-    var resultingLapses: Int
+    var resultingStability: Double = 0
+    var resultingDifficulty: Double = 0
+    var resultingElapsedDays: Double = 0
+    var resultingScheduledDays: Double = 0
+    var resultingLearningStep: Int = 0
+    var resultingRepetitions: Int = 0
+    var resultingLapses: Int = 0
 
     init(
         id: UUID = UUID(),

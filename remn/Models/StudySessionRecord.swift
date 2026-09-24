@@ -3,17 +3,17 @@ import SwiftData
 
 @Model
 final class StudySessionRecord: Identifiable {
-    @Attribute(.unique) var id: UUID
-    var createdAt: Date
-    var updatedAt: Date
-    var isActive: Bool
-    var subjectIDs: [UUID]
+    var id: UUID = UUID()
+    var createdAt: Date = Date.now
+    var updatedAt: Date = Date.now
+    var isActive: Bool = true
+    var subjectIDs: [UUID] = []
     var deckID: UUID?
-    var admittedCardIDs: [UUID]
-    var queueCardIDs: [UUID]
+    var admittedCardIDs: [UUID] = []
+    var queueCardIDs: [UUID] = []
     var lastReviewLogID: UUID?
-    var reviewedCount: Int
-    var initialNewCount: Int
+    var reviewedCount: Int = 0
+    var initialNewCount: Int = 0
 
     init(
         id: UUID = UUID(),

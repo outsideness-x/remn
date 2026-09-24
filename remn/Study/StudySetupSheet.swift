@@ -127,7 +127,7 @@ struct StudySetupSheet: View {
                     }
                 }
                 Spacer()
-                HandwrittenText("count.cards \(deck.cards.count)")
+                HandwrittenText("count.cards \(deck.allCards.count)")
                     .font(RemnTypography.note)
                     .foregroundStyle(Color.remnGraphite)
             }
@@ -278,7 +278,7 @@ struct StudySetupSheet: View {
 
     private var scopedDeck: Deck? {
         guard let initialDeckID else { return nil }
-        return subjects.lazy.flatMap(\.decks).first { $0.id == initialDeckID }
+        return subjects.lazy.flatMap(\.allDecks).first { $0.id == initialDeckID }
     }
 
     private var scopeSubjectIDs: Set<UUID> {

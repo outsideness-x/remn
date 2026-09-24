@@ -4,7 +4,7 @@ remn is a focused, free and open-source flashcard app for iPhone, iPad and Mac. 
 
 > create knowledge → review knowledge → remember knowledge
 
-There is no account, subscription, advertising, analytics, tracking, backend, or cloud dependency. All study data stays in the local SwiftData store on the device, and the app makes no runtime network requests.
+There is no account, subscription, advertising, analytics, tracking, or backend. Study data lives in a local SwiftData store and syncs between your devices through your own private iCloud database; remn itself never talks to any server.
 
 ## Requirements
 
@@ -30,6 +30,10 @@ xcodegen generate
 xcodebuild -project remn.xcodeproj -scheme remn \
   -destination 'platform=iOS Simulator,name=<installed iPhone>' test
 ```
+
+## Sync
+
+Cards, decks, subjects, review history and study sessions sync through CloudKit via SwiftData. The schema is versioned: `RemnSchemaV1` is the original local-only schema, kept frozen so existing libraries migrate, and `RemnSchemaV2` is the CloudKit-compatible one (no unique constraints, defaults everywhere, optional relationships). Sync follows the system iCloud settings for the app.
 
 ## Scheduling
 
@@ -74,7 +78,7 @@ Card detail can also render a dedicated high-resolution card layout and save it 
 
 ## Privacy
 
-remn has no networking entitlement or remote data layer. User-created content is only read and written locally, except when the user explicitly exports a backup or saves a card image.
+remn has no remote data layer of its own. The card library is mirrored to the signed-in user's private CloudKit database (container `iCloud.com.chemical-pink.remn`), which only that user can read; without an iCloud account everything stays on the device. Content otherwise leaves the device only when the user explicitly exports a backup or saves a card image.
 
 ## License
 

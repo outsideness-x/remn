@@ -129,7 +129,7 @@ struct CardDetailView: View {
 
     private var history: String {
         guard card.state != .new else { return String(localized: "card.notStudied") }
-        let reviews = String(localized: "count.reviews \(card.reviewLogs.count)")
+        let reviews = String(localized: "count.reviews \(card.allReviewLogs.count)")
         let next = card.due <= .now
             ? String(localized: "card.dueNow")
             : String(localized: "card.nextReview \(card.due.formatted(.dateTime.month(.wide).day()).lowercased())")
