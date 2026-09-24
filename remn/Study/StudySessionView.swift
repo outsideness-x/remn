@@ -66,6 +66,7 @@ struct StudySessionView: View {
                     HandwrittenText("close")
                 }
                 .buttonStyle(InkButtonStyle(kind: .quiet, seed: 31))
+                .keyboardShortcut(.cancelAction)
                 Spacer()
                 if showUndo {
                     Button(action: undo) {
@@ -75,6 +76,7 @@ struct StudySessionView: View {
                         }
                     }
                     .buttonStyle(InkButtonStyle(kind: .quiet, seed: 32))
+                    .keyboardShortcut("z", modifiers: .command)
                     .transition(.opacity)
                 }
             }
@@ -181,6 +183,7 @@ struct StudySessionView: View {
                 .frame(maxWidth: .infinity)
             }
             .buttonStyle(InkButtonStyle(kind: .secondary, seed: 57))
+            .keyboardShortcut(.space, modifiers: [])
             .opacity(revealed ? 0 : 1)
             .allowsHitTesting(!revealed)
             .accessibilityHidden(revealed)

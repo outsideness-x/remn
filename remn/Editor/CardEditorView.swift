@@ -47,6 +47,7 @@ struct CardEditorView: View {
                     HandwrittenText("save", weight: 0.4)
                 }
                 .buttonStyle(InkButtonStyle(kind: .quiet, seed: 13))
+                .keyboardShortcut("s", modifiers: .command)
                 .disabled(!canSave)
                 .opacity(canSave ? 1 : 0.4)
             }
@@ -55,6 +56,7 @@ struct CardEditorView: View {
             if mode == .edit { editor } else { preview }
         }
         .paperBackground()
+        .remnSheetFrame(width: 640, height: 760)
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(30)
         .interactiveDismissDisabled(hasChanges)

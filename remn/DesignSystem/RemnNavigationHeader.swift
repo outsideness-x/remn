@@ -99,6 +99,7 @@ struct SheetHeader<Trailing: View>: View {
                         HandwrittenText(leadingTitle)
                     }
                     .buttonStyle(InkButtonStyle(kind: .quiet, seed: 12))
+                    .keyboardShortcut(.cancelAction)
                     Spacer()
                     trailing
                 }

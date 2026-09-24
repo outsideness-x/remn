@@ -122,6 +122,7 @@ private struct HandmadeDialogModifier: ViewModifier {
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(style(for: action.role, index: index))
+                .keyboardShortcut(shortcut(for: action))
             }
         }
     }
@@ -132,6 +133,17 @@ private struct HandmadeDialogModifier: ViewModifier {
         case .plain: InkButtonStyle(kind: .secondary, seed: 850 + index)
         case .destructive: InkButtonStyle(kind: .destructive, seed: 850 + index)
         case .cancel: InkButtonStyle(kind: .quiet, seed: 850 + index)
+        }
+    }
+
+    private func shortcut(for action: HandmadeDialogAction) -> KeyboardShortcut? {
+        switch action.role {
+        case .cancel:
+            return .cancelAction
+        case .normal where actions.filter({ $0.role == .normal }).count == 1:
+            return .defaultAction
+        default:
+            return nil
         }
     }
 

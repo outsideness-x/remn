@@ -58,6 +58,7 @@ struct NameEditorSheet: View {
         }
         .paperBackground()
         .onAppear { isFocused = true }
+        .remnSheetFrame(width: 440, height: 170)
         .presentationDetents([.height(210)])
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(30)

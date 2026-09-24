@@ -97,6 +97,7 @@ struct StudySetupSheet: View {
             .remnReadableWidth(600)
             .background(alignment: .bottom) { PaperFade() }
         }
+        .remnSheetFrame(width: 520, height: 640)
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(30)
         .onAppear(perform: restoreSelection)

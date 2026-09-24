@@ -24,6 +24,17 @@ struct RatingButton: View {
             .padding(.horizontal, 4)
         }
         .buttonStyle(RatingButtonStyle(rating: rating))
+        .overlay(alignment: .topTrailing) {
+            if RemnPlatform.isMac {
+                HandwrittenText(verbatim: "\(rating.rawValue)")
+                    .font(RemnTypography.display(13, relativeTo: .caption2))
+                    .foregroundStyle(Color.remnGraphite.opacity(0.7))
+                    .padding(.top, 5)
+                    .padding(.trailing, 9)
+                    .accessibilityHidden(true)
+            }
+        }
+        .keyboardShortcut(KeyEquivalent(Character("\(rating.rawValue)")), modifiers: [])
         .accessibilityLabel(Text(LocalizedStringKey(rating.titleKey)))
         .accessibilityValue(Text(verbatim: interval))
     }

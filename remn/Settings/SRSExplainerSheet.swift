@@ -45,6 +45,7 @@ struct SRSExplainerSheet: View {
             }
         }
         .paperBackground()
+        .remnSheetFrame(width: 560, height: 720)
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(30)
     }
