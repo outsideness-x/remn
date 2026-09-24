@@ -5,6 +5,8 @@ import UniformTypeIdentifiers
 struct SettingsView: View {
     @Environment(\.modelContext) private var context
     @Environment(Vault.self) private var vault
+    @Environment(AppState.self) private var appState: AppState?
+    @Environment(\.remnIsNavigationRoot) private var isColumnRoot
     @AppStorage("desiredRetention") private var desiredRetention = 0.90
     @AppStorage("appearanceMode") private var appearanceMode = AppearanceMode.system.rawValue
 
@@ -17,7 +19,17 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            RemnNavigationHeader(backTitle: String(localized: "library"))
+            RemnNavigationHeader(backTitle: String(localized: "library")) {
+                if isColumnRoot {
+                    Button {
+                        withAnimation(.easeOut(duration: 0.18)) { appState?.showsSettings = false }
+                    } label: {
+                        HandwrittenText("done", weight: 0.4)
+                    }
+                    .buttonStyle(InkButtonStyle(kind: .quiet, seed: 145))
+                    .keyboardShortcut(.cancelAction)
+                }
+            }
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     ScreenTitle(title: String(localized: "settings"))
@@ -150,7 +162,7 @@ struct SettingsView: View {
     private var notesSettings: some View {
         Button { showVaultSetup = true } label: {
             HStack(alignment: .top, spacing: 14) {
-                InkIcon(kind: vault.location?.kind == .iCloud ? .cloud : .picture, color: .remnInk, size: 24)
+                InkIcon(kind: vault.location?.kind == .iCloud ? .cloud : .folder, color: .remnInk, size: 24)
                     .frame(width: 28, height: 28)
                 VStack(alignment: .leading, spacing: 2) {
                     HandwrittenText(verbatim: vaultTitle)

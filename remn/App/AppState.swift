@@ -28,6 +28,8 @@ final class AppState {
     var preselectedDeckID: UUID?
     var requestedCommand: AppCommand?
     var section: AppSection = .cards
+    /// On iPad and the Mac, settings open beside the sidebar instead of what was chosen in it.
+    var showsSettings = false
     var notesPath: [NotesRoute] = []
     /// The folder on screen in notes, so a new note lands where you're looking.
     var currentNotesFolder = ""

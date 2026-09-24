@@ -45,9 +45,13 @@ struct remnApp: App {
             }
             .preferredColorScheme(AppearanceMode(rawValue: appearanceMode)?.colorScheme)
             .tint(.remnAccent)
+            #if DEBUG && os(macOS)
+            .onAppear { WindowSnapshot.scheduleIfRequested() }
+            #endif
             #if os(macOS)
             .frame(minWidth: 760, minHeight: 540)
-            .toolbar(.hidden, for: .windowToolbar)
+            // The window keeps its close, minimise and zoom buttons over the paper; nothing else sits up there.
+            .toolbarBackground(.hidden, for: .windowToolbar)
             #endif
         }
         #if os(macOS)
@@ -57,24 +61,6 @@ struct remnApp: App {
         #endif
         .commands { RemnCommands() }
 
-        #if os(macOS)
-        Settings {
-            Group {
-                if let container {
-                    SettingsView()
-                        .environment(\.remnIsNavigationRoot, true)
-                        .modelContainer(container)
-                        .environment(vault)
-                } else {
-                    StartupFailureView(message: startupError ?? String(localized: "storage.error"))
-                }
-            }
-            .frame(width: 540, height: 720)
-            .preferredColorScheme(AppearanceMode(rawValue: appearanceMode)?.colorScheme)
-            .tint(.remnAccent)
-        }
-        .windowResizability(.contentSize)
-        #endif
     }
 
     @ViewBuilder

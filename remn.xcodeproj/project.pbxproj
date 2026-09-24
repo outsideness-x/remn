@@ -25,6 +25,7 @@
 		2677F9747943172FD033A62D /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA80540B1A8E082DB6AF1429 /* Platform.swift */; };
 		28013FB6B872F09210C975FE /* CardContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C02176044374CB1713244F6 /* CardContentView.swift */; };
 		28DADDEA23A9D58F137D94AF /* LiveEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3CF1031579B35E973BB230 /* LiveEditorView.swift */; };
+		2BDD428AB4B530BDDF572D37 /* WindowSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F38508692CF3C7DF09D251 /* WindowSnapshot.swift */; };
 		2C977A18EA5D91596EA5BBA5 /* StudyQueueBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71376D3FF1CD1E3DA17A415 /* StudyQueueBuilder.swift */; };
 		2EF19357C1614F1748745E45 /* LiveStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A936199CBCAFEC6DA6AE82E9 /* LiveStyler.swift */; };
 		315C8545FC80419C34388BD6 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3E5915E4007738575047C4 /* SearchTests.swift */; };
@@ -189,6 +190,7 @@
 		7C2499DE0F3CF80E54B2E115 /* CardExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardExportView.swift; sourceTree = "<group>"; };
 		7E2D647215E4ECF91FFE78E5 /* BackupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupTests.swift; sourceTree = "<group>"; };
 		81440D7398777E78E1B6860F /* DeckDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailView.swift; sourceTree = "<group>"; };
+		83F38508692CF3C7DF09D251 /* WindowSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSnapshot.swift; sourceTree = "<group>"; };
 		8582F224E564AE10A9C73E52 /* ReviewLogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewLogEntry.swift; sourceTree = "<group>"; };
 		867AB964E10295C861743490 /* Vault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vault.swift; sourceTree = "<group>"; };
 		8D4751617CF215BF60BAE16C /* CardSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSearch.swift; sourceTree = "<group>"; };
@@ -565,6 +567,7 @@
 				6895F64A4DB608E8E9F16891 /* remnApp.swift */,
 				1D08D9FDB393E2857A395E38 /* RemnCommands.swift */,
 				6AC017E7D16B771C0C61176D /* RootView.swift */,
+				83F38508692CF3C7DF09D251 /* WindowSnapshot.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -823,6 +826,7 @@
 				A5C73E929AC2E6AD4A0EDDC3 /* VaultLocation.swift in Sources */,
 				7ABD3C5CB7D2820E064BADE4 /* VaultSetupView.swift in Sources */,
 				B84D0145065550D266A16368 /* VaultTree.swift in Sources */,
+				2BDD428AB4B530BDDF572D37 /* WindowSnapshot.swift in Sources */,
 				3D2BE4F9D08CA429259D4531 /* remnApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

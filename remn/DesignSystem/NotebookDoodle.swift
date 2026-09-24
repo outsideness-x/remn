@@ -120,14 +120,10 @@ struct RemnTabBar: View {
 
 /// The top of the sidebar on iPad and the Mac: the wordmark, search and settings, and cards or notes.
 struct SidebarHeader: View {
-    #if os(macOS)
-    @Environment(\.openSettings) private var openSettings
-    #endif
+    @Environment(AppState.self) private var appState
     @Binding var section: AppSection
     let searchSelected: Bool
-    let settingsSelected: Bool
     let onSearch: () -> Void
-    let onSettings: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -138,21 +134,21 @@ struct SidebarHeader: View {
                     .accessibilityAddTraits(.isHeader)
                     .inkWritesOn(duration: 0.55)
                 Spacer()
-                InkIconButton(kind: .search, label: "search", color: searchSelected ? .remnAccent : .remnInk, size: 22) {
+                InkIconButton(kind: .search, label: "search", color: searchSelected && !appState.showsSettings ? .remnAccent : .remnInk, size: 22) {
+                    appState.showsSettings = false
                     onSearch()
                 }
-                InkIconButton(kind: .settings, label: "settings", color: settingsSelected ? .remnAccent : .remnInk, size: 23) {
-                    #if os(macOS)
-                    openSettings()
-                    #else
-                    onSettings()
-                    #endif
+                InkIconButton(kind: .settings, label: "settings", color: appState.showsSettings ? .remnAccent : .remnInk, size: 23) {
+                    withAnimation(.easeOut(duration: 0.18)) { appState.showsSettings.toggle() }
                 }
             }
             .padding(.trailing, -10)
 
             InkChoiceRow(
-                selection: $section,
+                selection: Binding(
+                    get: { section },
+                    set: { section = $0; appState.showsSettings = false }
+                ),
                 options: AppSection.allCases.map { .init(value: $0, title: Text($0.title)) },
                 seed: 7_300
             )

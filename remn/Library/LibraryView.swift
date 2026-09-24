@@ -5,7 +5,6 @@ import SwiftUI
 enum LibraryDestination: Hashable {
     case subject(UUID)
     case search
-    case settings
 }
 
 /// Every subject on one page. On iPhone it is the first screen; on iPad and the Mac it is the sidebar,
@@ -135,9 +134,7 @@ struct LibraryView: View {
             SidebarHeader(
                 section: $appState.section,
                 searchSelected: selection.wrappedValue == .search,
-                settingsSelected: selection.wrappedValue == .settings,
-                onSearch: { selection.wrappedValue = .search },
-                onSettings: { selection.wrappedValue = .settings }
+                onSearch: { selection.wrappedValue = .search }
             )
         } else {
             phoneHeader
@@ -195,9 +192,10 @@ struct LibraryView: View {
         if let selection {
             LazyVStack(spacing: 6) {
                 ForEach(subjects, id: \.id) { subject in
-                    let isSelected = selection.wrappedValue == .subject(subject.id)
+                    let isSelected = selection.wrappedValue == .subject(subject.id) && !appState.showsSettings
                     Button {
                         selection.wrappedValue = .subject(subject.id)
+                        appState.showsSettings = false
                     } label: {
                         LibraryRow(
                             title: subject.name,

@@ -21,6 +21,7 @@ enum InkIconKind: Int, CaseIterable {
     case picture
     case card
     case list
+    case folder
 }
 
 /// A small drawing in the same pen as the rest of the interface, on a 24-point grid.
@@ -208,6 +209,11 @@ private struct InkIconDrawing {
                 Stroke(points: [p(3.2, 7.6), p(17.2, 7.4), p(17.4, 20.1), p(3.4, 20.3), p(3.3, 7.3)]),
                 Stroke(points: [p(6.3, 12.1), p(14.3, 11.9)]),
                 Stroke(points: [p(6.2, 15.7), p(11.9, 15.6)]),
+            ])
+        case .folder:
+            InkIconDrawing(strokes: [
+                Stroke(points: [p(3.1, 18.9), p(2.9, 6.2), p(9.4, 6.0), p(11.2, 8.4), p(20.8, 8.2), p(21.0, 19.1), p(3.3, 19.2)]),
+                Stroke(points: [p(3.2, 11.1), p(20.7, 10.9)]),
             ])
         case .list:
             InkIconDrawing(

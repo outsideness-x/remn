@@ -91,7 +91,6 @@ struct NotesSidebar: View {
     @Environment(Vault.self) private var vault
     @Environment(AppState.self) private var appState
     @Binding var selection: NotesSidebarItem?
-    let onSettings: () -> Void
 
     @State private var expanded: Set<String> = []
     @State private var showNewFolder = false
@@ -106,9 +105,7 @@ struct NotesSidebar: View {
                 SidebarHeader(
                     section: $appState.section,
                     searchSelected: selection == .search,
-                    settingsSelected: false,
-                    onSearch: { selection = .search },
-                    onSettings: onSettings
+                    onSearch: { selection = .search }
                 )
                 if vault.status == .ready {
                     tree
@@ -129,24 +126,6 @@ struct NotesSidebar: View {
         .scrollIndicators(.never)
         .paperBackground()
         .remnHidesSystemBar()
-        .safeAreaInset(edge: .bottom) {
-            if vault.status == .ready {
-                Button { appState.requestedCommand = .newNote } label: {
-                    HStack(spacing: 12) {
-                        NotebookDoodle(ink: .remnOnAccent, accent: .remnOnAccent, paper: .remnAccent, width: 22)
-                        HandwrittenText("notes.new", weight: 0.5)
-                        Spacer()
-                        InkIcon(kind: .plus, color: .remnOnAccent, size: 20)
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(InkButtonStyle(kind: .primary, seed: 8_601))
-                .padding(.horizontal, 14)
-                .padding(.top, 14)
-                .padding(.bottom, 14)
-                .background(alignment: .bottom) { PaperFade() }
-            }
-        }
         .sheet(isPresented: $showNewFolder) {
             NameEditorSheet(title: "notes.folder.new") { name in
                 Task {
@@ -266,9 +245,10 @@ struct NotesSidebar: View {
         hasChildren: Bool,
         item: NotesSidebarItem
     ) -> some View {
-        let isSelected = selection == item
+        let isSelected = selection == item && !appState.showsSettings
         return Button {
             selection = item
+            appState.showsSettings = false
         } label: {
             HStack(spacing: 6) {
                 if hasChildren {
@@ -333,8 +313,11 @@ struct NotesSidebar: View {
                     .foregroundStyle(Color.remnGraphite)
                 FlowLayout(spacing: 6, lineSpacing: 6) {
                     ForEach(tags, id: \.tag) { item in
-                        Button { selection = .tag(item.tag) } label: {
-                            TagChip(tag: item.tag, count: item.count, isSelected: selection == .tag(item.tag))
+                        Button {
+                            selection = .tag(item.tag)
+                            appState.showsSettings = false
+                        } label: {
+                            TagChip(tag: item.tag, count: item.count, isSelected: selection == .tag(item.tag) && !appState.showsSettings)
                         }
                         .buttonStyle(InkPressStyle())
                     }

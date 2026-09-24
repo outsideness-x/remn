@@ -43,6 +43,9 @@ struct RootView: View {
             } else if arguments.contains("-openNotes") {
                 appState.section = .notes
             }
+            if arguments.contains("-openSettings") {
+                appState.showsSettings = true
+            }
         }
         #endif
         .onChange(of: appState.requestedCommand) { _, command in
@@ -128,10 +131,7 @@ struct LibrarySplitView: View {
                 case .cards:
                     LibraryView(selection: $selection)
                 case .notes:
-                    NotesSidebar(selection: $notesSelection) {
-                        appState.section = .cards
-                        selection = .settings
-                    }
+                    NotesSidebar(selection: $notesSelection)
                 }
             }
             .frame(width: RemnPlatform.isMac ? 300 : 330)
@@ -142,16 +142,24 @@ struct LibrarySplitView: View {
                 .background { PaperBackground() }
                 .accessibilityHidden(true)
             Group {
-                switch appState.section {
-                case .cards:
+                if appState.showsSettings {
                     NavigationStack {
-                        detail
+                        SettingsView()
                             .environment(\.remnIsNavigationRoot, true)
                     }
-                    .id(selection)
-                case .notes:
-                    NotesSplitDetail(selection: notesSelection)
-                        .id(notesSelection)
+                    .transition(.opacity)
+                } else {
+                    switch appState.section {
+                    case .cards:
+                        NavigationStack {
+                            detail
+                                .environment(\.remnIsNavigationRoot, true)
+                        }
+                        .id(selection)
+                    case .notes:
+                        NotesSplitDetail(selection: notesSelection)
+                            .id(notesSelection)
+                    }
                 }
             }
             .padding(.top, RemnPlatform.isMac ? 22 : 0)
@@ -163,6 +171,7 @@ struct LibrarySplitView: View {
         .onChange(of: appState.requestedCommand) { _, command in
             guard command == .search else { return }
             appState.requestedCommand = nil
+            appState.showsSettings = false
             switch appState.section {
             case .cards: selection = .search
             case .notes: notesSelection = .search
@@ -182,8 +191,6 @@ struct LibrarySplitView: View {
             }
         case .search:
             SearchView()
-        case .settings:
-            SettingsView()
         case nil:
             placeholder
         }
@@ -206,7 +213,7 @@ struct LibrarySplitView: View {
 
     private func chooseFirstSubjectIfNeeded() {
         if case .subject(let id) = selection, subjects.contains(where: { $0.id == id }) { return }
-        if selection == .search || selection == .settings { return }
+        if selection == .search { return }
         selection = subjects.first.map { .subject($0.id) }
     }
 }

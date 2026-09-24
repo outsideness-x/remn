@@ -5,6 +5,11 @@ struct RemnCommands: Commands {
     @FocusedValue(\.remnAppState) private var appState
 
     var body: some Commands {
+        CommandGroup(replacing: .appSettings) {
+            Button("menu.settings") { appState?.showsSettings = true }
+                .keyboardShortcut(",")
+                .disabled(appState == nil)
+        }
         CommandGroup(replacing: .newItem) {
             if appState?.section == .notes {
                 Button("menu.newNote") { appState?.requestedCommand = .newNote }
