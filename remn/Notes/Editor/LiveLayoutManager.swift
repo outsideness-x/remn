@@ -195,10 +195,18 @@ final class LiveLayoutManager: NSLayoutManager, NSLayoutManagerDelegate {
         }
         context.saveGState()
         context.interpolationQuality = .high
+        if picture.kind == .image {
+            context.addPath(InkBrush.closedOutline(InkGeometry.roundedRectPatch(in: rect, cornerRadius: 8, seed: picture.key.inkSeed)).cgPath)
+            context.clip()
+        }
         context.translateBy(x: rect.minX, y: rect.maxY)
         context.scaleBy(x: 1, y: -1)
         context.draw(image, in: CGRect(origin: .zero, size: rect.size))
         context.restoreGState()
+        if picture.kind == .image {
+            let frame = InkBrush.stroke(InkGeometry.roundedRectLoop(in: rect, cornerRadius: 8, seed: picture.key.inkSeed), pen: .hairline, seed: picture.key.inkSeed)
+            fill(frame, LiveTheme.ink.withAlphaComponent(0.55), context)
+        }
     }
 
     private func draw(_ decoration: LiveDecoration, range: NSRange, container: NSTextContainer, origin: CGPoint, in context: CGContext) {

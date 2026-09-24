@@ -474,6 +474,9 @@ struct LiveStyler {
 
     private func imageSource(in line: NSRange, string: NSString) -> String {
         let text = string.substring(with: line)
+        if let match = text.firstMatch(of: #/!\[\[([^\]|]+)/#) {
+            return String(match.output.1)
+        }
         guard let match = text.firstMatch(of: #/!\[[^\]]*\]\(([^)\s]+)/#) else { return "" }
         return String(match.output.1)
     }

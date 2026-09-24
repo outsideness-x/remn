@@ -2109,6 +2109,38 @@
         }
       }
     },
+    "insert.image.files" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "from Files"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "из «Файлов»"
+          }
+        }
+      }
+    },
+    "insert.image.photos" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "from Photos"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "из «Фото»"
+          }
+        }
+      }
+    },
     "insert.inlineMath" : {
       "localizations" : {
         "en" : {

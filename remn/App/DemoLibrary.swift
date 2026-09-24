@@ -1,6 +1,8 @@
 #if DEBUG
 import Foundation
+import ImageIO
 import SwiftData
+import SwiftUI
 
 /// A small, believable library in memory, for design reviews and App Store screenshots.
 /// Launch with `-demoLibrary`; the real store on the device is never touched.
@@ -33,7 +35,37 @@ enum DemoLibrary {
             try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
             try? text.write(to: url, atomically: true, encoding: .utf8)
         }
+        let cellFolder = root.appendingPathComponent(russian ? "Биология/attachments" : "Biology/attachments")
+        try? FileManager.default.createDirectory(at: cellFolder, withIntermediateDirectories: true)
+        try? cellPicture()?.write(to: cellFolder.appendingPathComponent("cell.png"))
         return Vault(rootURL: root)
+    }
+
+    /// A soft, textbook-style drawing of a cell for the biology note.
+    private static func cellPicture() -> Data? {
+        let view = ZStack {
+            Ellipse().fill(Color(red: 0.93, green: 0.86, blue: 0.74))
+            Ellipse().stroke(Color(red: 0.55, green: 0.38, blue: 0.25), lineWidth: 6)
+            Circle().fill(Color(red: 0.62, green: 0.42, blue: 0.62)).frame(width: 120).offset(x: -30, y: -10)
+            Circle().fill(Color(red: 0.45, green: 0.28, blue: 0.47)).frame(width: 40).offset(x: -20, y: -20)
+            ForEach(0..<5, id: \.self) { index in
+                Capsule()
+                    .fill(Color(red: 0.86, green: 0.47, blue: 0.36))
+                    .frame(width: 70, height: 30)
+                    .rotationEffect(.degrees(Double(index) * 37))
+                    .offset(x: [150, 110, -150, 60, 170][index], y: [70, -95, 70, 100, -20][index])
+            }
+        }
+        .frame(width: 560, height: 340)
+        .padding(20)
+        .background(Color(red: 0.98, green: 0.97, blue: 0.94))
+        let renderer = ImageRenderer(content: view)
+        renderer.scale = 2
+        guard let image = renderer.cgImage else { return nil }
+        let data = NSMutableData()
+        guard let destination = CGImageDestinationCreateWithData(data, "public.png" as CFString, 1, nil) else { return nil }
+        CGImageDestinationAddImage(destination, image, nil)
+        return CGImageDestinationFinalize(destination) ? data as Data : nil
     }
 
     private static let englishNotes: [(String, String)] = [
@@ -86,7 +118,7 @@ enum DemoLibrary {
 
         `Task` inherits the actor it was created on; `Task.detached` does not.
         """),
-        ("Biology/The cell.md", "# The cell\n\n**ATP synthase** turns the proton gradient into ATP.\n\n---\n\nRibosomes read mRNA three bases at a time. #biology\n"),
+        ("Biology/The cell.md", "# The cell\n\n**ATP synthase** turns the proton gradient into ATP.\n\n![](attachments/cell.png)\n\n---\n\nRibosomes read mRNA three bases at a time. #biology\n"),
         ("Reading list.md", "# Reading list\n\n- [ ] *Gödel, Escher, Bach*\n- [x] *The Art of Doing Science and Engineering*\n"),
     ]
 
@@ -140,7 +172,7 @@ enum DemoLibrary {
 
         `Task` наследует актор места создания, `Task.detached` — нет.
         """),
-        ("Биология/Клетка.md", "# Клетка\n\n**АТФ-синтаза** превращает протонный градиент в АТФ.\n\n---\n\nРибосомы читают мРНК по три нуклеотида. #биология\n"),
+        ("Биология/Клетка.md", "# Клетка\n\n**АТФ-синтаза** превращает протонный градиент в АТФ.\n\n![](attachments/cell.png)\n\n---\n\nРибосомы читают мРНК по три нуклеотида. #биология\n"),
         ("Что почитать.md", "# Что почитать\n\n- [ ] *Гёдель, Эшер, Бах*\n- [x] *Искусство научной и инженерной работы*\n"),
     ]
 

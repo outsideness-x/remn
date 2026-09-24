@@ -158,6 +158,25 @@ final class LiveTextView: UITextView, LiveTextHost, UIGestureRecognizerDelegate 
         true
     }
 
+    // MARK: - Pasting pictures
+
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == #selector(paste(_:)), UIPasteboard.general.hasImages {
+            return true
+        }
+        return super.canPerformAction(action, withSender: sender)
+    }
+
+    override func paste(_ sender: Any?) {
+        let pasteboard = UIPasteboard.general
+        if pasteboard.hasImages, !pasteboard.hasStrings, let image = pasteboard.image,
+           let data = image.pngData() {
+            controller.onPasteImage(data)
+            return
+        }
+        super.paste(sender)
+    }
+
     // MARK: - LiveTextHost
 
     var hostSelectedRange: NSRange {
@@ -196,6 +215,7 @@ final class LiveTextView: UITextView, LiveTextHost, UIGestureRecognizerDelegate 
 
 #else
 import AppKit
+import UniformTypeIdentifiers
 
 private struct PlatformLiveEditor: NSViewRepresentable {
     let controller: LiveEditorController
@@ -371,6 +391,47 @@ final class LiveNSTextView: NSTextView, LiveTextHost {
 
     @objc private func makeCard(_ sender: Any?) {
         controller.makeCardFromSelection()
+    }
+
+    // MARK: - Pasting and dropping pictures
+
+    override func paste(_ sender: Any?) {
+        let pasteboard = NSPasteboard.general
+        if pasteboard.string(forType: .string) == nil, let data = Self.imageData(from: pasteboard) {
+            controller.onPasteImage(data)
+            return
+        }
+        super.paste(sender)
+    }
+
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        let pasteboard = sender.draggingPasteboard
+        let urls = pasteboard.readObjects(
+            forClasses: [NSURL.self],
+            options: [.urlReadingFileURLsOnly: true, .urlReadingContentsConformToTypes: [UTType.image.identifier]]
+        ) as? [URL] ?? []
+        guard !urls.isEmpty || Self.imageData(from: pasteboard) != nil else {
+            return super.performDragOperation(sender)
+        }
+        let point = convert(sender.draggingLocation, from: nil)
+        setSelectedRange(NSRange(location: characterIndexForInsertion(at: point), length: 0))
+        window?.makeFirstResponder(self)
+        if urls.isEmpty, let data = Self.imageData(from: pasteboard) {
+            controller.onPasteImage(data)
+        }
+        for url in urls {
+            let accessing = url.startAccessingSecurityScopedResource()
+            defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+            if let data = try? Data(contentsOf: url) { controller.onPasteImage(data) }
+        }
+        return true
+    }
+
+    private static func imageData(from pasteboard: NSPasteboard) -> Data? {
+        for type in [NSPasteboard.PasteboardType.png, .tiff] {
+            if let data = pasteboard.data(forType: type) { return data }
+        }
+        return nil
     }
 
     // MARK: - LiveTextHost

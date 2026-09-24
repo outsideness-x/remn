@@ -247,14 +247,16 @@ final class Vault {
     func saveAttachment(_ data: Data, fileExtension: String, forNoteAt notePath: String) async throws -> String {
         let folder = VaultPath.parent(of: notePath)
         let folderURL = try requireURL(folder).appendingPathComponent(VaultPath.attachmentsFolder, isDirectory: true)
-        let stamp = Date.now.formatted(.iso8601.year().month().day().time(includingFractionalSeconds: false))
-            .replacingOccurrences(of: ":", with: "")
-        let url = VaultFiles.availableURL(named: "image \(stamp)", extension: fileExtension, in: folderURL)
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyyMMdd-HHmmss"
+        let url = VaultFiles.availableURL(named: "image-\(formatter.string(from: .now))", extension: fileExtension, in: folderURL)
         try await Task.detached {
             try VaultFiles.createFolder(folderURL)
             try VaultFiles.write(data, to: url)
         }.value
-        return "\(VaultPath.attachmentsFolder)/\(url.lastPathComponent)"
+        let name = url.lastPathComponent.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? url.lastPathComponent
+        return "\(VaultPath.attachmentsFolder)/\(name)"
     }
 
     /// Where a link written in a note points on disk, if it points inside the notes folder.
@@ -268,6 +270,24 @@ final class Vault {
         let resolved = base.appendingPathComponent(decoded.trimmingCharacters(in: CharacterSet(charactersIn: "/")))
             .standardizedFileURL
         guard resolved.path.hasPrefix(rootURL.standardizedFileURL.path) else { return nil }
+        if FileManager.default.fileExists(atPath: resolved.path) || decoded.contains("/") {
+            return resolved
+        }
+        // Obsidian-style `![[name.png]]`: look beside the note, in its attachments, then anywhere in the folder.
+        let name = VaultPath.name(of: decoded)
+        let candidates = [
+            base.appendingPathComponent(name),
+            base.appendingPathComponent(VaultPath.attachmentsFolder).appendingPathComponent(name),
+            rootURL.appendingPathComponent(name),
+            rootURL.appendingPathComponent(VaultPath.attachmentsFolder).appendingPathComponent(name),
+        ]
+        if let found = candidates.first(where: { FileManager.default.fileExists(atPath: $0.path) }) {
+            return found
+        }
+        let enumerator = FileManager.default.enumerator(at: rootURL, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
+        while let url = enumerator?.nextObject() as? URL {
+            if url.lastPathComponent == name { return url }
+        }
         return resolved
     }
 

@@ -1,4 +1,6 @@
+import PhotosUI
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// One note, open: its title, its tags and the live editor, saved to its file as you write.
 struct NoteView: View {
@@ -22,6 +24,10 @@ struct NoteView: View {
     @State private var showFonts = false
     @State private var showTags = false
     @State private var cardDraft: CardDraft?
+    @State private var chooseImageSource = false
+    @State private var pickingPhoto = false
+    @State private var pickingImageFile = false
+    @State private var photoItem: PhotosPickerItem?
 
     /// A passage of the note on its way to becoming a flashcard.
     private struct CardDraft: Identifiable {
@@ -72,7 +78,13 @@ struct NoteView: View {
         .remnHidesSystemBar()
         .safeAreaInset(edge: .bottom) {
             if isLoaded, showsToolbar {
-                NoteToolbar(controller: controller)
+                NoteToolbar(controller: controller, onInsertImage: {
+                    #if os(iOS)
+                    chooseImageSource = true
+                    #else
+                    pickingImageFile = true
+                    #endif
+                })
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
@@ -114,6 +126,35 @@ struct NoteView: View {
         .sheet(isPresented: $showFonts) {
             FontPickerSheet(selection: Binding(get: { controller.font }, set: { setFont($0) }))
         }
+        .handmadeDialog(
+            isPresented: $chooseImageSource,
+            title: "insert.image",
+            message: nil,
+            actions: [
+                HandmadeDialogAction("insert.image.photos", role: .plain) { pickingPhoto = true },
+                HandmadeDialogAction("insert.image.files", role: .plain) { pickingImageFile = true },
+                HandmadeDialogAction("cancel", role: .cancel) {},
+            ]
+        )
+        .photosPicker(isPresented: $pickingPhoto, selection: $photoItem, matching: .images)
+        .onChange(of: photoItem) { _, item in
+            guard let item else { return }
+            photoItem = nil
+            Task {
+                if let data = try? await item.loadTransferable(type: Data.self) { await insertImage(data) }
+            }
+        }
+        .fileImporter(isPresented: $pickingImageFile, allowedContentTypes: [.image], allowsMultipleSelection: true) { result in
+            guard let urls = try? result.get() else { return }
+            Task {
+                for url in urls {
+                    let accessing = url.startAccessingSecurityScopedResource()
+                    let data = try? Data(contentsOf: url)
+                    if accessing { url.stopAccessingSecurityScopedResource() }
+                    if let data { await insertImage(data) }
+                }
+            }
+        }
         .sheet(item: $cardDraft) { draft in
             CardEditorView(fromNote: path, selection: draft.text)
         }
@@ -136,6 +177,8 @@ struct NoteView: View {
     private func load() async {
         controller.onTextChange = { _ in scheduleSave() }
         controller.onMakeCard = { text in cardDraft = CardDraft(text: text) }
+        controller.onPasteImage = { data in Task { await insertImage(data) } }
+        controller.renderer.resolveImage = { [vault, path] link in vault.resolveLink(link, fromNoteAt: path) }
         do {
             let loaded = try await vault.load(path)
             document = loaded
@@ -185,6 +228,19 @@ struct NoteView: View {
         savedText = fresh.text
         controller.font = NoteFont(frontMatter: fresh.frontMatter.font)
         controller.setText(fresh.body)
+    }
+
+    // MARK: - Pictures
+
+    /// Saves a picture beside the note and puts it where the cursor is, on a line of its own.
+    private func insertImage(_ data: Data) async {
+        guard let prepared = await Task.detached(operation: { ImageAttachment.prepare(data) }).value else { return }
+        do {
+            let link = try await vault.saveAttachment(prepared.data, fileExtension: prepared.fileExtension, forNoteAt: path)
+            controller.insert("![](\(link))", asBlock: true)
+        } catch {
+            appState.errorMessage = error.localizedDescription
+        }
     }
 
     // MARK: - Title, tags and font

@@ -33,6 +33,8 @@ final class LiveEditorController: NSObject {
     @ObservationIgnored var onTextChange: (String) -> Void = { _ in }
     /// Called with the selected Markdown when someone asks to make a card from it.
     @ObservationIgnored var onMakeCard: (String) -> Void = { _ in }
+    /// Called with a picture pasted or dropped into the note.
+    @ObservationIgnored var onPasteImage: (Data) -> Void = { _ in }
 
     private(set) var hasSelection = false
     private(set) var isFocused = false

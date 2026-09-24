@@ -236,7 +236,8 @@ struct LiveMarkdown: Equatable {
             let bullet = match.output.2
             return Block(kind: .listItem(ordered: bullet.first?.isNumber == true), range: line.range, marker: marker(length))
         }
-        if line.text.firstMatch(of: #/^\s*!\[[^\]]*\]\([^)]+\)\s*$/#) != nil {
+        if line.text.firstMatch(of: #/^\s*!\[[^\]]*\]\([^)]+\)\s*$/#) != nil
+            || line.text.firstMatch(of: #/^\s*!\[\[[^\]]+\]\]\s*$/#) != nil {
             return Block(kind: .image, range: line.range)
         }
         if line.trimmed.hasPrefix("|"), line.trimmed.hasSuffix("|"), line.trimmed.count > 1 {
@@ -289,6 +290,10 @@ struct LiveMarkdown: Equatable {
         for match in Self.image.matches(in: text, range: all) where claim(match.range) {
             let url = nsText.substring(with: match.range(at: 2))
             inlines.append(Inline(kind: .image(url: url), range: absolute(match.range), markers: [absolute(match.range)], content: absolute(match.range(at: 1))))
+        }
+        for match in Self.embed.matches(in: text, range: all) where claim(match.range) {
+            let name = nsText.substring(with: match.range(at: 1))
+            inlines.append(Inline(kind: .image(url: name), range: absolute(match.range), markers: [absolute(match.range)], content: absolute(match.range(at: 1))))
         }
         for match in Self.wikiLink.matches(in: text, range: all) where claim(match.range) {
             let target = nsText.substring(with: match.range(at: 1))
@@ -345,6 +350,7 @@ struct LiveMarkdown: Equatable {
     private static let codeSpan = regex(#"(`+)(.+?)\1"#)
     private static let inlineMath = regex(#"(?<![\\$])\$(?!\s)([^$\n]+?)(?<![\s\\])\$(?![$\d])"#)
     private static let image = regex(#"!\[([^\]\n]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)"#)
+    private static let embed = regex(#"!\[\[([^\]|\n]+?)(?:\|[^\]\n]*)?\]\]"#)
     private static let wikiLink = regex(#"\[\[([^\]|\n]+)(?:\|([^\]\n]+))?\]\]"#)
     private static let link = regex(#"\[([^\]\n]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)"#)
     private static let strong = regex(#"(\*\*|__)(?=\S)(.+?)(?<=\S)\1"#)

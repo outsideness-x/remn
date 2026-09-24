@@ -12,6 +12,7 @@
 		0680B43FC7FAE7F5CC0E8D52 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEEDBD645D6620FD7D055BF6 /* Assets.xcassets */; };
 		0687742BC216D31053B9A815 /* CardRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43359355A0A7079AF77BC1A9 /* CardRow.swift */; };
 		07BE7C23C410B92065C2DB70 /* TestStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D290C0256CB30E048474D412 /* TestStore.swift */; };
+		0BFCAAB456A60101B0760F89 /* ImageAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263980D52455E1C8F51A106D /* ImageAttachment.swift */; };
 		1530F51EA72ABD44CA007034 /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C16DF9943FC0278AB4985E /* Flashcard.swift */; };
 		18122817421751BC644D80BB /* InkText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48884F3A496DF7412F048BD7 /* InkText.swift */; };
 		18B44B3E651531E927A35A39 /* NoteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7334397D719E6AD2D59D3D /* NoteRow.swift */; };
@@ -141,6 +142,7 @@
 		1F1C6EB52842729B7FC742EE /* VaultLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultLocation.swift; sourceTree = "<group>"; };
 		21FF9D89B5DA9AC233E8B060 /* SubjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectModel.swift; sourceTree = "<group>"; };
 		23A3FFBF0BC7C0304F7C1D13 /* remn-macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "remn-macOS.entitlements"; sourceTree = "<group>"; };
+		263980D52455E1C8F51A106D /* ImageAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachment.swift; sourceTree = "<group>"; };
 		27F704B7B8F11803E5DE940C /* remn-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "remn-iOS.entitlements"; sourceTree = "<group>"; };
 		29F95FD1076C503DAC0C2F44 /* Flashcard+Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flashcard+Display.swift"; sourceTree = "<group>"; };
 		2A92BF2EDB3DC41B3D94FAEB /* remn.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = remn.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -556,6 +558,7 @@
 			isa = PBXGroup;
 			children = (
 				78A8D0CD4582B1FAECF8B189 /* FrontMatter.swift */,
+				263980D52455E1C8F51A106D /* ImageAttachment.swift */,
 				6313919740ACE4171A83747E /* NoteDocument.swift */,
 				458D01B507BC930CE47B5B16 /* NoteFont.swift */,
 			);
@@ -714,6 +717,7 @@
 				BD78710A9B5D8FF51CD5102F /* FrontMatter.swift in Sources */,
 				D797D3202B36BEFE11F83B11 /* HandmadeComponents.swift in Sources */,
 				CD3F1776C35ECC20D198BA06 /* HandmadeDialog.swift in Sources */,
+				0BFCAAB456A60101B0760F89 /* ImageAttachment.swift in Sources */,
 				573975F1F32C434BFE532823 /* InkBrush.swift in Sources */,
 				931B84337657DF2ABC1C4883 /* InkControls.swift in Sources */,
 				E4D99213CDEF8C7847690FE2 /* InkGeometry.swift in Sources */,
