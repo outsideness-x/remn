@@ -39,6 +39,10 @@ struct SubjectDetailView: View {
         }
         .paperBackground()
         .remnHidesSystemBar()
+        .onAppear {
+            appState.currentSubjectID = subject.id
+            appState.currentDeckID = nil
+        }
         .safeAreaInset(edge: .bottom) {
             if !subject.cards.isEmpty {
                 Button {
@@ -119,12 +123,19 @@ struct SubjectDetailView: View {
                     }
                     .padding(.trailing, -10)
                 }
+                .remnContextMenu(deckActions(for: deck))
             }
         }
     }
 
     private var deckActions: [HandmadeDialogAction] {
         guard let deck = manageDeck else { return [] }
+        return deckActions(for: deck) + [
+            HandmadeDialogAction("cancel", role: .cancel) { manageDeck = nil }
+        ]
+    }
+
+    private func deckActions(for deck: Deck) -> [HandmadeDialogAction] {
         var actions = [
             HandmadeDialogAction("rename", role: .plain) {
                 manageDeck = nil
@@ -144,13 +155,12 @@ struct SubjectDetailView: View {
                 )
             }
         }
-        actions.append(contentsOf: [
+        actions.append(
             HandmadeDialogAction("delete", role: .destructive) {
                 manageDeck = nil
                 deleteDeck = deck
-            },
-            HandmadeDialogAction("cancel", role: .cancel) { manageDeck = nil }
-        ])
+            }
+        )
         return actions
     }
 

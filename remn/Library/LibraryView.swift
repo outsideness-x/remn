@@ -1,18 +1,35 @@
 import SwiftData
 import SwiftUI
 
+/// What the detail column of the split layout shows.
+enum LibraryDestination: Hashable {
+    case subject(UUID)
+    case search
+    case settings
+}
+
+/// Every subject on one page. On iPhone it is the first screen; on iPad and the Mac it is the sidebar,
+/// and choosing a subject opens it beside the list instead of on top of it.
 struct LibraryView: View {
     @Environment(\.modelContext) private var context
     @Environment(AppState.self) private var appState
+    #if os(macOS)
+    @Environment(\.openSettings) private var openSettings
+    #endif
     @Query(sort: [SortDescriptor(\SubjectModel.manualSortOrder), SortDescriptor(\SubjectModel.createdAt)])
     private var subjects: [SubjectModel]
     @Query private var cards: [Flashcard]
     @Query private var sessions: [StudySessionRecord]
 
+    /// Present when the library is the sidebar of a split layout.
+    var selection: Binding<LibraryDestination?>?
+
     @State private var showCreate = false
     @State private var manageSubject: SubjectModel?
     @State private var renameSubject: SubjectModel?
     @State private var deleteSubject: SubjectModel?
+
+    private var isSidebar: Bool { selection != nil }
 
     var body: some View {
         ScrollView {
@@ -31,16 +48,17 @@ struct LibraryView: View {
                     }
                     .padding(.top, 2)
                     subjectList
-                        .padding(.top, 30)
+                        .padding(.top, isSidebar ? 22 : 30)
                     newSubjectButton
                         .padding(.top, 10)
                 }
             }
-            .padding(.horizontal, 22)
-            .padding(.top, 6)
+            .padding(.horizontal, isSidebar ? 16 : 22)
+            .padding(.top, topInset)
             .padding(.bottom, 40)
             .remnReadableWidth()
         }
+        .scrollIndicators(isSidebar ? .never : .automatic)
         .paperBackground()
         .remnHidesSystemBar()
         .safeAreaInset(edge: .bottom) {
@@ -51,8 +69,10 @@ struct LibraryView: View {
         .sheet(isPresented: $showCreate) {
             NameEditorSheet(title: "subject.new") { name in
                 let order = (subjects.map(\.manualSortOrder).max() ?? -1) + 1
-                context.insert(SubjectModel(name: name, manualSortOrder: order))
+                let subject = SubjectModel(name: name, manualSortOrder: order)
+                context.insert(subject)
                 save()
+                selection?.wrappedValue = .subject(subject.id)
             }
         }
         .sheet(item: $renameSubject) { subject in
@@ -80,38 +100,75 @@ struct LibraryView: View {
             message: Text("subject.delete.message"),
             actions: [
                 HandmadeDialogAction("delete", role: .destructive) {
-                    if let deleteSubject { context.delete(deleteSubject); save() }
+                    if let deleteSubject {
+                        if selection?.wrappedValue == .subject(deleteSubject.id) {
+                            selection?.wrappedValue = nil
+                        }
+                        context.delete(deleteSubject)
+                        save()
+                    }
                     deleteSubject = nil
                 },
                 HandmadeDialogAction("cancel", role: .cancel) { deleteSubject = nil }
             ]
         )
+        .onChange(of: appState.requestedCommand) { _, command in
+            guard command == .newSubject else { return }
+            appState.requestedCommand = nil
+            showCreate = true
+        }
+    }
+
+    /// Room for the window buttons, which sit on the paper at the top of the sidebar on the Mac.
+    private var topInset: CGFloat {
+        isSidebar && RemnPlatform.isMac ? 30 : 6
     }
 
     private var header: some View {
         HStack(alignment: .center, spacing: 0) {
             HandwrittenText("remn", weight: 1)
-                .font(RemnTypography.wordmark)
+                .font(isSidebar ? RemnTypography.display(38, relativeTo: .largeTitle) : RemnTypography.wordmark)
                 .foregroundStyle(Color.remnInk)
                 .accessibilityAddTraits(.isHeader)
                 .inkWritesOn(duration: 0.55)
             Spacer()
-            NavigationLink { SearchView() } label: {
-                InkIcon(kind: .search, size: 23)
-                    .frame(width: 44, height: 44)
-                    .contentShape(Rectangle())
+            if let selection {
+                InkIconButton(kind: .search, label: "search", color: searchColor, size: 22) {
+                    selection.wrappedValue = .search
+                }
+                InkIconButton(kind: .settings, label: "settings", color: settingsColor, size: 23) {
+                    #if os(macOS)
+                    openSettings()
+                    #else
+                    selection.wrappedValue = .settings
+                    #endif
+                }
+            } else {
+                NavigationLink { SearchView() } label: {
+                    InkIcon(kind: .search, size: 23)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(InkPressStyle())
+                .accessibilityLabel(Text("search"))
+                NavigationLink { SettingsView() } label: {
+                    InkIcon(kind: .settings, size: 24)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(InkPressStyle())
+                .accessibilityLabel(Text("settings"))
             }
-            .buttonStyle(InkPressStyle())
-            .accessibilityLabel(Text("search"))
-            NavigationLink { SettingsView() } label: {
-                InkIcon(kind: .settings, size: 24)
-                    .frame(width: 44, height: 44)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(InkPressStyle())
-            .accessibilityLabel(Text("settings"))
         }
         .padding(.trailing, -10)
+    }
+
+    private var searchColor: Color {
+        selection?.wrappedValue == .search ? .remnAccent : .remnInk
+    }
+
+    private var settingsColor: Color {
+        selection?.wrappedValue == .settings ? .remnAccent : .remnInk
     }
 
     @ViewBuilder
@@ -129,33 +186,63 @@ struct LibraryView: View {
                 HandwrittenText("home.noCards")
             }
         }
-        .font(RemnTypography.body)
+        .font(isSidebar ? RemnTypography.note : RemnTypography.body)
         .foregroundStyle(Color.remnGraphite)
         .fixedSize(horizontal: false, vertical: true)
     }
 
+    @ViewBuilder
     private var subjectList: some View {
-        LazyVStack(spacing: 0) {
-            ForEach(Array(subjects.enumerated()), id: \.element.id) { index, subject in
-                if index > 0 {
-                    InkDivider(seed: subject.id.inkSeed)
-                }
-                HStack(spacing: 0) {
-                    NavigationLink {
-                        SubjectDetailView(subject: subject)
+        if let selection {
+            LazyVStack(spacing: 6) {
+                ForEach(subjects, id: \.id) { subject in
+                    let isSelected = selection.wrappedValue == .subject(subject.id)
+                    Button {
+                        selection.wrappedValue = .subject(subject.id)
                     } label: {
                         LibraryRow(
                             title: subject.name,
                             dueCount: subject.cards.dueTodayCount(),
-                            totalCount: subject.cards.count
+                            totalCount: subject.cards.count,
+                            compact: true
                         )
+                        .padding(.leading, 14)
+                        .padding(.trailing, 40)
                     }
-                    .buttonStyle(InkRowStyle())
+                    .buttonStyle(SidebarRowStyle(isSelected: isSelected, seed: subject.id.inkSeed))
+                    .overlay(alignment: .trailing) {
+                        InkIconButton(kind: .more, label: "actions", color: .remnGraphite, size: 18) {
+                            manageSubject = subject
+                        }
+                        .padding(.trailing, 2)
+                    }
+                    .remnContextMenu(subjectActions(for: subject))
+                    .accessibilityAddTraits(isSelected ? .isSelected : [])
+                }
+            }
+        } else {
+            LazyVStack(spacing: 0) {
+                ForEach(Array(subjects.enumerated()), id: \.element.id) { index, subject in
+                    if index > 0 {
+                        InkDivider(seed: subject.id.inkSeed)
+                    }
+                    HStack(spacing: 0) {
+                        NavigationLink {
+                            SubjectDetailView(subject: subject)
+                        } label: {
+                            LibraryRow(
+                                title: subject.name,
+                                dueCount: subject.cards.dueTodayCount(),
+                                totalCount: subject.cards.count
+                            )
+                        }
+                        .buttonStyle(InkRowStyle())
 
-                    InkIconButton(kind: .more, label: "actions", color: .remnGraphite, size: 20) {
-                        manageSubject = subject
+                        InkIconButton(kind: .more, label: "actions", color: .remnGraphite, size: 20) {
+                            manageSubject = subject
+                        }
+                        .padding(.trailing, -10)
                     }
-                    .padding(.trailing, -10)
                 }
             }
         }
@@ -201,9 +288,9 @@ struct LibraryView: View {
             }
             .buttonStyle(InkButtonStyle(kind: .primary, seed: 8))
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, isSidebar ? 14 : 20)
         .padding(.top, 14)
-        .padding(.bottom, 8)
+        .padding(.bottom, isSidebar ? 14 : 8)
         .remnReadableWidth(600)
         .background(alignment: .bottom) { PaperFade() }
     }
@@ -214,6 +301,12 @@ struct LibraryView: View {
 
     private var subjectActions: [HandmadeDialogAction] {
         guard let subject = manageSubject else { return [] }
+        return subjectActions(for: subject) + [
+            HandmadeDialogAction("cancel", role: .cancel) { manageSubject = nil }
+        ]
+    }
+
+    private func subjectActions(for subject: SubjectModel) -> [HandmadeDialogAction] {
         var actions = [
             HandmadeDialogAction("rename", role: .plain) {
                 manageSubject = nil
@@ -236,13 +329,12 @@ struct LibraryView: View {
                 )
             }
         }
-        actions.append(contentsOf: [
+        actions.append(
             HandmadeDialogAction("delete", role: .destructive) {
                 manageSubject = nil
                 deleteSubject = subject
-            },
-            HandmadeDialogAction("cancel", role: .cancel) { manageSubject = nil }
-        ])
+            }
+        )
         return actions
     }
 

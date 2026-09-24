@@ -48,6 +48,7 @@ struct DeckDetailView: View {
                                     .padding(.top, 2)
                                     .padding(.trailing, 8)
                                 }
+                                .remnContextMenu(cardActions(for: card))
                             }
                         }
                         .padding(.top, 16)
@@ -61,6 +62,10 @@ struct DeckDetailView: View {
         }
         .paperBackground()
         .remnHidesSystemBar()
+        .onAppear {
+            appState.currentDeckID = deck.id
+            appState.currentSubjectID = deck.subject?.id
+        }
         .safeAreaInset(edge: .bottom) {
             if !deckCards.isEmpty {
                 Button {
@@ -131,7 +136,13 @@ struct DeckDetailView: View {
 
     private var cardActions: [HandmadeDialogAction] {
         guard let card = manageCard else { return [] }
-        return [
+        return cardActions(for: card) + [
+            HandmadeDialogAction("cancel", role: .cancel) { manageCard = nil }
+        ]
+    }
+
+    private func cardActions(for card: Flashcard) -> [HandmadeDialogAction] {
+        [
             HandmadeDialogAction("edit", role: .plain) {
                 manageCard = nil
                 editingCard = card
@@ -144,8 +155,7 @@ struct DeckDetailView: View {
             HandmadeDialogAction("delete", role: .destructive) {
                 manageCard = nil
                 deleteCard = card
-            },
-            HandmadeDialogAction("cancel", role: .cancel) { manageCard = nil }
+            }
         ]
     }
 

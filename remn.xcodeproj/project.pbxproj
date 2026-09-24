@@ -81,6 +81,7 @@
 		E9039D7B2418A258D6593C74 /* CardSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4751617CF215BF60BAE16C /* CardSearch.swift */; };
 		EC5D100A8C97CC473A47287C /* CardExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2499DE0F3CF80E54B2E115 /* CardExportView.swift */; };
 		ED3DFE877C970B008EFC696E /* ScheduleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6589AD8278F3631AB285EE3 /* ScheduleState.swift */; };
+		EE8B34F39CAB36A385A6AE39 /* RemnCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D08D9FDB393E2857A395E38 /* RemnCommands.swift */; };
 		F3E30020DAC50E4107057764 /* Flashcard+Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F95FD1076C503DAC0C2F44 /* Flashcard+Display.swift */; };
 		F7BF1560E4A8642001B0CA86 /* RemnTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D62DB0BDB38E94A38C92D4 /* RemnTextStyle.swift */; };
 		F89C2F844176B56B482A08AA /* CardEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E4DDE9993647270960E6C2 /* CardEditorView.swift */; };
@@ -106,6 +107,7 @@
 		15A858101FE1C0ACD7EBDF5A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		17CC62A0E6A629ABDA580F04 /* StudySetupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySetupSheet.swift; sourceTree = "<group>"; };
 		1888021129F6DC0B39144A81 /* OfflineAttachmentLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineAttachmentLoader.swift; sourceTree = "<group>"; };
+		1D08D9FDB393E2857A395E38 /* RemnCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnCommands.swift; sourceTree = "<group>"; };
 		1E99BF5C47CF0005283FDD06 /* RemnNavigationHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnNavigationHeader.swift; sourceTree = "<group>"; };
 		21FF9D89B5DA9AC233E8B060 /* SubjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectModel.swift; sourceTree = "<group>"; };
 		23A3FFBF0BC7C0304F7C1D13 /* remn-macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "remn-macOS.entitlements"; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 				BC69D30D20A30414C1CAF279 /* AppState.swift */,
 				FE85CD67E822CBBAE756B71F /* DemoLibrary.swift */,
 				6895F64A4DB608E8E9F16891 /* remnApp.swift */,
+				1D08D9FDB393E2857A395E38 /* RemnCommands.swift */,
 				6AC017E7D16B771C0C61176D /* RootView.swift */,
 			);
 			path = App;
@@ -605,6 +608,7 @@
 				2677F9747943172FD033A62D /* Platform.swift in Sources */,
 				DA0BA9A8F72664485C69EA61 /* RatingButton.swift in Sources */,
 				A9305ED863AAED8616065F46 /* RemnColors.swift in Sources */,
+				EE8B34F39CAB36A385A6AE39 /* RemnCommands.swift in Sources */,
 				DCA22BC85351846C9E8D9392 /* RemnNavigationHeader.swift in Sources */,
 				B86480F4C6B017013F1F8DF2 /* RemnSchema.swift in Sources */,
 				F7BF1560E4A8642001B0CA86 /* RemnTextStyle.swift in Sources */,

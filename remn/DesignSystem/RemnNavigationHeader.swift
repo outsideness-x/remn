@@ -1,8 +1,14 @@
 import SwiftUI
 
+extension EnvironmentValues {
+    /// Set on the first page of a column that has nowhere to go back to, like the detail of a split layout.
+    @Entry var remnIsNavigationRoot = false
+}
+
 /// The top of a pushed screen: a drawn arrow back to where you came from, and room for one action.
 struct RemnNavigationHeader<Trailing: View>: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.remnIsNavigationRoot) private var isRoot
 
     let backTitle: String?
     let trailing: Trailing
@@ -14,23 +20,9 @@ struct RemnNavigationHeader<Trailing: View>: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            Button { dismiss() } label: {
-                HStack(spacing: 6) {
-                    InkIcon(kind: .back, color: .remnInk, size: 22)
-                        .frame(width: 26, height: 44)
-                    if let backTitle {
-                        HandwrittenText(verbatim: backTitle)
-                            .font(RemnTypography.note)
-                            .foregroundStyle(Color.remnGraphite)
-                            .lineLimit(1)
-                    }
-                }
-                .padding(.horizontal, 8)
-                .frame(minHeight: 44)
-                .contentShape(Rectangle())
+            if !isRoot {
+                backButton
             }
-            .buttonStyle(InkPressStyle())
-            .accessibilityLabel(Text("back"))
 
             Spacer(minLength: 12)
 
@@ -38,6 +30,28 @@ struct RemnNavigationHeader<Trailing: View>: View {
         }
         .padding(.horizontal, 10)
         .padding(.top, 4)
+        .frame(minHeight: 48)
+    }
+
+    private var backButton: some View {
+        Button { dismiss() } label: {
+            HStack(spacing: 6) {
+                InkIcon(kind: .back, color: .remnInk, size: 22)
+                    .frame(width: 26, height: 44)
+                if let backTitle {
+                    HandwrittenText(verbatim: backTitle)
+                        .font(RemnTypography.note)
+                        .foregroundStyle(Color.remnGraphite)
+                        .lineLimit(1)
+                }
+            }
+            .padding(.horizontal, 8)
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(InkPressStyle())
+        .accessibilityLabel(Text("back"))
+        .keyboardShortcut("[", modifiers: .command)
     }
 }
 

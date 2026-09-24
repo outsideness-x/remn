@@ -157,3 +157,21 @@ extension View {
         )
     }
 }
+
+extension View {
+    /// On the Mac a right click offers the same actions as the drawn "more" button, in a native menu.
+    @ViewBuilder
+    func remnContextMenu(_ actions: [HandmadeDialogAction]) -> some View {
+        #if os(macOS)
+        contextMenu {
+            ForEach(actions) { action in
+                Button(role: action.role == .destructive ? .destructive : nil, action: action.perform) {
+                    action.title
+                }
+            }
+        }
+        #else
+        self
+        #endif
+    }
+}

@@ -45,7 +45,35 @@ struct remnApp: App {
             }
             .preferredColorScheme(AppearanceMode(rawValue: appearanceMode)?.colorScheme)
             .tint(.remnAccent)
+            #if os(macOS)
+            .frame(minWidth: 760, minHeight: 540)
+            .toolbar(.hidden, for: .windowToolbar)
+            #endif
         }
+        #if os(macOS)
+        .windowStyle(.hiddenTitleBar)
+        .defaultSize(width: 1120, height: 780)
+        .windowBackgroundDragBehavior(.enabled)
+        #endif
+        .commands { RemnCommands() }
+
+        #if os(macOS)
+        Settings {
+            Group {
+                if let container {
+                    SettingsView()
+                        .environment(\.remnIsNavigationRoot, true)
+                        .modelContainer(container)
+                } else {
+                    StartupFailureView(message: startupError ?? String(localized: "storage.error"))
+                }
+            }
+            .frame(width: 540, height: 720)
+            .preferredColorScheme(AppearanceMode(rawValue: appearanceMode)?.colorScheme)
+            .tint(.remnAccent)
+        }
+        .windowResizability(.contentSize)
+        #endif
     }
 
     @ViewBuilder
