@@ -184,6 +184,17 @@ final class LiveEditorController: NSObject {
         host.hostScrollToSelection()
     }
 
+    /// Return in a list: carries the list on, or ends it on an empty item. Returns false for a plain newline.
+    func continueList() -> Bool {
+        guard let host, host.hostSelectedRange.length == 0,
+              let edit = ListContinuation.edit(in: storage.string as NSString, at: host.hostSelectedRange.location)
+        else { return false }
+        host.hostReplace(edit.range, with: edit.replacement)
+        host.hostSelectedRange = edit.selection
+        host.hostScrollToSelection()
+        return true
+    }
+
     /// Ticks or unticks a task when its drawn box is tapped.
     func toggleTask(at characterIndex: Int) -> Bool {
         guard let block = markdown.blocks.first(where: { block in

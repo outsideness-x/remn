@@ -169,3 +169,52 @@ enum NoteInsertion: Equatable {
         )
     }
 }
+
+/// Return at the end of a list item starts the next one; Return on an empty item ends the list.
+enum ListContinuation {
+    static func edit(in text: NSString, at location: Int) -> NoteInsertion.Edit? {
+        guard location <= text.length else { return nil }
+        let line = text.lineRange(for: NSRange(location: location, length: 0))
+        let lineEnd = LiveMarkdown.lineEnd(of: line, in: text)
+        let head = text.substring(with: NSRange(location: line.location, length: location - line.location))
+        guard let match = head.firstMatch(of: #/^(\s*)(?:([-*+])|(\d{1,9})([.)]))[ \t]+(\[[ xX]\][ \t]+)?|^(\s*)((?:> ?)+)/#) else {
+            return nil
+        }
+        // Nothing to continue inside code or formulas.
+        let blocks = LiveMarkdown(text as String).blocks
+        let inFence = blocks.contains { block in
+            guard block.isFenced else { return false }
+            // An unclosed fence runs to the very end, cursor included.
+            return NSLocationInRange(location, block.range) || (block.closeFence == nil && location == NSMaxRange(block.range))
+        }
+        if inFence { return nil }
+
+        let marker = (String(head[match.range]) as NSString).length
+        let rest = text.substring(with: NSRange(location: line.location + marker, length: lineEnd - line.location - marker))
+        if rest.trimmingCharacters(in: .whitespaces).isEmpty, location == lineEnd {
+            // An empty item: take its marker away and leave a plain line.
+            return NoteInsertion.Edit(
+                range: NSRange(location: line.location, length: marker),
+                replacement: "",
+                selection: NSRange(location: line.location, length: 0)
+            )
+        }
+
+        let next: String
+        if let quote = match.output.7 {
+            next = String(match.output.6 ?? "") + String(quote)
+        } else if let number = match.output.3.flatMap({ Int($0) }) {
+            next = String(match.output.1 ?? "") + "\(number + 1)" + String(match.output.4 ?? ".") + " "
+        } else {
+            let indent = String(match.output.1 ?? "")
+            let bullet = String(match.output.2 ?? "-")
+            next = indent + bullet + " " + (match.output.5 != nil ? "[ ] " : "")
+        }
+        let replacement = "\n" + next
+        return NoteInsertion.Edit(
+            range: NSRange(location: location, length: 0),
+            replacement: replacement,
+            selection: NSRange(location: location + (replacement as NSString).length, length: 0)
+        )
+    }
+}

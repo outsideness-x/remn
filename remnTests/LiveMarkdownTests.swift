@@ -136,3 +136,29 @@ struct NoteInsertionTests {
         #expect(selected.contains("\\int"))
     }
 }
+
+struct ListContinuationTests {
+    private func pressReturn(_ text: String) -> String? {
+        let source = text as NSString
+        guard let edit = ListContinuation.edit(in: source, at: source.length) else { return nil }
+        return source.replacingCharacters(in: edit.range, with: edit.replacement)
+    }
+
+    @Test func listsCarryOn() {
+        #expect(pressReturn("- milk") == "- milk\n- ")
+        #expect(pressReturn("  * eggs") == "  * eggs\n  * ")
+        #expect(pressReturn("9. nine") == "9. nine\n10. ")
+        #expect(pressReturn("- [x] done") == "- [x] done\n- [ ] ")
+        #expect(pressReturn("> quoted") == "> quoted\n> ")
+    }
+
+    @Test func anEmptyItemEndsTheList() {
+        #expect(pressReturn("- milk\n- ") == "- milk\n")
+        #expect(pressReturn("- [ ] ") == "")
+    }
+
+    @Test func plainTextAndCodeAreLeftAlone() {
+        #expect(pressReturn("just words") == nil)
+        #expect(pressReturn("```\n- not a list") == nil)
+    }
+}

@@ -52,6 +52,11 @@ private struct PlatformLiveEditor: UIViewRepresentable {
             textView.typingAttributes = controller.typingAttributes
         }
 
+        func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+            if text == "\n", range.length == 0, controller.continueList() { return false }
+            return true
+        }
+
         func textViewDidBeginEditing(_ textView: UITextView) {
             controller.focusDidChange(true)
         }
@@ -389,6 +394,11 @@ final class LiveNSTextView: NSTextView, LiveTextHost {
             if controller.toggleTask(at: index) { return }
         }
         super.mouseDown(with: event)
+    }
+
+    override func insertNewline(_ sender: Any?) {
+        if controller.continueList() { return }
+        super.insertNewline(sender)
     }
 
     override func menu(for event: NSEvent) -> NSMenu? {
