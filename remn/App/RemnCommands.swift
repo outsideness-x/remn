@@ -6,15 +6,31 @@ struct RemnCommands: Commands {
 
     var body: some Commands {
         CommandGroup(replacing: .newItem) {
-            Button("menu.newCard") { appState?.requestedCommand = .newCard }
-                .keyboardShortcut("n")
+            if appState?.section == .notes {
+                Button("menu.newNote") { appState?.requestedCommand = .newNote }
+                    .keyboardShortcut("n")
+                Button("menu.newFolder") { appState?.requestedCommand = .newFolder }
+                    .keyboardShortcut("n", modifiers: [.command, .shift])
+            } else {
+                Button("menu.newCard") { appState?.requestedCommand = .newCard }
+                    .keyboardShortcut("n")
+                    .disabled(appState == nil)
+                Button("menu.newSubject") { appState?.requestedCommand = .newSubject }
+                    .keyboardShortcut("n", modifiers: [.command, .shift])
+                    .disabled(appState == nil)
+            }
+        }
+        CommandGroup(before: .sidebar) {
+            Button("menu.showCards") { appState?.section = .cards }
+                .keyboardShortcut("1")
                 .disabled(appState == nil)
-            Button("menu.newSubject") { appState?.requestedCommand = .newSubject }
-                .keyboardShortcut("n", modifiers: [.command, .shift])
+            Button("menu.showNotes") { appState?.section = .notes }
+                .keyboardShortcut("2")
                 .disabled(appState == nil)
+            Divider()
         }
         CommandGroup(after: .textEditing) {
-            Button("menu.search") { appState?.requestedCommand = .search }
+            Button(appState?.section == .notes ? "menu.searchNotes" : "menu.search") { appState?.requestedCommand = .search }
                 .keyboardShortcut("f", modifiers: [.command, .shift])
                 .disabled(appState == nil)
         }

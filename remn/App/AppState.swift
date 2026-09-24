@@ -6,7 +6,16 @@ import SwiftUI
 enum AppCommand: Equatable {
     case newSubject
     case newCard
+    case newNote
+    case newFolder
     case search
+}
+
+/// Where the notes column is, as a path the navigation stack can follow.
+enum NotesRoute: Hashable {
+    case folder(String)
+    case tag(String)
+    case note(String)
 }
 
 @MainActor
@@ -18,10 +27,20 @@ final class AppState {
     var preselectedSubjectIDs: Set<UUID> = []
     var preselectedDeckID: UUID?
     var requestedCommand: AppCommand?
+    var section: AppSection = .cards
+    var notesPath: [NotesRoute] = []
+    /// The folder on screen in notes, so a new note lands where you're looking.
+    var currentNotesFolder = ""
 
     /// The subject and deck on screen, so a new card lands where you're looking.
     var currentSubjectID: UUID?
     var currentDeckID: UUID?
+
+    /// Opens a note from anywhere, like the card it was made into.
+    func openNote(_ path: String) {
+        section = .notes
+        notesPath = [.note(path)]
+    }
 
     func prepareStudy(subjectIDs: Set<UUID> = [], deckID: UUID? = nil) {
         preselectedSubjectIDs = subjectIDs

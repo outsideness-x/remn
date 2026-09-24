@@ -17,6 +17,10 @@ enum InkIconKind: Int, CaseIterable {
     case close
     case undo
     case cloud
+    case typeface
+    case picture
+    case card
+    case list
 }
 
 /// A small drawing in the same pen as the rest of the interface, on a 24-point grid.
@@ -181,6 +185,43 @@ private struct InkIconDrawing {
                     p(20.7, 13.6), p(19.7, 16.6), p(17.0, 17.7), p(7.4, 17.5),
                 ], smooth: true),
             ])
+        case .typeface:
+            InkIconDrawing(
+                strokes: [
+                    Stroke(points: [p(2.6, 19.2), p(7.6, 4.8), p(12.4, 19.0)]),
+                    Stroke(points: [p(4.7, 13.7), p(10.3, 13.4)]),
+                    Stroke(points: [p(20.4, 11.2), p(20.7, 19.3)]),
+                ],
+                loops: [CGRect(x: 14.0, y: 11.8, width: 6.4, height: 7.3)]
+            )
+        case .picture:
+            InkIconDrawing(
+                strokes: [
+                    Stroke(points: [p(3.2, 5.4), p(20.9, 5.1), p(20.7, 18.9), p(3.0, 19.1), p(3.3, 5.0)]),
+                    Stroke(points: [p(5.0, 17.2), p(9.6, 11.2), p(12.9, 14.6), p(15.4, 12.2), p(19.2, 17.0)]),
+                ],
+                loops: [CGRect(x: 14.4, y: 7.4, width: 3.2, height: 3.1)]
+            )
+        case .card:
+            InkIconDrawing(strokes: [
+                Stroke(points: [p(6.4, 3.9), p(20.6, 4.2), p(20.3, 14.6)]),
+                Stroke(points: [p(3.2, 7.6), p(17.2, 7.4), p(17.4, 20.1), p(3.4, 20.3), p(3.3, 7.3)]),
+                Stroke(points: [p(6.3, 12.1), p(14.3, 11.9)]),
+                Stroke(points: [p(6.2, 15.7), p(11.9, 15.6)]),
+            ])
+        case .list:
+            InkIconDrawing(
+                strokes: [
+                    Stroke(points: [p(9.2, 6.3), p(20.6, 6.0)]),
+                    Stroke(points: [p(9.1, 12.2), p(20.4, 12.0)]),
+                    Stroke(points: [p(9.3, 18.1), p(17.6, 17.9)]),
+                ],
+                dots: [
+                    Dot(center: p(4.4, 6.2), radius: 1.5),
+                    Dot(center: p(4.3, 12.1), radius: 1.5),
+                    Dot(center: p(4.5, 18.0), radius: 1.5),
+                ]
+            )
         case .undo:
             InkIconDrawing(strokes: [
                 Stroke(points: [p(5.4, 9.6), p(13.5, 8.6), p(19.4, 12.6), p(17.6, 18.3), p(11.6, 19.2)], smooth: true),

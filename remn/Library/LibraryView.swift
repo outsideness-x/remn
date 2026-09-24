@@ -13,9 +13,6 @@ enum LibraryDestination: Hashable {
 struct LibraryView: View {
     @Environment(\.modelContext) private var context
     @Environment(AppState.self) private var appState
-    #if os(macOS)
-    @Environment(\.openSettings) private var openSettings
-    #endif
     @Query(sort: [SortDescriptor(\SubjectModel.manualSortOrder), SortDescriptor(\SubjectModel.createdAt)])
     private var subjects: [SubjectModel]
     @Query private var cards: [Flashcard]
@@ -62,9 +59,16 @@ struct LibraryView: View {
         .paperBackground()
         .remnHidesSystemBar()
         .safeAreaInset(edge: .bottom) {
-            if !cards.isEmpty {
-                bottomActions
+            VStack(spacing: 0) {
+                if !cards.isEmpty {
+                    bottomActions
+                }
+                if !isSidebar {
+                    @Bindable var appState = appState
+                    RemnTabBar(selection: $appState.section)
+                }
             }
+            .background(alignment: .bottom) { PaperFade() }
         }
         .sheet(isPresented: $showCreate) {
             NameEditorSheet(title: "subject.new") { name in
@@ -124,51 +128,46 @@ struct LibraryView: View {
         isSidebar && RemnPlatform.isMac ? 30 : 6
     }
 
+    @ViewBuilder
     private var header: some View {
+        if let selection {
+            @Bindable var appState = appState
+            SidebarHeader(
+                section: $appState.section,
+                searchSelected: selection.wrappedValue == .search,
+                settingsSelected: selection.wrappedValue == .settings,
+                onSearch: { selection.wrappedValue = .search },
+                onSettings: { selection.wrappedValue = .settings }
+            )
+        } else {
+            phoneHeader
+        }
+    }
+
+    private var phoneHeader: some View {
         HStack(alignment: .center, spacing: 0) {
             HandwrittenText("remn", weight: 1)
-                .font(isSidebar ? RemnTypography.display(38, relativeTo: .largeTitle) : RemnTypography.wordmark)
+                .font(RemnTypography.wordmark)
                 .foregroundStyle(Color.remnInk)
                 .accessibilityAddTraits(.isHeader)
                 .inkWritesOn(duration: 0.55)
             Spacer()
-            if let selection {
-                InkIconButton(kind: .search, label: "search", color: searchColor, size: 22) {
-                    selection.wrappedValue = .search
-                }
-                InkIconButton(kind: .settings, label: "settings", color: settingsColor, size: 23) {
-                    #if os(macOS)
-                    openSettings()
-                    #else
-                    selection.wrappedValue = .settings
-                    #endif
-                }
-            } else {
-                NavigationLink { SearchView() } label: {
-                    InkIcon(kind: .search, size: 23)
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(InkPressStyle())
-                .accessibilityLabel(Text("search"))
-                NavigationLink { SettingsView() } label: {
-                    InkIcon(kind: .settings, size: 24)
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(InkPressStyle())
-                .accessibilityLabel(Text("settings"))
+            NavigationLink { SearchView() } label: {
+                InkIcon(kind: .search, size: 23)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
             }
+            .buttonStyle(InkPressStyle())
+            .accessibilityLabel(Text("search"))
+            NavigationLink { SettingsView() } label: {
+                InkIcon(kind: .settings, size: 24)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(InkPressStyle())
+            .accessibilityLabel(Text("settings"))
         }
         .padding(.trailing, -10)
-    }
-
-    private var searchColor: Color {
-        selection?.wrappedValue == .search ? .remnAccent : .remnInk
-    }
-
-    private var settingsColor: Color {
-        selection?.wrappedValue == .settings ? .remnAccent : .remnInk
     }
 
     @ViewBuilder
@@ -290,9 +289,8 @@ struct LibraryView: View {
         }
         .padding(.horizontal, isSidebar ? 14 : 20)
         .padding(.top, 14)
-        .padding(.bottom, isSidebar ? 14 : 8)
+        .padding(.bottom, isSidebar ? 14 : 4)
         .remnReadableWidth(600)
-        .background(alignment: .bottom) { PaperFade() }
     }
 
     private var activeSession: StudySessionRecord? {

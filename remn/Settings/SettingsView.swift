@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @Environment(\.modelContext) private var context
+    @Environment(Vault.self) private var vault
     @AppStorage("desiredRetention") private var desiredRetention = 0.90
     @AppStorage("appearanceMode") private var appearanceMode = AppearanceMode.system.rawValue
 
@@ -12,6 +13,7 @@ struct SettingsView: View {
     @State private var showImporter = false
     @State private var showSRSExplanation = false
     @State private var resultMessage: String?
+    @State private var showVaultSetup = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -22,6 +24,8 @@ struct SettingsView: View {
                     section("settings.study") { studySettings }
                         .padding(.top, 28)
                     section("settings.appearance") { appearancePicker }
+                        .padding(.top, 38)
+                    section("settings.notes") { notesSettings }
                         .padding(.top, 38)
                     section("settings.data") { dataSettings }
                         .padding(.top, 38)
@@ -63,6 +67,9 @@ struct SettingsView: View {
         )
         .sheet(isPresented: $showSRSExplanation) {
             SRSExplainerSheet()
+        }
+        .sheet(isPresented: $showVaultSetup) {
+            VaultSetupView(isSheet: true)
         }
     }
 
@@ -137,6 +144,36 @@ struct SettingsView: View {
             dataRow("backup.import", note: "backup.import.note", icon: .download) {
                 showImporter = true
             }
+        }
+    }
+
+    private var notesSettings: some View {
+        Button { showVaultSetup = true } label: {
+            HStack(alignment: .top, spacing: 14) {
+                InkIcon(kind: vault.location?.kind == .iCloud ? .cloud : .picture, color: .remnInk, size: 24)
+                    .frame(width: 28, height: 28)
+                VStack(alignment: .leading, spacing: 2) {
+                    HandwrittenText(verbatim: vaultTitle)
+                        .font(RemnTypography.control)
+                        .foregroundStyle(Color.remnInk)
+                    HandwrittenText("settings.notes.change")
+                        .font(RemnTypography.note)
+                        .foregroundStyle(Color.remnAccent)
+                }
+                Spacer(minLength: 0)
+            }
+            .padding(.vertical, 12)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(InkRowStyle())
+    }
+
+    private var vaultTitle: String {
+        switch vault.location?.kind {
+        case .iCloud: String(localized: "notes.setup.icloud")
+        case .device: String(localized: "notes.setup.device")
+        case .folder: vault.rootURL?.lastPathComponent ?? String(localized: "notes.setup.folder")
+        case nil: String(localized: "settings.notes.none")
         }
     }
 

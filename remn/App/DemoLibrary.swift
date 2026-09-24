@@ -22,6 +22,128 @@ enum DemoLibrary {
         return container
     }
 
+    /// A notes folder in a temporary directory, filled with a few believable notes.
+    static func makeVault() -> Vault {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("remn-demo-notes", isDirectory: true)
+        try? FileManager.default.removeItem(at: root)
+        let russian = Locale.preferredLanguages.first?.hasPrefix("ru") == true
+        for (path, text) in russian ? russianNotes : englishNotes {
+            let url = root.appendingPathComponent(path)
+            try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try? text.write(to: url, atomically: true, encoding: .utf8)
+        }
+        return Vault(rootURL: root)
+    }
+
+    private static let englishNotes: [(String, String)] = [
+        ("Linear Algebra/Eigenvalues.md", """
+        ---
+        tags: [linear-algebra, exam]
+        ---
+
+        # Eigenvalues
+
+        A non-zero vector $v$ is an **eigenvector** of $A$ when $A$ only stretches it:
+
+        $$
+        A v = \\lambda v
+        $$
+
+        The scalars $\\lambda$ are the roots of the *characteristic polynomial* $\\det(A - \\lambda I) = 0$.
+
+        ## Why it matters
+
+        - diagonalisation: $A = P D P^{-1}$
+        - powers get cheap: $A^n = P D^n P^{-1}$
+        - the ==spectral theorem== for symmetric matrices
+
+        > The trace is the sum of the eigenvalues; the determinant is their product.
+
+        - [x] read chapter 5
+        - [ ] solve problems 5.1–5.12
+        """),
+        ("Linear Algebra/Vector spaces.md", "# Vector spaces\n\nA **basis** is a linearly independent set that spans the space.\n\nRank–nullity: $\\dim V = \\operatorname{rank} T + \\operatorname{nullity} T$ #linear-algebra\n"),
+        ("Programming/Swift concurrency.md", """
+        ---
+        tags: [swift]
+        font: sfPro
+        ---
+
+        # Actors
+
+        An `actor` protects its mutable state: only one task touches it at a time.
+
+        ```swift
+        actor Counter {
+            private var value = 0
+            func increment() -> Int {
+                value += 1 // serialised
+                return value
+            }
+        }
+        ```
+
+        `Task` inherits the actor it was created on; `Task.detached` does not.
+        """),
+        ("Biology/The cell.md", "# The cell\n\n**ATP synthase** turns the proton gradient into ATP.\n\n---\n\nRibosomes read mRNA three bases at a time. #biology\n"),
+        ("Reading list.md", "# Reading list\n\n- [ ] *Gödel, Escher, Bach*\n- [x] *The Art of Doing Science and Engineering*\n"),
+    ]
+
+    private static let russianNotes: [(String, String)] = [
+        ("Линейная алгебра/Собственные значения.md", """
+        ---
+        tags: [линал, экзамен]
+        ---
+
+        # Собственные значения
+
+        Ненулевой вектор $v$ — **собственный** для $A$, если $A$ его только растягивает:
+
+        $$
+        A v = \\lambda v
+        $$
+
+        Числа $\\lambda$ — корни *характеристического многочлена* $\\det(A - \\lambda I) = 0$.
+
+        ## Зачем это нужно
+
+        - диагонализация: $A = P D P^{-1}$
+        - степени считаются быстро: $A^n = P D^n P^{-1}$
+        - ==спектральная теорема== для симметричных матриц
+
+        > След равен сумме собственных значений, определитель — их произведению.
+
+        - [x] прочитать главу 5
+        - [ ] решить задачи 5.1–5.12
+        """),
+        ("Линейная алгебра/Векторные пространства.md", "# Векторные пространства\n\n**Базис** — линейно независимая система, порождающая всё пространство.\n\nТеорема о ранге и дефекте: $\\dim V = \\operatorname{rank} T + \\dim \\ker T$ #линал\n"),
+        ("Программирование/Конкурентность в Swift.md", """
+        ---
+        tags: [swift]
+        font: sfPro
+        ---
+
+        # Акторы
+
+        `actor` защищает своё изменяемое состояние: к нему обращается одна задача за раз.
+
+        ```swift
+        actor Counter {
+            private var value = 0
+            func increment() -> Int {
+                value += 1 // по очереди
+                return value
+            }
+        }
+        ```
+
+        `Task` наследует актор места создания, `Task.detached` — нет.
+        """),
+        ("Биология/Клетка.md", "# Клетка\n\n**АТФ-синтаза** превращает протонный градиент в АТФ.\n\n---\n\nРибосомы читают мРНК по три нуклеотида. #биология\n"),
+        ("Что почитать.md", "# Что почитать\n\n- [ ] *Гёдель, Эшер, Бах*\n- [x] *Искусство научной и инженерной работы*\n"),
+    ]
+
     private enum Plan {
         /// Never studied.
         case new

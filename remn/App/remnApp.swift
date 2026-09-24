@@ -4,10 +4,16 @@ import SwiftUI
 @main
 struct remnApp: App {
     @AppStorage("appearanceMode") private var appearanceMode = AppearanceMode.system.rawValue
+    @State private var vault: Vault
     private let container: ModelContainer?
     private let startupError: String?
 
     init() {
+        #if DEBUG
+        _vault = State(initialValue: DemoLibrary.isRequested ? DemoLibrary.makeVault() : Vault())
+        #else
+        _vault = State(initialValue: Vault())
+        #endif
         do {
             #if DEBUG
             if DemoLibrary.isRequested {
@@ -58,6 +64,7 @@ struct remnApp: App {
                     SettingsView()
                         .environment(\.remnIsNavigationRoot, true)
                         .modelContainer(container)
+                        .environment(vault)
                 } else {
                     StartupFailureView(message: startupError ?? String(localized: "storage.error"))
                 }
@@ -75,6 +82,7 @@ struct remnApp: App {
         if let container {
             RootView()
                 .modelContainer(container)
+                .environment(vault)
         } else {
             StartupFailureView(message: startupError ?? String(localized: "storage.error"))
         }

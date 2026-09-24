@@ -78,7 +78,9 @@ enum NoteText {
                 inFence.toggle()
                 continue
             }
-            guard !inFence, !trimmed.isEmpty, trimmed != "$$", !trimmed.hasPrefix("!["), trimmed != "---" else {
+            // Headings usually repeat the title, so the snippet starts with what's under them.
+            let isHeading = trimmed.range(of: #"^#{1,6}\s"#, options: .regularExpression) != nil
+            guard !inFence, !trimmed.isEmpty, !isHeading, trimmed != "$$", !trimmed.hasPrefix("!["), trimmed != "---" else {
                 continue
             }
             let clean = trimmed

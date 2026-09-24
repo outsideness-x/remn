@@ -16,13 +16,35 @@ struct RootView: View {
             if usesSplitLayout {
                 LibrarySplitView()
             } else {
-                NavigationStack {
-                    LibraryView()
+                ZStack {
+                    NavigationStack {
+                        LibraryView()
+                    }
+                    .opacity(appState.section == .cards ? 1 : 0)
+                    .allowsHitTesting(appState.section == .cards)
+                    .accessibilityHidden(appState.section != .cards)
+                    NotesTab()
+                        .opacity(appState.section == .notes ? 1 : 0)
+                        .allowsHitTesting(appState.section == .notes)
+                        .accessibilityHidden(appState.section != .notes)
                 }
+                .animation(.easeOut(duration: 0.18), value: appState.section)
             }
         }
         .environment(appState)
         .focusedSceneValue(\.remnAppState, appState)
+        #if DEBUG
+        .onAppear {
+            // Design reviews: `-openNote "Folder/Note.md"` opens straight into a note.
+            let arguments = ProcessInfo.processInfo.arguments
+            if let index = arguments.firstIndex(of: "-openNote"), arguments.indices.contains(index + 1) {
+                let path = arguments[index + 1]
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { appState.openNote(path) }
+            } else if arguments.contains("-openNotes") {
+                appState.section = .notes
+            }
+        }
+        #endif
         .onChange(of: appState.requestedCommand) { _, command in
             guard command == .newCard else { return }
             appState.requestedCommand = nil
@@ -91,28 +113,47 @@ struct RootView: View {
     }
 }
 
-/// The library as a sidebar with a pencil rule down its edge, and whatever you chose beside it.
+/// Cards or notes as a sidebar with a pencil rule down its edge, and whatever you chose beside it.
 struct LibrarySplitView: View {
     @Environment(AppState.self) private var appState
     @Query(sort: [SortDescriptor(\SubjectModel.manualSortOrder), SortDescriptor(\SubjectModel.createdAt)])
     private var subjects: [SubjectModel]
     @State private var selection: LibraryDestination?
+    @State private var notesSelection: NotesSidebarItem? = .folder("")
 
     var body: some View {
         HStack(spacing: 0) {
-            LibraryView(selection: $selection)
-                .frame(width: RemnPlatform.isMac ? 300 : 330)
+            Group {
+                switch appState.section {
+                case .cards:
+                    LibraryView(selection: $selection)
+                case .notes:
+                    NotesSidebar(selection: $notesSelection) {
+                        appState.section = .cards
+                        selection = .settings
+                    }
+                }
+            }
+            .frame(width: RemnPlatform.isMac ? 300 : 330)
             InkLine(seed: 7_001, pen: .hairline, vertical: true)
                 .fill(Color.remnInk.opacity(0.28))
                 .frame(width: 6)
                 .padding(.vertical, 18)
                 .background { PaperBackground() }
                 .accessibilityHidden(true)
-            NavigationStack {
-                detail
-                    .environment(\.remnIsNavigationRoot, true)
+            Group {
+                switch appState.section {
+                case .cards:
+                    NavigationStack {
+                        detail
+                            .environment(\.remnIsNavigationRoot, true)
+                    }
+                    .id(selection)
+                case .notes:
+                    NotesSplitDetail(selection: notesSelection)
+                        .id(notesSelection)
+                }
             }
-            .id(selection)
             .padding(.top, RemnPlatform.isMac ? 22 : 0)
             .background { PaperBackground() }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -122,8 +163,12 @@ struct LibrarySplitView: View {
         .onChange(of: appState.requestedCommand) { _, command in
             guard command == .search else { return }
             appState.requestedCommand = nil
-            selection = .search
+            switch appState.section {
+            case .cards: selection = .search
+            case .notes: notesSelection = .search
+            }
         }
+        .onChange(of: notesSelection) { _, _ in appState.notesPath = [] }
     }
 
     @ViewBuilder

@@ -67,7 +67,7 @@ struct FrontMatterTests {
     }
 
     @Test func snippetSkipsMarkdownPunctuation() {
-        #expect(NoteText.snippet(of: "# Title\n\n**Bold** [link](x) text") == "Title")
+        #expect(NoteText.snippet(of: "# Title\n\n**Bold** [link](x) text") == "Bold link text")
         #expect(NoteText.snippet(of: "```\ncode\n```\n\n$$\nx\n$$\n- item *one*") == "x")
     }
 }

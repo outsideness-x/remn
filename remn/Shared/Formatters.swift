@@ -19,6 +19,21 @@ enum RemnFormatters {
         return String(localized: "interval.years \(max(1, Int((seconds / (86_400 * 365)).rounded())))")
     }
 
+    /// When a note was last changed: the time today, "yesterday", or the date.
+    static func noteDate(_ date: Date, now: Date = .now) -> String {
+        let calendar = Calendar.current
+        if calendar.isDate(date, inSameDayAs: now) {
+            return date.formatted(date: .omitted, time: .shortened)
+        }
+        if let yesterday = calendar.date(byAdding: .day, value: -1, to: now), calendar.isDate(date, inSameDayAs: yesterday) {
+            return String(localized: "notes.yesterday")
+        }
+        if calendar.isDate(date, equalTo: now, toGranularity: .year) {
+            return date.formatted(.dateTime.month(.abbreviated).day()).lowercased()
+        }
+        return date.formatted(.dateTime.year().month(.abbreviated).day()).lowercased()
+    }
+
     static func dueStatus(for card: Flashcard, now: Date = .now) -> String {
         if card.state == .new { return String(localized: "status.new") }
         if card.due <= now { return String(localized: "status.due") }
