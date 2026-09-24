@@ -22,7 +22,7 @@ struct RootView: View {
             }
             .environment(appState)
         }
-        .fullScreenCover(
+        .remnFullScreenCover(
             isPresented: Binding(
                 get: { appState.presentedSession != nil },
                 set: { if !$0 { appState.presentedSession = nil } }

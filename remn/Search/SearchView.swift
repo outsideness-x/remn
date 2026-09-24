@@ -12,7 +12,9 @@ struct SearchView: View {
             HStack(spacing: 12) {
                 InkIcon(kind: .search, color: .remnGraphite, size: 21)
                 TextField("search.placeholder", text: $query)
+                    #if os(iOS)
                     .textInputAutocapitalization(.never)
+                    #endif
                     .autocorrectionDisabled()
                     .submitLabel(.search)
                     .font(RemnTypography.display(24, relativeTo: .title3))
@@ -76,7 +78,7 @@ struct SearchView: View {
             .scrollDismissesKeyboard(.interactively)
         }
         .paperBackground()
-        .toolbar(.hidden, for: .navigationBar)
+        .remnHidesSystemBar()
         .onAppear { focused = query.isEmpty }
     }
 

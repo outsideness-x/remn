@@ -35,7 +35,7 @@ struct SettingsView: View {
             }
         }
         .paperBackground()
-        .toolbar(.hidden, for: .navigationBar)
+        .remnHidesSystemBar()
         .fileExporter(
             isPresented: $showExporter,
             document: exportDocument,

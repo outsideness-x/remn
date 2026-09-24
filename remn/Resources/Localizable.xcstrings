@@ -1,178 +1,2964 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "about.openSource" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "free & open source" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "бесплатно и с открытым кодом" } } } },
-    "about.mit" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "MIT license" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "лицензия MIT" } } } },
-    "about.ownership" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "your cards stay on this device. backups remain yours." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "карточки остаются на этом устройстве. резервные копии принадлежат вам." } } } },
-    "about.tagline" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "a quiet place for things worth remembering." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "тихое место для того, что стоит запомнить." } } } },
-    "about.version %@ %@" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "version %1$@ (%2$@)" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "версия %1$@ (%2$@)" } } } },
-    "appearance.dark" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "dark" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "тёмная" } } } },
-    "appearance.light" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "light" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "светлая" } } } },
-    "appearance.system" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "system" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "системная" } } } },
-    "actions" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "actions" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "действия" } } } },
-    "back" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "back" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "назад" } } } },
-    "backup.error.duplicates" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "the backup contains duplicate identifiers" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "в копии есть повторяющиеся идентификаторы" } } } },
-    "backup.error.relationships" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "the backup contains broken relationships" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "в копии нарушены связи данных" } } } },
-    "backup.error.schema" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "this backup version is not supported" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "эта версия резервной копии не поддерживается" } } } },
-    "backup.error.settings" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "the backup contains invalid settings" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "в копии некорректные настройки" } } } },
-    "backup.export" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "export backup" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "экспорт копии" } } } },
-    "backup.export.note" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "a portable file with every card and its review history" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "переносимый файл со всеми карточками и историей повторений" } } } },
-    "backup.exported" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "backup saved" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "копия сохранена" } } } },
-    "backup.import" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "import backup" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "импорт копии" } } } },
-    "backup.import.note" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "adds a backup to this library, card by card" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "добавляет копию в эту библиотеку, карточку за карточкой" } } } },
-    "backup.imported" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "backup imported" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "копия импортирована" } } } },
-    "backup.result" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "backup" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "резервная копия" } } } },
-    "cancel" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "cancel" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "отмена" } } } },
-    "card" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "card" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "карточка" } } } },
-    "card.back" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "back" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "ответ" } } } },
-    "card.delete.message" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "this card and its review history will be deleted" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "карточка и история повторений будут удалены" } } } },
-    "card.delete.title" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "delete card?" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "удалить карточку?" } } } },
-    "card.dueNow" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "due now" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "пора повторить" } } } },
-    "card.duplicate" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "duplicate" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "дублировать" } } } },
-    "card.edit" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "edit card" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "изменить карточку" } } } },
-    "card.empty" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "nothing to remember yet" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "пока нечего запоминать" } } } },
-    "card.front" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "front" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "вопрос" } } } },
-    "card.make" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "make a card" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "сделать карточку" } } } },
-    "card.new" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "new card" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "новая карточка" } } } },
-    "card.nextReview %@" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "next review %@" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "следующее повторение — %@" } } } },
-    "card.notStudied" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "not studied yet" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "ещё не изучалась" } } } },
-    "card.reset" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "reset progress" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "сбросить прогресс" } } } },
-    "card.reset.message" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "the card will become new; its review history stays in the backup history" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "карточка снова станет новой; история повторений сохранится" } } } },
-    "card.reset.title" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "reset this card?" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "сбросить карточку?" } } } },
-    "card.saveImage" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "save as image" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "сохранить изображением" } } } },
-    "card.untitled" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "untitled card" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "карточка без названия" } } } },
-    "close" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "close" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "закрыть" } } } },
-    "count.cards %lld" : { "localizations" : { "en" : { "variations" : { "plural" : { "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld card" } }, "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld cards" } } } } }, "ru" : { "variations" : { "plural" : { "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld карточка" } }, "few" : { "stringUnit" : { "state" : "translated", "value" : "%lld карточки" } }, "many" : { "stringUnit" : { "state" : "translated", "value" : "%lld карточек" } }, "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld карточки" } } } } } } },
-    "count.due %lld" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld due" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "%lld к повторению" } } } },
-    "count.new %lld" : { "localizations" : { "en" : { "variations" : { "plural" : { "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld new" } }, "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld new" } } } } }, "ru" : { "variations" : { "plural" : { "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld новая" } }, "few" : { "stringUnit" : { "state" : "translated", "value" : "%lld новые" } }, "many" : { "stringUnit" : { "state" : "translated", "value" : "%lld новых" } }, "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld новых" } } } } } } },
-    "count.reviews %lld" : { "localizations" : { "en" : { "variations" : { "plural" : { "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld review" } }, "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld reviews" } } } } }, "ru" : { "variations" : { "plural" : { "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld повторение" } }, "few" : { "stringUnit" : { "state" : "translated", "value" : "%lld повторения" } }, "many" : { "stringUnit" : { "state" : "translated", "value" : "%lld повторений" } }, "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld повторения" } } } } } } },
-    "deck" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "deck" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "колода" } } } },
-    "deck.delete.message" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "all cards in this deck will be deleted" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "все карточки в этой колоде будут удалены" } } } },
-    "deck.delete.title" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "delete deck?" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "удалить колоду?" } } } },
-    "deck.empty" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "no decks here yet" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "здесь пока нет колод" } } } },
-    "deck.make" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "make a deck" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "сделать колоду" } } } },
-    "deck.new" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "new deck" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "новая колода" } } } },
-    "deck.rename" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "rename deck" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "переименовать колоду" } } } },
-    "deck.unknown" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "unknown deck" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "неизвестная колода" } } } },
-    "delete" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "delete" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "удалить" } } } },
-    "decrease" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "decrease" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "уменьшить" } } } },
-    "done" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "done" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "готово" } } } },
-    "done." : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "done." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "готово." } } } },
-    "edit" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "edit" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "изменить" } } } },
-    "editor.insert.bold" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "insert bold" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "вставить жирный текст" } } } },
-    "editor.insert.bullets" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "insert bullet list" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "вставить список" } } } },
-    "editor.insert.codeBlock" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "insert code block" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "вставить блок кода" } } } },
-    "editor.insert.displayMath" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "insert display math" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "вставить формулу блоком" } } } },
-    "editor.insert.inlineCode" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "insert inline code" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "вставить код в строке" } } } },
-    "editor.insert.inlineMath" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "insert inline math" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "вставить формулу в строке" } } } },
-    "editor.back.placeholder" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "answer, explanation, or example" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "ответ, объяснение или пример" } } } },
-    "editor.discard" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "discard" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "не сохранять" } } } },
-    "editor.discard.message" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "what you wrote on this card will be lost." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "написанное на этой карточке пропадёт." } } } },
-    "editor.discard.title" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "discard changes?" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "не сохранять изменения?" } } } },
-    "editor.front.placeholder" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "question, prompt, or idea" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "вопрос, условие или идея" } } } },
-    "editor.keepEditing" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "keep editing" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "продолжить" } } } },
-    "editor.tool.block" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "block" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "блок" } } } },
-    "editor.tool.bold" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "bold" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "жирный" } } } },
-    "editor.tool.code" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "code" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "код" } } } },
-    "editor.tool.equation" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "equation" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "уравнение" } } } },
-    "editor.tool.list" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "list" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "список" } } } },
-    "editor.tool.math" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "math" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "формула" } } } },
-    "error" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "something went wrong" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "что-то пошло не так" } } } },
-    "export.photosDenied" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "photo access was not granted" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "нет доступа к Фото" } } } },
-    "export.renderFailed" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "the card image could not be rendered" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "не удалось создать изображение карточки" } } } },
-    "export.result" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "card image" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "изображение карточки" } } } },
-    "export.saved" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "saved to photos" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "сохранено в Фото" } } } },
-    "export.saving" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "saving…" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "сохраняем…" } } } },
-    "home.caughtUp %@" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "all caught up. next review %@." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "всё повторено. следующее повторение %@." } } } },
-    "home.dueToday %lld" : { "localizations" : { "en" : { "variations" : { "plural" : { "one" : { "stringUnit" : { "state" : "translated", "value" : "one card to review today." } }, "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld cards to review today." } } } } }, "ru" : { "variations" : { "plural" : { "one" : { "stringUnit" : { "state" : "translated", "value" : "сегодня повторить %lld карточку." } }, "few" : { "stringUnit" : { "state" : "translated", "value" : "сегодня повторить %lld карточки." } }, "many" : { "stringUnit" : { "state" : "translated", "value" : "сегодня повторить %lld карточек." } }, "other" : { "stringUnit" : { "state" : "translated", "value" : "сегодня повторить %lld карточки." } } } } } } },
-    "home.newReady %lld" : { "localizations" : { "en" : { "variations" : { "plural" : { "one" : { "stringUnit" : { "state" : "translated", "value" : "nothing to review. one new card is ready." } }, "other" : { "stringUnit" : { "state" : "translated", "value" : "nothing to review. %lld new cards are ready." } } } } }, "ru" : { "variations" : { "plural" : { "one" : { "stringUnit" : { "state" : "translated", "value" : "повторять нечего. ждёт %lld новая карточка." } }, "few" : { "stringUnit" : { "state" : "translated", "value" : "повторять нечего. ждут %lld новые карточки." } }, "many" : { "stringUnit" : { "state" : "translated", "value" : "повторять нечего. ждут %lld новых карточек." } }, "other" : { "stringUnit" : { "state" : "translated", "value" : "повторять нечего. ждут %lld новой карточки." } } } } } } },
-    "home.noCards" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "add a few cards to begin." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "добавьте пару карточек, чтобы начать." } } } },
-    "increase" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "increase" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "увеличить" } } } },
-    "interval.days %lld" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "%lldd" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "%lld дн" } } } },
-    "interval.hours %lld" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "%lldh" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "%lld ч" } } } },
-    "interval.minutes %lld" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "%lldm" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "%lld мин" } } } },
-    "interval.months %lld" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "%lldmo" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "%lld мес" } } } },
-    "interval.years %lld" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "%lldy" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "%lld г" } } } },
-    "library" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "library" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "библиотека" } } } },
-    "library.empty" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "nothing to remember yet" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "пока нечего запоминать" } } } },
-    "move.down" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "move down" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "переместить ниже" } } } },
-    "move.up" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "move up" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "переместить выше" } } } },
-    "name" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "name" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "название" } } } },
-    "ok" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "ok" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "ок" } } } },
-    "preview" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "preview" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "предпросмотр" } } } },
-    "rating.again" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "again" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "не помню" } } } },
-    "rating.easy" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "easy" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "легко" } } } },
-    "rating.good" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "good" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "хорошо" } } } },
-    "rating.hard" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "hard" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "трудно" } } } },
-    "remn" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "remn" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "remn" } } } },
-    "rename" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "rename" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "переименовать" } } } },
-    "save" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "save" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "сохранить" } } } },
-    "search" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "search" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "поиск" } } } },
-    "search.clear" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "clear search" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "очистить поиск" } } } },
-    "search.empty" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "nothing found" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "ничего не найдено" } } } },
-    "search.placeholder" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "cards, decks, subjects" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "карточки, колоды, предметы" } } } },
-    "search.prompt" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "search all your knowledge" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "поиск по всем знаниям" } } } },
-    "settings" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "settings" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "настройки" } } } },
-    "settings.about" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "about" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "о приложении" } } } },
-    "settings.appearance" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "appearance" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "оформление" } } } },
-    "settings.data" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "data" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "данные" } } } },
-    "settings.retention" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "desired retention" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "желаемая запоминаемость" } } } },
-    "settings.retention.help" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "higher retention means more reviews; 90% is balanced" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "выше процент — больше повторений; 90% — сбалансированный вариант" } } } },
-    "settings.srs.open" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "how scheduling works" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "как работает расписание" } } } },
-    "settings.study" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "study" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "повторение" } } } },
-    "status.due" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "due" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "пора" } } } },
-    "status.new" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "new" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "новая" } } } },
-    "storage.couldNotOpen" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "could not open your library" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "не удалось открыть библиотеку" } } } },
-    "storage.error" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "storage error" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "ошибка хранилища" } } } },
-    "srs.again" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "missed it; return soon" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "не вспомнили; скоро повторить" } } } },
-    "srs.easy" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "instant and confident" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "сразу и уверенно" } } } },
-    "srs.good" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "normal recall" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "вспомнили нормально" } } } },
-    "srs.hard" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "recalled with real effort" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "вспомнили с большим трудом" } } } },
-    "srs.history" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "Every answer is kept in the review history. Undo restores the card to its exact previous state." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "Каждый ответ сохраняется в истории. Отмена возвращает карточку точно в предыдущее состояние." } } } },
-    "srs.intro" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "remn does not use a fixed calendar. It predicts when each memory is about to fade and brings the card back around then." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "remn не использует фиксированный календарь. Он предсказывает, когда память начнёт угасать, и возвращает карточку примерно тогда." } } } },
-    "srs.later" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "later" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "позже" } } } },
-    "srs.memory.body" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "FSRS tracks how stable and difficult each card is. Successful recall strengthens it, so the next interval usually grows." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "FSRS отслеживает устойчивость и сложность каждой карточки. Успешное вспоминание укрепляет память, поэтому следующий интервал обычно растёт." } } } },
-    "srs.memory.title" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "memory, not a timer" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "память, а не таймер" } } } },
-    "srs.muchLater" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "much later" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "намного позже" } } } },
-    "srs.now" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "now" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "сейчас" } } } },
-    "srs.queue.body" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "Overdue reviews come first, then new cards. A card scheduled for later is not pulled forward just to fill the chosen session size." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "Сначала идут просроченные повторения, затем новые карточки. Карточка, назначенная на позже, не появляется раньше только ради заполнения сессии." } } } },
-    "srs.queue.title" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "the queue has rules" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "у очереди есть правила" } } } },
-    "srs.ratings.body" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "The four times under the buttons are real predictions. Your rating selects one of those next states." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "Четыре времени под кнопками — реальные прогнозы. Ваша оценка выбирает одно из этих следующих состояний." } } } },
-    "srs.ratings.title" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "your answer teaches it" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "ваш ответ обучает алгоритм" } } } },
-    "srs.retention.body" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "At 90%, FSRS aims for roughly a nine-in-ten chance of recall when a card returns. Raising it shortens intervals and creates more reviews." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "При 90% FSRS стремится примерно к девяти шансам из десяти вспомнить карточку при следующем показе. Более высокий процент сокращает интервалы и добавляет повторения." } } } },
-    "srs.retention.title" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "90% is the bargain" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "90% — разумный компромисс" } } } },
-    "srs.title" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "how remn remembers" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "как remn запоминает" } } } },
-    "study" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "study" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "учить" } } } },
-    "study.allDue" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "all due" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "все к повторению" } } } },
-    "study.availability %lld %lld" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld ready now · %2$lld later" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld сейчас · %2$lld позже" } } } },
-    "study.backLibrary" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "back to library" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "в библиотеку" } } } },
-    "study.continue" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "continue study" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "продолжить занятие" } } } },
-    "study.custom" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "custom" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "своё" } } } },
-    "study.deck" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "study this deck" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "учить эту колоду" } } } },
-    "study.howMany" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "how many cards?" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "сколько карточек?" } } } },
-    "study.inSession" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "in this session" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "в этом занятии" } } } },
-    "study.more" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "study more" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "учить ещё" } } } },
-    "study.noneAvailable" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "nothing to study." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "учить пока нечего." } } } },
-    "study.noneAvailable.message" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "there are no due or new cards here right now." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "здесь сейчас нет ни повторений, ни новых карточек." } } } },
-    "study.progress %lld %lld" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "card %1$lld of %2$lld" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "карточка %1$lld из %2$lld" } } } },
-    "study.rate" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "how well did you remember?" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "насколько хорошо вспомнили?" } } } },
-    "study.ratingsHelp.message" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "again means you did not recall it. hard means you did recall it, but with serious difficulty. good is normal effort; easy is immediate and confident." } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "«не помню» — ответ не вспомнился. «трудно» — вспомнили, но с большим трудом. «хорошо» — обычное усилие, «легко» — сразу и уверенно." } } } },
-    "study.ratingsHelp.title" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "ratings" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "оценки" } } } },
-    "study.setup" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "study" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "занятие" } } } },
-    "study.showAnswer" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "show the answer" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "показать ответ" } } } },
-    "study.start" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "start" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "начать" } } } },
-    "study.subject" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "study this subject" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "учить этот предмет" } } } },
-    "study.tapFlip" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "tap to turn it over" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "коснитесь, чтобы перевернуть" } } } },
-    "study.tapReveal" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "tap the card to see the answer" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "коснитесь карточки, чтобы увидеть ответ" } } } },
-    "study.what" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "what do you want to study?" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "что хотите учить?" } } } },
-    "subject" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "subject" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "предмет" } } } },
-    "subject.delete.message" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "all decks and cards in this subject will be deleted" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "все колоды и карточки предмета будут удалены" } } } },
-    "subject.delete.title" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "delete subject?" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "удалить предмет?" } } } },
-    "subject.make" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "make a subject" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "создать предмет" } } } },
-    "subject.new" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "new subject" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "новый предмет" } } } },
-    "subject.rename" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "rename subject" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "переименовать предмет" } } } },
-    "subject.unknown" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "unknown subject" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "неизвестный предмет" } } } },
-    "undo" : { "localizations" : { "en" : { "stringUnit" : { "state" : "translated", "value" : "undo" } }, "ru" : { "stringUnit" : { "state" : "translated", "value" : "отменить" } } } }
+    "about.mit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MIT license"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "лицензия MIT"
+          }
+        }
+      }
+    },
+    "about.openSource" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "free & open source"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "бесплатно и с открытым кодом"
+          }
+        }
+      }
+    },
+    "about.ownership" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "your cards stay on this device. backups remain yours."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "карточки остаются на этом устройстве. резервные копии принадлежат вам."
+          }
+        }
+      }
+    },
+    "about.tagline" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "a quiet place for things worth remembering."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "тихое место для того, что стоит запомнить."
+          }
+        }
+      }
+    },
+    "about.version %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "version %1$@ (%2$@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "версия %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "actions" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "actions"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "действия"
+          }
+        }
+      }
+    },
+    "appearance.dark" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dark"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "тёмная"
+          }
+        }
+      }
+    },
+    "appearance.light" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "light"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "светлая"
+          }
+        }
+      }
+    },
+    "appearance.system" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "system"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "системная"
+          }
+        }
+      }
+    },
+    "back" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "back"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "назад"
+          }
+        }
+      }
+    },
+    "backup.error.duplicates" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "the backup contains duplicate identifiers"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "в копии есть повторяющиеся идентификаторы"
+          }
+        }
+      }
+    },
+    "backup.error.relationships" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "the backup contains broken relationships"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "в копии нарушены связи данных"
+          }
+        }
+      }
+    },
+    "backup.error.schema" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "this backup version is not supported"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "эта версия резервной копии не поддерживается"
+          }
+        }
+      }
+    },
+    "backup.error.settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "the backup contains invalid settings"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "в копии некорректные настройки"
+          }
+        }
+      }
+    },
+    "backup.export" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "export backup"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "экспорт копии"
+          }
+        }
+      }
+    },
+    "backup.export.note" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "a portable file with every card and its review history"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "переносимый файл со всеми карточками и историей повторений"
+          }
+        }
+      }
+    },
+    "backup.exported" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "backup saved"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "копия сохранена"
+          }
+        }
+      }
+    },
+    "backup.import" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "import backup"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "импорт копии"
+          }
+        }
+      }
+    },
+    "backup.import.note" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "adds a backup to this library, card by card"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "добавляет копию в эту библиотеку, карточку за карточкой"
+          }
+        }
+      }
+    },
+    "backup.imported" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "backup imported"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "копия импортирована"
+          }
+        }
+      }
+    },
+    "backup.result" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "backup"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "резервная копия"
+          }
+        }
+      }
+    },
+    "cancel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cancel"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "отмена"
+          }
+        }
+      }
+    },
+    "card" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "card"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "карточка"
+          }
+        }
+      }
+    },
+    "card.back" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "back"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ответ"
+          }
+        }
+      }
+    },
+    "card.delete.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "this card and its review history will be deleted"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "карточка и история повторений будут удалены"
+          }
+        }
+      }
+    },
+    "card.delete.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "delete card?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "удалить карточку?"
+          }
+        }
+      }
+    },
+    "card.dueNow" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "due now"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "пора повторить"
+          }
+        }
+      }
+    },
+    "card.duplicate" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "duplicate"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "дублировать"
+          }
+        }
+      }
+    },
+    "card.edit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "edit card"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "изменить карточку"
+          }
+        }
+      }
+    },
+    "card.empty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nothing to remember yet"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "пока нечего запоминать"
+          }
+        }
+      }
+    },
+    "card.front" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "front"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вопрос"
+          }
+        }
+      }
+    },
+    "card.make" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "make a card"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сделать карточку"
+          }
+        }
+      }
+    },
+    "card.new" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "new card"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "новая карточка"
+          }
+        }
+      }
+    },
+    "card.nextReview %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "next review %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "следующее повторение — %@"
+          }
+        }
+      }
+    },
+    "card.notStudied" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "not studied yet"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ещё не изучалась"
+          }
+        }
+      }
+    },
+    "card.reset" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "reset progress"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сбросить прогресс"
+          }
+        }
+      }
+    },
+    "card.reset.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "the card will become new; its review history stays in the backup history"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "карточка снова станет новой; история повторений сохранится"
+          }
+        }
+      }
+    },
+    "card.reset.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "reset this card?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сбросить карточку?"
+          }
+        }
+      }
+    },
+    "card.saveImage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "save as image"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сохранить изображением"
+          }
+        }
+      }
+    },
+    "card.untitled" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "untitled card"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "карточка без названия"
+          }
+        }
+      }
+    },
+    "close" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "close"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "закрыть"
+          }
+        }
+      }
+    },
+    "count.cards %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld card"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld cards"
+                }
+              }
+            }
+          }
+        },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld карточки"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld карточек"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld карточка"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld карточки"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "count.due %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld due"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld к повторению"
+          }
+        }
+      }
+    },
+    "count.new %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld new"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld new"
+                }
+              }
+            }
+          }
+        },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld новые"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld новых"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld новая"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld новых"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "count.reviews %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld review"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld reviews"
+                }
+              }
+            }
+          }
+        },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld повторения"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld повторений"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld повторение"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld повторения"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "deck" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "deck"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "колода"
+          }
+        }
+      }
+    },
+    "deck.delete.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "all cards in this deck will be deleted"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "все карточки в этой колоде будут удалены"
+          }
+        }
+      }
+    },
+    "deck.delete.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "delete deck?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "удалить колоду?"
+          }
+        }
+      }
+    },
+    "deck.empty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no decks here yet"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "здесь пока нет колод"
+          }
+        }
+      }
+    },
+    "deck.make" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "make a deck"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сделать колоду"
+          }
+        }
+      }
+    },
+    "deck.new" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "new deck"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "новая колода"
+          }
+        }
+      }
+    },
+    "deck.rename" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "rename deck"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "переименовать колоду"
+          }
+        }
+      }
+    },
+    "deck.unknown" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "unknown deck"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "неизвестная колода"
+          }
+        }
+      }
+    },
+    "decrease" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "decrease"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "уменьшить"
+          }
+        }
+      }
+    },
+    "delete" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "delete"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "удалить"
+          }
+        }
+      }
+    },
+    "done" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "done"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "готово"
+          }
+        }
+      }
+    },
+    "done." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "done."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "готово."
+          }
+        }
+      }
+    },
+    "edit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "edit"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "изменить"
+          }
+        }
+      }
+    },
+    "editor.back.placeholder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "answer, explanation, or example"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ответ, объяснение или пример"
+          }
+        }
+      }
+    },
+    "editor.discard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "discard"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "не сохранять"
+          }
+        }
+      }
+    },
+    "editor.discard.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "what you wrote on this card will be lost."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "написанное на этой карточке пропадёт."
+          }
+        }
+      }
+    },
+    "editor.discard.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "discard changes?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "не сохранять изменения?"
+          }
+        }
+      }
+    },
+    "editor.front.placeholder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "question, prompt, or idea"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вопрос, условие или идея"
+          }
+        }
+      }
+    },
+    "editor.insert.bold" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "insert bold"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вставить жирный текст"
+          }
+        }
+      }
+    },
+    "editor.insert.bullets" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "insert bullet list"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вставить список"
+          }
+        }
+      }
+    },
+    "editor.insert.codeBlock" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "insert code block"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вставить блок кода"
+          }
+        }
+      }
+    },
+    "editor.insert.displayMath" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "insert display math"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вставить формулу блоком"
+          }
+        }
+      }
+    },
+    "editor.insert.inlineCode" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "insert inline code"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вставить код в строке"
+          }
+        }
+      }
+    },
+    "editor.insert.inlineMath" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "insert inline math"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вставить формулу в строке"
+          }
+        }
+      }
+    },
+    "editor.keepEditing" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "keep editing"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "продолжить"
+          }
+        }
+      }
+    },
+    "editor.tool.block" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "block"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "блок"
+          }
+        }
+      }
+    },
+    "editor.tool.bold" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bold"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "жирный"
+          }
+        }
+      }
+    },
+    "editor.tool.code" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "code"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "код"
+          }
+        }
+      }
+    },
+    "editor.tool.equation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "equation"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "уравнение"
+          }
+        }
+      }
+    },
+    "editor.tool.list" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "list"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "список"
+          }
+        }
+      }
+    },
+    "editor.tool.math" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "math"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "формула"
+          }
+        }
+      }
+    },
+    "error" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "something went wrong"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "что-то пошло не так"
+          }
+        }
+      }
+    },
+    "export.photosDenied" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "photo access was not granted"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "нет доступа к Фото"
+          }
+        }
+      }
+    },
+    "export.renderFailed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "the card image could not be rendered"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "не удалось создать изображение карточки"
+          }
+        }
+      }
+    },
+    "export.result" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "card image"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "изображение карточки"
+          }
+        }
+      }
+    },
+    "export.saved" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "saved to photos"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сохранено в Фото"
+          }
+        }
+      }
+    },
+    "export.savedFile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "image saved"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "изображение сохранено"
+          }
+        }
+      }
+    },
+    "export.saving" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "saving…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сохраняем…"
+          }
+        }
+      }
+    },
+    "home.caughtUp %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "all caught up. next review %@."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "всё повторено. следующее повторение %@."
+          }
+        }
+      }
+    },
+    "home.dueToday %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "one card to review today."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld cards to review today."
+                }
+              }
+            }
+          }
+        },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "сегодня повторить %lld карточки."
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "сегодня повторить %lld карточек."
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "сегодня повторить %lld карточку."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "сегодня повторить %lld карточки."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "home.newReady %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "nothing to review. one new card is ready."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "nothing to review. %lld new cards are ready."
+                }
+              }
+            }
+          }
+        },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "повторять нечего. ждут %lld новые карточки."
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "повторять нечего. ждут %lld новых карточек."
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "повторять нечего. ждёт %lld новая карточка."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "повторять нечего. ждут %lld новой карточки."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "home.noCards" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "add a few cards to begin."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "добавьте пару карточек, чтобы начать."
+          }
+        }
+      }
+    },
+    "increase" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "increase"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "увеличить"
+          }
+        }
+      }
+    },
+    "interval.days %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldd"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld дн"
+          }
+        }
+      }
+    },
+    "interval.hours %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldh"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ч"
+          }
+        }
+      }
+    },
+    "interval.minutes %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldm"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld мин"
+          }
+        }
+      }
+    },
+    "interval.months %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldmo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld мес"
+          }
+        }
+      }
+    },
+    "interval.years %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldy"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld г"
+          }
+        }
+      }
+    },
+    "library" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "library"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "библиотека"
+          }
+        }
+      }
+    },
+    "library.empty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nothing to remember yet"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "пока нечего запоминать"
+          }
+        }
+      }
+    },
+    "move.down" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "move down"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "переместить ниже"
+          }
+        }
+      }
+    },
+    "move.up" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "move up"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "переместить выше"
+          }
+        }
+      }
+    },
+    "name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "название"
+          }
+        }
+      }
+    },
+    "ok" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ok"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ок"
+          }
+        }
+      }
+    },
+    "preview" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "preview"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "предпросмотр"
+          }
+        }
+      }
+    },
+    "rating.again" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "again"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "не помню"
+          }
+        }
+      }
+    },
+    "rating.easy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "easy"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "легко"
+          }
+        }
+      }
+    },
+    "rating.good" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "good"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "хорошо"
+          }
+        }
+      }
+    },
+    "rating.hard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hard"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "трудно"
+          }
+        }
+      }
+    },
+    "remn" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "remn"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "remn"
+          }
+        }
+      }
+    },
+    "rename" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "rename"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "переименовать"
+          }
+        }
+      }
+    },
+    "save" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "save"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сохранить"
+          }
+        }
+      }
+    },
+    "search" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "search"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "поиск"
+          }
+        }
+      }
+    },
+    "search.clear" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "clear search"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "очистить поиск"
+          }
+        }
+      }
+    },
+    "search.empty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nothing found"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ничего не найдено"
+          }
+        }
+      }
+    },
+    "search.placeholder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cards, decks, subjects"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "карточки, колоды, предметы"
+          }
+        }
+      }
+    },
+    "search.prompt" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "search all your knowledge"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "поиск по всем знаниям"
+          }
+        }
+      }
+    },
+    "settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "settings"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "настройки"
+          }
+        }
+      }
+    },
+    "settings.about" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "about"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "о приложении"
+          }
+        }
+      }
+    },
+    "settings.appearance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "appearance"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "оформление"
+          }
+        }
+      }
+    },
+    "settings.data" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "data"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "данные"
+          }
+        }
+      }
+    },
+    "settings.retention" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "desired retention"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "желаемая запоминаемость"
+          }
+        }
+      }
+    },
+    "settings.retention.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "higher retention means more reviews; 90% is balanced"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "выше процент — больше повторений; 90% — сбалансированный вариант"
+          }
+        }
+      }
+    },
+    "settings.srs.open" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "how scheduling works"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "как работает расписание"
+          }
+        }
+      }
+    },
+    "settings.study" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "study"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "повторение"
+          }
+        }
+      }
+    },
+    "srs.again" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "missed it; return soon"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "не вспомнили; скоро повторить"
+          }
+        }
+      }
+    },
+    "srs.easy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "instant and confident"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сразу и уверенно"
+          }
+        }
+      }
+    },
+    "srs.good" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "normal recall"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вспомнили нормально"
+          }
+        }
+      }
+    },
+    "srs.hard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "recalled with real effort"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вспомнили с большим трудом"
+          }
+        }
+      }
+    },
+    "srs.history" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every answer is kept in the review history. Undo restores the card to its exact previous state."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Каждый ответ сохраняется в истории. Отмена возвращает карточку точно в предыдущее состояние."
+          }
+        }
+      }
+    },
+    "srs.intro" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "remn does not use a fixed calendar. It predicts when each memory is about to fade and brings the card back around then."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "remn не использует фиксированный календарь. Он предсказывает, когда память начнёт угасать, и возвращает карточку примерно тогда."
+          }
+        }
+      }
+    },
+    "srs.later" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "later"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "позже"
+          }
+        }
+      }
+    },
+    "srs.memory.body" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FSRS tracks how stable and difficult each card is. Successful recall strengthens it, so the next interval usually grows."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FSRS отслеживает устойчивость и сложность каждой карточки. Успешное вспоминание укрепляет память, поэтому следующий интервал обычно растёт."
+          }
+        }
+      }
+    },
+    "srs.memory.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "memory, not a timer"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "память, а не таймер"
+          }
+        }
+      }
+    },
+    "srs.muchLater" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "much later"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "намного позже"
+          }
+        }
+      }
+    },
+    "srs.now" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "now"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сейчас"
+          }
+        }
+      }
+    },
+    "srs.queue.body" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overdue reviews come first, then new cards. A card scheduled for later is not pulled forward just to fill the chosen session size."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сначала идут просроченные повторения, затем новые карточки. Карточка, назначенная на позже, не появляется раньше только ради заполнения сессии."
+          }
+        }
+      }
+    },
+    "srs.queue.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "the queue has rules"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "у очереди есть правила"
+          }
+        }
+      }
+    },
+    "srs.ratings.body" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The four times under the buttons are real predictions. Your rating selects one of those next states."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Четыре времени под кнопками — реальные прогнозы. Ваша оценка выбирает одно из этих следующих состояний."
+          }
+        }
+      }
+    },
+    "srs.ratings.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "your answer teaches it"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ваш ответ обучает алгоритм"
+          }
+        }
+      }
+    },
+    "srs.retention.body" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "At 90%, FSRS aims for roughly a nine-in-ten chance of recall when a card returns. Raising it shortens intervals and creates more reviews."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "При 90% FSRS стремится примерно к девяти шансам из десяти вспомнить карточку при следующем показе. Более высокий процент сокращает интервалы и добавляет повторения."
+          }
+        }
+      }
+    },
+    "srs.retention.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "90% is the bargain"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "90% — разумный компромисс"
+          }
+        }
+      }
+    },
+    "srs.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "how remn remembers"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "как remn запоминает"
+          }
+        }
+      }
+    },
+    "status.due" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "due"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "пора"
+          }
+        }
+      }
+    },
+    "status.new" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "new"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "новая"
+          }
+        }
+      }
+    },
+    "storage.couldNotOpen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "could not open your library"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "не удалось открыть библиотеку"
+          }
+        }
+      }
+    },
+    "storage.error" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "storage error"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ошибка хранилища"
+          }
+        }
+      }
+    },
+    "study" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "study"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "учить"
+          }
+        }
+      }
+    },
+    "study.allDue" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "all due"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "все к повторению"
+          }
+        }
+      }
+    },
+    "study.availability %lld %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld ready now · %2$lld later"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld сейчас · %2$lld позже"
+          }
+        }
+      }
+    },
+    "study.backLibrary" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "back to library"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "в библиотеку"
+          }
+        }
+      }
+    },
+    "study.continue" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "continue study"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "продолжить занятие"
+          }
+        }
+      }
+    },
+    "study.custom" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "custom"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "своё"
+          }
+        }
+      }
+    },
+    "study.deck" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "study this deck"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "учить эту колоду"
+          }
+        }
+      }
+    },
+    "study.howMany" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "how many cards?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сколько карточек?"
+          }
+        }
+      }
+    },
+    "study.inSession" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in this session"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "в этом занятии"
+          }
+        }
+      }
+    },
+    "study.more" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "study more"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "учить ещё"
+          }
+        }
+      }
+    },
+    "study.noneAvailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nothing to study."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "учить пока нечего."
+          }
+        }
+      }
+    },
+    "study.noneAvailable.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "there are no due or new cards here right now."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "здесь сейчас нет ни повторений, ни новых карточек."
+          }
+        }
+      }
+    },
+    "study.progress %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "study.progress %1$@ %2$@"
+          }
+        }
+      }
+    },
+    "study.progress %lld %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "card %1$lld of %2$lld"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "карточка %1$lld из %2$lld"
+          }
+        }
+      }
+    },
+    "study.rate" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "how well did you remember?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "насколько хорошо вспомнили?"
+          }
+        }
+      }
+    },
+    "study.ratingsHelp.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "again means you did not recall it. hard means you did recall it, but with serious difficulty. good is normal effort; easy is immediate and confident."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«не помню» — ответ не вспомнился. «трудно» — вспомнили, но с большим трудом. «хорошо» — обычное усилие, «легко» — сразу и уверенно."
+          }
+        }
+      }
+    },
+    "study.ratingsHelp.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ratings"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "оценки"
+          }
+        }
+      }
+    },
+    "study.setup" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "study"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "занятие"
+          }
+        }
+      }
+    },
+    "study.showAnswer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "show the answer"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "показать ответ"
+          }
+        }
+      }
+    },
+    "study.start" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "start"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "начать"
+          }
+        }
+      }
+    },
+    "study.subject" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "study this subject"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "учить этот предмет"
+          }
+        }
+      }
+    },
+    "study.tapFlip" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tap to turn it over"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "коснитесь, чтобы перевернуть"
+          }
+        }
+      }
+    },
+    "study.tapReveal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tap the card to see the answer"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "коснитесь карточки, чтобы увидеть ответ"
+          }
+        }
+      }
+    },
+    "study.what" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "what do you want to study?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "что хотите учить?"
+          }
+        }
+      }
+    },
+    "subject" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "subject"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "предмет"
+          }
+        }
+      }
+    },
+    "subject.delete.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "all decks and cards in this subject will be deleted"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "все колоды и карточки предмета будут удалены"
+          }
+        }
+      }
+    },
+    "subject.delete.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "delete subject?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "удалить предмет?"
+          }
+        }
+      }
+    },
+    "subject.make" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "make a subject"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "создать предмет"
+          }
+        }
+      }
+    },
+    "subject.new" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "new subject"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "новый предмет"
+          }
+        }
+      }
+    },
+    "subject.rename" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "rename subject"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "переименовать предмет"
+          }
+        }
+      }
+    },
+    "subject.unknown" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "unknown subject"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "неизвестный предмет"
+          }
+        }
+      }
+    },
+    "undo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "undo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "отменить"
+          }
+        }
+      }
+    }
   },
   "version" : "1.0"
 }

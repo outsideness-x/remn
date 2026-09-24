@@ -56,7 +56,7 @@ struct CardDetailView: View {
             }
         }
         .paperBackground()
-        .toolbar(.hidden, for: .navigationBar)
+        .remnHidesSystemBar()
         .overlay {
             if isExporting {
                 ZStack {
@@ -170,8 +170,7 @@ struct CardDetailView: View {
         Task { @MainActor in
             defer { isExporting = false }
             do {
-                try await CardImageExporter.save(card)
-                exportMessage = String(localized: "export.saved")
+                exportMessage = try await CardImageExporter.save(card)
             } catch {
                 exportMessage = error.localizedDescription
             }

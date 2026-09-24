@@ -2,7 +2,6 @@ import SwiftData
 import SwiftUI
 
 struct StudySessionView: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @Environment(AppState.self) private var appState
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -63,7 +62,7 @@ struct StudySessionView: View {
                 .accessibilityLabel(Text("study.progress \(position) \(total)"))
             }
             HStack {
-                Button { dismiss() } label: {
+                Button { appState.presentedSession = nil } label: {
                     HandwrittenText("close")
                 }
                 .buttonStyle(InkButtonStyle(kind: .quiet, seed: 31))

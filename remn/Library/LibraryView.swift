@@ -42,7 +42,7 @@ struct LibraryView: View {
             .remnReadableWidth()
         }
         .paperBackground()
-        .toolbar(.hidden, for: .navigationBar)
+        .remnHidesSystemBar()
         .safeAreaInset(edge: .bottom) {
             if !cards.isEmpty {
                 bottomActions

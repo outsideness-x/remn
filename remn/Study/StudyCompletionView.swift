@@ -2,7 +2,6 @@ import SwiftData
 import SwiftUI
 
 struct StudyCompletionView: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @Environment(AppState.self) private var appState
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -62,7 +61,6 @@ struct StudyCompletionView: View {
         session.isActive = false
         try? context.save()
         appState.presentedSession = nil
-        dismiss()
     }
 
     private func studyMore() {

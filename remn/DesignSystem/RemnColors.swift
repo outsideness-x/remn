@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 
 /// Paper, one ink, a graphite pencil and a red pencil. Dark mode is the same kit on charcoal paper.
 extension Color {
@@ -14,15 +13,25 @@ extension Color {
     static let remnSurface = remnInk.opacity(0.05)
 
     private init(light: UInt32, dark: UInt32) {
-        self.init(
-            UIColor { traits in
-                UIColor(hex: traits.userInterfaceStyle == .dark ? dark : light)
-            }
-        )
+        self.init(PlatformColor.remnDynamic(light: light, dark: dark))
     }
 }
 
-private extension UIColor {
+extension PlatformColor {
+    /// A colour that follows the appearance of whatever it is drawn in.
+    static func remnDynamic(light: UInt32, dark: UInt32) -> PlatformColor {
+        #if canImport(UIKit)
+        PlatformColor { traits in
+            PlatformColor(hex: traits.userInterfaceStyle == .dark ? dark : light)
+        }
+        #else
+        PlatformColor(name: nil) { appearance in
+            let isDark = appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            return PlatformColor(hex: isDark ? dark : light)
+        }
+        #endif
+    }
+
     convenience init(hex: UInt32) {
         self.init(
             red: CGFloat((hex >> 16) & 0xFF) / 255,

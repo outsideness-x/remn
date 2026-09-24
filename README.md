@@ -1,6 +1,6 @@
 # remn
 
-remn is a focused, free and open-source flashcard app for iPhone and iPad. It does one thing:
+remn is a focused, free and open-source flashcard app for iPhone, iPad and Mac. It does one thing:
 
 > create knowledge → review knowledge → remember knowledge
 
@@ -9,15 +9,17 @@ There is no account, subscription, advertising, analytics, tracking, backend, or
 ## Requirements
 
 - Xcode 26 or newer
-- iOS 18 or newer
+- iOS 18 or newer, macOS 15 or newer
 - Swift 6
 
 ## Build
 
 1. Open `remn.xcodeproj` in Xcode.
 2. Let Swift Package Manager resolve the pinned dependencies.
-3. Select the `remn` scheme and an iOS 18+ iPhone or iPad.
+3. Select the `remn` scheme and an iOS 18+ iPhone or iPad, or My Mac.
 4. Build and run.
+
+remn is one multiplatform target: the same SwiftUI code runs natively on iOS and macOS.
 
 The project file is generated from `project.yml` with [XcodeGen](https://github.com/yonaskolb/XcodeGen). The checked-in project is ready to open; regenerating it is optional.
 

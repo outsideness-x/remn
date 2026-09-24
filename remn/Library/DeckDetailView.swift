@@ -60,7 +60,7 @@ struct DeckDetailView: View {
             }
         }
         .paperBackground()
-        .toolbar(.hidden, for: .navigationBar)
+        .remnHidesSystemBar()
         .safeAreaInset(edge: .bottom) {
             if !deckCards.isEmpty {
                 Button {

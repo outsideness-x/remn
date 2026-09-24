@@ -68,7 +68,11 @@ struct SheetHeader<Trailing: View>: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            #if os(iOS)
             SheetGrabber()
+            #else
+            Color.clear.frame(height: 12)
+            #endif
             ZStack {
                 HandwrittenText(title, weight: 0.4)
                     .font(RemnTypography.navigationTitle)

@@ -58,6 +58,7 @@ struct CardEditorView: View {
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(30)
         .interactiveDismissDisabled(hasChanges)
+        #if os(iOS)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -70,6 +71,7 @@ struct CardEditorView: View {
                 }
             }
         }
+        #endif
         .handmadeDialog(
             isPresented: $confirmDiscard,
             title: "editor.discard.title",

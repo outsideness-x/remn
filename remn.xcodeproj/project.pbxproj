@@ -16,6 +16,7 @@
 		19FD03CC87C582DD051AF70B /* OfflineAttachmentLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1888021129F6DC0B39144A81 /* OfflineAttachmentLoader.swift */; };
 		1E4D4541793BEF1485AE1EBB /* StudyQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1094BA94AB0FA576E2719827 /* StudyQueueTests.swift */; };
 		2186EA12EDEF5D164D4C50DC /* StudySetupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CC62A0E6A629ABDA580F04 /* StudySetupSheet.swift */; };
+		2677F9747943172FD033A62D /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA80540B1A8E082DB6AF1429 /* Platform.swift */; };
 		28013FB6B872F09210C975FE /* CardContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C02176044374CB1713244F6 /* CardContentView.swift */; };
 		2C977A18EA5D91596EA5BBA5 /* StudyQueueBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71376D3FF1CD1E3DA17A415 /* StudyQueueBuilder.swift */; };
 		315C8545FC80419C34388BD6 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3E5915E4007738575047C4 /* SearchTests.swift */; };
@@ -107,6 +108,7 @@
 		1888021129F6DC0B39144A81 /* OfflineAttachmentLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineAttachmentLoader.swift; sourceTree = "<group>"; };
 		1E99BF5C47CF0005283FDD06 /* RemnNavigationHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnNavigationHeader.swift; sourceTree = "<group>"; };
 		21FF9D89B5DA9AC233E8B060 /* SubjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectModel.swift; sourceTree = "<group>"; };
+		23A3FFBF0BC7C0304F7C1D13 /* remn-macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "remn-macOS.entitlements"; sourceTree = "<group>"; };
 		29F95FD1076C503DAC0C2F44 /* Flashcard+Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flashcard+Display.swift"; sourceTree = "<group>"; };
 		2A92BF2EDB3DC41B3D94FAEB /* remn.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = remn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F16E415713C31E8C0695AF3 /* PaperGrain.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = PaperGrain.metal; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 		9F72936533B36DABA6988A35 /* MarkdownRenderSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownRenderSource.swift; sourceTree = "<group>"; };
 		A6E4DDE9993647270960E6C2 /* CardEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEditorView.swift; sourceTree = "<group>"; };
 		B74613E361D1008F37D52C7D /* FlashcardSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardSurface.swift; sourceTree = "<group>"; };
+		BA80540B1A8E082DB6AF1429 /* Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		BC69D30D20A30414C1CAF279 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		BEA5B762D59F24BB59139A3A /* NameEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameEditorSheet.swift; sourceTree = "<group>"; };
 		C6589AD8278F3631AB285EE3 /* ScheduleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleState.swift; sourceTree = "<group>"; };
@@ -249,6 +252,7 @@
 				E35084084FB10D50F86C775C /* HandmadeDialog.swift */,
 				D1D3F10A81056E2B9BF62CE3 /* InkControls.swift */,
 				DD7DC6E8928E3FCA113BE902 /* InkIcon.swift */,
+				BA80540B1A8E082DB6AF1429 /* Platform.swift */,
 				73275047DD887BC610647B2A /* RemnColors.swift */,
 				1E99BF5C47CF0005283FDD06 /* RemnNavigationHeader.swift */,
 				3D2767AD6663EDF37938359D /* RemnTypography.swift */,
@@ -318,6 +322,7 @@
 				CEEDBD645D6620FD7D055BF6 /* Assets.xcassets */,
 				8E542A22B3B0207CEDE1E98D /* Info.plist */,
 				15A858101FE1C0ACD7EBDF5A /* Localizable.xcstrings */,
+				23A3FFBF0BC7C0304F7C1D13 /* remn-macOS.entitlements */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -489,11 +494,11 @@
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					0FF614E38E94770795DDF3EB = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = KX98K6BPAP;
 						ProvisioningStyle = Automatic;
 					};
 					C62777D0F8DB9E83A5B2D0FC = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = KX98K6BPAP;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -597,6 +602,7 @@
 				19FD03CC87C582DD051AF70B /* OfflineAttachmentLoader.swift in Sources */,
 				44B81357AA1A22C6C5653E71 /* Paper.swift in Sources */,
 				5DD9219111002EC25AA7D395 /* PaperGrain.metal in Sources */,
+				2677F9747943172FD033A62D /* Platform.swift in Sources */,
 				DA0BA9A8F72664485C69EA61 /* RatingButton.swift in Sources */,
 				A9305ED863AAED8616065F46 /* RemnColors.swift in Sources */,
 				DCA22BC85351846C9E8D9392 /* RemnNavigationHeader.swift in Sources */,
@@ -638,17 +644,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "remn/Resources/remn-macOS.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = remn/Resources/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.chemical-pink.remn";
 				PRODUCT_NAME = remn;
-				SDKROOT = iphoneos;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -657,17 +668,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "remn/Resources/remn-macOS.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = remn/Resources/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.chemical-pink.remn";
 				PRODUCT_NAME = remn;
-				SDKROOT = iphoneos;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -728,7 +744,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = KX98K6BPAP;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -747,12 +763,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
@@ -815,7 +831,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = KX98K6BPAP;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -828,11 +844,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 6.0;

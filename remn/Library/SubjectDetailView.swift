@@ -38,7 +38,7 @@ struct SubjectDetailView: View {
             }
         }
         .paperBackground()
-        .toolbar(.hidden, for: .navigationBar)
+        .remnHidesSystemBar()
         .safeAreaInset(edge: .bottom) {
             if !subject.cards.isEmpty {
                 Button {

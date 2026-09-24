@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 
 /// One hand, several sizes. Every style scales with Dynamic Type.
 enum RemnTypography {
@@ -20,6 +19,6 @@ enum RemnTypography {
     static var studyText: Font { display(27, relativeTo: .title3) }
 
     static var isDisplayFontAvailable: Bool {
-        UIFont(name: "Neucha", size: 17) != nil
+        PlatformFont(name: "Neucha", size: 17) != nil
     }
 }
