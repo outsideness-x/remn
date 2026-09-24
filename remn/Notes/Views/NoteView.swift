@@ -21,6 +21,13 @@ struct NoteView: View {
     @State private var showMove = false
     @State private var showFonts = false
     @State private var showTags = false
+    @State private var cardDraft: CardDraft?
+
+    /// A passage of the note on its way to becoming a flashcard.
+    private struct CardDraft: Identifiable {
+        let id = UUID()
+        let text: String
+    }
 
     init(path: String) {
         _path = State(initialValue: path)
@@ -107,6 +114,9 @@ struct NoteView: View {
         .sheet(isPresented: $showFonts) {
             FontPickerSheet(selection: Binding(get: { controller.font }, set: { setFont($0) }))
         }
+        .sheet(item: $cardDraft) { draft in
+            CardEditorView(fromNote: path, selection: draft.text)
+        }
         .sheet(isPresented: $showTags) {
             TagEditorSheet(tags: Binding(get: { document.frontMatter.tags }, set: { setTags($0) }))
         }
@@ -125,6 +135,7 @@ struct NoteView: View {
 
     private func load() async {
         controller.onTextChange = { _ in scheduleSave() }
+        controller.onMakeCard = { text in cardDraft = CardDraft(text: text) }
         do {
             let loaded = try await vault.load(path)
             document = loaded

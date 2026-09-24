@@ -497,6 +497,22 @@
         }
       }
     },
+    "card.fromNote" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "from the note"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "из конспекта"
+          }
+        }
+      }
+    },
     "card.front" : {
       "localizations" : {
         "en" : {
@@ -637,6 +653,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "сохранить изображением"
+          }
+        }
+      }
+    },
+    "card.swapSides" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "flip"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "перевернуть"
+          }
+        }
+      }
+    },
+    "card.swapSides.hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "puts the passage from the note on the other side of the card"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "переносит фрагмент конспекта на другую сторону карточки"
           }
         }
       }
@@ -965,6 +1013,22 @@
         }
       }
     },
+    "deck.choose" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "choose a deck"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "выберите колоду"
+          }
+        }
+      }
+    },
     "deck.delete.message" : {
       "localizations" : {
         "en" : {
@@ -1041,6 +1105,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "новая колода"
+          }
+        }
+      }
+    },
+    "deck.newEllipsis" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "new deck…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "новая колода…"
+          }
+        }
+      }
+    },
+    "deck.noneYet" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no decks yet — make one"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "колод пока нет — создайте"
           }
         }
       }

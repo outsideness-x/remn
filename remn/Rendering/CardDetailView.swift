@@ -48,6 +48,22 @@ struct CardDetailView: View {
                         .font(RemnTypography.note)
                         .foregroundStyle(Color.remnGraphite)
                         .padding(.horizontal, 4)
+                    if let notePath = card.sourceNotePath {
+                        Button { appState.openNote(notePath) } label: {
+                            HStack(spacing: 10) {
+                                NotebookDoodle(width: 18)
+                                HandwrittenText("card.fromNote")
+                                    .foregroundStyle(Color.remnGraphite)
+                                HandwrittenText(verbatim: VaultPath.title(ofNoteNamed: VaultPath.name(of: notePath)))
+                                    .foregroundStyle(Color.remnAccent)
+                                    .lineLimit(1)
+                                InkIcon(kind: .forward, color: .remnAccent, size: 15)
+                            }
+                            .font(RemnTypography.note)
+                        }
+                        .buttonStyle(InkPressStyle())
+                        .padding(.horizontal, 4)
+                    }
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 12)

@@ -14,11 +14,18 @@ struct CardEditorView: View {
     @Environment(\.modelContext) private var context
     @Environment(AppState.self) private var appState
     @Query(sort: \Deck.name) private var decks: [Deck]
+    @AppStorage("lastNoteCardDeckID") private var lastNoteCardDeckID = ""
 
     private let card: Flashcard?
+    /// The note a new card is being made from, and the subject its folder suggests.
+    private let sourceNotePath: String?
+    private let suggestedSubject: String?
+    private let initialFront: String
+    private let initialBack: String
     @State private var selectedDeckID: UUID?
     @State private var front: String
     @State private var back: String
+    @State private var showNewDeck = false
     @State private var frontSelection: TextSelection?
     @State private var backSelection: TextSelection?
     @State private var mode = Mode.edit
@@ -28,9 +35,26 @@ struct CardEditorView: View {
 
     init(initialDeck: Deck, card: Flashcard? = nil) {
         self.card = card
+        sourceNotePath = card?.sourceNotePath
+        suggestedSubject = nil
+        initialFront = card?.frontMarkdown ?? ""
+        initialBack = card?.backMarkdown ?? ""
         _selectedDeckID = State(initialValue: card?.deck?.id ?? initialDeck.id)
-        _front = State(initialValue: card?.frontMarkdown ?? "")
-        _back = State(initialValue: card?.backMarkdown ?? "")
+        _front = State(initialValue: initialFront)
+        _back = State(initialValue: initialBack)
+    }
+
+    /// A new card from a passage of a note; the passage goes on the front, and can be swapped to the back.
+    init(fromNote notePath: String, selection: String) {
+        card = nil
+        sourceNotePath = notePath
+        let folder = notePath.split(separator: "/").dropLast().first.map(String.init)
+        suggestedSubject = folder
+        initialFront = selection
+        initialBack = ""
+        _selectedDeckID = State(initialValue: nil)
+        _front = State(initialValue: selection)
+        _back = State(initialValue: "")
     }
 
     var body: some View {
@@ -56,6 +80,10 @@ struct CardEditorView: View {
             if mode == .edit { editor } else { preview }
         }
         .paperBackground()
+        .onAppear(perform: chooseDeckForNote)
+        .sheet(isPresented: $showNewDeck) {
+            NameEditorSheet(title: "deck.new") { name in createDeck(named: name) }
+        }
         .remnSheetFrame(width: 640, height: 760)
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(30)
@@ -127,6 +155,10 @@ struct CardEditorView: View {
     private var editor: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
+                if let sourceNotePath {
+                    sourceRow(sourceNotePath)
+                        .padding(.horizontal, 20)
+                }
                 deckMenu
                     .padding(.horizontal, 20)
                 MarkdownToolbar(insert: insert)
@@ -142,6 +174,35 @@ struct CardEditorView: View {
         .scrollDismissesKeyboard(.interactively)
     }
 
+    /// Where the card comes from, and a way to put the passage on the other side.
+    private func sourceRow(_ path: String) -> some View {
+        HStack(spacing: 12) {
+            NotebookDoodle(width: 20)
+            VStack(alignment: .leading, spacing: 1) {
+                HandwrittenText("card.fromNote")
+                    .font(RemnTypography.caption)
+                    .foregroundStyle(Color.remnGraphite)
+                HandwrittenText(verbatim: VaultPath.title(ofNoteNamed: VaultPath.name(of: path)))
+                    .font(RemnTypography.note)
+                    .foregroundStyle(Color.remnInk)
+                    .lineLimit(1)
+            }
+            Spacer(minLength: 8)
+            Button {
+                withAnimation(.spring(duration: 0.3, bounce: 0.2)) { swap(&front, &back) }
+            } label: {
+                HStack(spacing: 6) {
+                    InkIcon(kind: .flip, color: .remnAccent, size: 17)
+                    HandwrittenText("card.swapSides")
+                        .lineLimit(1)
+                        .fixedSize()
+                }
+            }
+            .buttonStyle(InkButtonStyle(kind: .quiet, seed: 205))
+            .accessibilityHint(Text("card.swapSides.hint"))
+        }
+    }
+
     private var deckMenu: some View {
         Button { showDeckPicker = true } label: {
             HStack(spacing: 12) {
@@ -149,6 +210,11 @@ struct CardEditorView: View {
                     HandwrittenText("deck")
                         .font(RemnTypography.note)
                         .foregroundStyle(Color.remnGraphite)
+                    if selectedDeck == nil {
+                        HandwrittenText(decks.isEmpty ? "deck.noneYet" : "deck.choose", weight: 0.3)
+                            .font(RemnTypography.display(23, relativeTo: .body))
+                            .foregroundStyle(Color.remnAccent)
+                    }
                     if let selectedDeck {
                         HandwrittenText(verbatim: selectedDeck.name, weight: 0.3)
                             .font(RemnTypography.display(23, relativeTo: .body))
@@ -187,8 +253,53 @@ struct CardEditorView: View {
                 showDeckPicker = false
             }
         } + [
+            HandmadeDialogAction("deck.newEllipsis", role: .plain) {
+                showDeckPicker = false
+                showNewDeck = true
+            },
             HandmadeDialogAction("cancel", role: .cancel) { showDeckPicker = false }
         ]
+    }
+
+    /// For a card from a note: the deck used last time, else one in the subject named like the note's folder.
+    private func chooseDeckForNote() {
+        guard sourceNotePath != nil else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
+            focusedSide = back.isEmpty ? .back : .front
+        }
+        guard selectedDeckID == nil else { return }
+        if let last = UUID(uuidString: lastNoteCardDeckID), decks.contains(where: { $0.id == last }),
+           suggestedSubject == nil || decks.first(where: { $0.id == last })?.subject?.name.localizedCaseInsensitiveCompare(suggestedSubject ?? "") == .orderedSame {
+            selectedDeckID = last
+        } else if let suggestedSubject,
+                  let deck = decks.first(where: { $0.subject?.name.localizedCaseInsensitiveCompare(suggestedSubject) == .orderedSame }) {
+            selectedDeckID = deck.id
+        } else if let last = UUID(uuidString: lastNoteCardDeckID), decks.contains(where: { $0.id == last }) {
+            selectedDeckID = last
+        } else {
+            selectedDeckID = decks.first?.id
+        }
+    }
+
+    /// A new deck, in the subject named like the note's folder (made if it isn't there yet).
+    private func createDeck(named name: String) {
+        let subjectName = suggestedSubject ?? selectedDeck?.subject?.name ?? String(localized: "section.notes")
+        let subjects = (try? context.fetch(FetchDescriptor<SubjectModel>())) ?? []
+        let subject = subjects.first { $0.name.localizedCaseInsensitiveCompare(subjectName) == .orderedSame } ?? {
+            let order = (subjects.map(\.manualSortOrder).max() ?? -1) + 1
+            let subject = SubjectModel(name: subjectName, manualSortOrder: order)
+            context.insert(subject)
+            return subject
+        }()
+        let order = (subject.allDecks.map(\.manualSortOrder).max() ?? -1) + 1
+        let deck = Deck(subject: subject, name: name, manualSortOrder: order)
+        context.insert(deck)
+        do {
+            try context.save()
+            selectedDeckID = deck.id
+        } catch {
+            appState.errorMessage = error.localizedDescription
+        }
     }
 
     private func editorSection(
@@ -276,7 +387,7 @@ struct CardEditorView: View {
     }
 
     private var hasChanges: Bool {
-        front != (card?.frontMarkdown ?? "") || back != (card?.backMarkdown ?? "")
+        front != initialFront || back != initialBack
     }
 
     private func insert(_ insertion: MarkdownInsertion) {
@@ -316,7 +427,8 @@ struct CardEditorView: View {
             card.backMarkdown = back
             card.updatedAt = .now
         } else {
-            context.insert(Flashcard(deck: deck, frontMarkdown: front, backMarkdown: back))
+            context.insert(Flashcard(deck: deck, frontMarkdown: front, backMarkdown: back, sourceNotePath: sourceNotePath))
+            if sourceNotePath != nil { lastNoteCardDeckID = deck.id.uuidString }
         }
         do {
             try context.save()
