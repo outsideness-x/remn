@@ -32,12 +32,14 @@ final class Vault {
         if location != nil { open() }
     }
 
-    /// For tests and previews: a folder that's already on disk.
-    init(rootURL: URL) {
+    /// For tests, previews and the demo library: a folder that's already on disk. With `watches`,
+    /// changes made to it from outside come in the way they do for a real notes folder.
+    init(rootURL: URL, watches: Bool = false) {
         location = .device
         self.rootURL = rootURL
         status = .ready
         root = VaultScanner.scan(root: rootURL, reusing: [:])
+        if watches { watch(rootURL) }
     }
 
     // MARK: - Choosing and opening
@@ -72,6 +74,13 @@ final class Vault {
         }
         rootURL = url
         root = VaultFolder(path: "", name: url.lastPathComponent, folders: [], notes: [])
+        watch(url)
+        status = .ready
+        refresh()
+    }
+
+    /// Reads the folder again whenever something changes it: another app, or a sync from another device.
+    private func watch(_ url: URL) {
         let presenter = VaultPresenter(url: url) { [weak self] in
             Task { @MainActor in self?.scheduleRefresh() }
         }
@@ -82,8 +91,6 @@ final class Vault {
             Task { @MainActor in self?.scheduleRefresh() }
         }
         #endif
-        status = .ready
-        refresh()
     }
 
     private func close() {

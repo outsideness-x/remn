@@ -38,7 +38,7 @@ enum DemoLibrary {
         let cellFolder = root.appendingPathComponent(russian ? "Биология/attachments" : "Biology/attachments")
         try? FileManager.default.createDirectory(at: cellFolder, withIntermediateDirectories: true)
         try? cellPicture()?.write(to: cellFolder.appendingPathComponent("cell.png"))
-        return Vault(rootURL: root)
+        return Vault(rootURL: root, watches: true)
     }
 
     /// A soft, textbook-style drawing of a cell for the biology note.
