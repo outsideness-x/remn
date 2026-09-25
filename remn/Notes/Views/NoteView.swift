@@ -220,6 +220,8 @@ struct NoteView: View {
             try? await Task.sleep(for: .milliseconds(700))
             guard !Task.isCancelled else { return }
             await saveNow()
+            // Nothing waits to be saved any more, so changes from other devices can come in again.
+            if !Task.isCancelled { saveTask = nil }
         }
     }
 
@@ -240,7 +242,7 @@ struct NoteView: View {
 
     /// Picks up an edit made on another device or in another app, unless there's unsaved writing here.
     private func reloadIfChangedElsewhere() async {
-        guard isLoaded, controller.text == document.body, saveTask == nil || saveTask?.isCancelled == true else { return }
+        guard isLoaded, controller.text == document.body, saveTask == nil else { return }
         guard let fresh = try? await vault.load(path) else { return }
         guard fresh.text != savedText else { return }
         document = fresh
