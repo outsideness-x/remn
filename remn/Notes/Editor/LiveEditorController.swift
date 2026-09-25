@@ -32,6 +32,7 @@ final class LiveEditorController: NSObject {
     @ObservationIgnored private var activeSignature: [NSRange] = []
     @ObservationIgnored private var isStyling = false
     @ObservationIgnored private var parsedText: String?
+    @ObservationIgnored private var parsedLength = 0
     /// The cursor the note was last styled for, when it was styled at all.
     @ObservationIgnored private var styledSelection: NSRange??
 
@@ -92,6 +93,7 @@ final class LiveEditorController: NSObject {
         let previous = (text: parsedText, markdown: markdown)
         parsedText = current
         markdown = LiveMarkdown(current)
+        parsedLength = storage.length
         if let text = previous.text {
             restyle(.edit(LiveStyler.Edit(from: text, to: current), before: previous.markdown))
         } else {
@@ -149,8 +151,10 @@ final class LiveEditorController: NSObject {
 
     @discardableResult
     private func restyle(_ reason: Restyle) -> Bool {
-        // The parse is from before the half-typed text; it's styled once the keyboard commits it.
-        guard !isStyling, host?.hostIsComposing != true else { return false }
+        // The parse is from before the half-typed text; it's styled once the keyboard commits it. And while an
+        // edit is being made the text view already moves the cursor, before it reports the edit: the old parse
+        // would reach past the end of the shorter text. The edit's own restyle comes straight after.
+        guard !isStyling, host?.hostIsComposing != true, storage.length == parsedLength else { return false }
         let selection = selectionForStyling
         let signature = LiveStyler.activeSignature(of: markdown, selection: selection, in: storage.string as NSString)
             + (selection == nil ? [] : [NSRange(location: -1, length: 0)])
