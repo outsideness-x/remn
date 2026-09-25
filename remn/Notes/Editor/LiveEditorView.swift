@@ -321,6 +321,7 @@ final class LiveNSTextView: NSTextView, LiveTextHost {
         isAutomaticSpellingCorrectionEnabled = false
         // Like autocorrection, suggested words would write into the Markdown by themselves.
         inlinePredictionType = .no
+        isAutomaticTextCompletionEnabled = false
         insertionPointColor = LiveTheme.accent
         typingAttributes = controller.typingAttributes
         selectedTextAttributes = [.backgroundColor: LiveTheme.accent.withAlphaComponent(0.2)]
