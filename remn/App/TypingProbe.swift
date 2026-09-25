@@ -47,6 +47,13 @@ enum TypingProbe {
             write()
             return
         }
+        if mode == "link" {
+            await probeLink(editor, in: window) { line in
+                log.append(line)
+                write()
+            }
+            return
+        }
         if mode == "list" {
             await probeList(editor, in: window) { line in
                 log.append(line)
@@ -85,6 +92,36 @@ enum TypingProbe {
         }
         log.append("end: \((textView(in: window.contentView)?.string ?? "").suffix(40).debugDescription)")
         write()
+    }
+
+    /// A click on the note's first `[[wiki link]]`, which should open the note it names.
+    private static func probeLink(_ editor: LiveNSTextView, in window: NSWindow, log: (String) -> Void) async {
+        let text = editor.string as NSString
+        let link = text.range(of: "[[")
+        guard link.location != NSNotFound, let layoutManager = editor.layoutManager, let container = editor.textContainer else {
+            log("no link")
+            return
+        }
+        let glyphs = layoutManager.glyphRange(forCharacterRange: NSRange(location: link.location + 4, length: 1), actualCharacterRange: nil)
+        let rect = layoutManager.boundingRect(forGlyphRange: glyphs, in: container)
+            .offsetBy(dx: editor.textContainerOrigin.x, dy: editor.textContainerOrigin.y)
+        let point = editor.convert(NSPoint(x: rect.midX, y: rect.midY), to: nil)
+        log("clicking \(text.substring(with: NSRange(location: link.location, length: 17)).debugDescription) at \(point), key \(window.isKeyWindow)")
+        // Straight to the text view: a window in the background takes its first click only to come forward.
+        let events = [NSEvent.EventType.leftMouseDown, .leftMouseUp].compactMap { type in
+            NSEvent.mouseEvent(
+                with: type, location: point, modifierFlags: [], timestamp: ProcessInfo.processInfo.systemUptime,
+                windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: type == .leftMouseDown ? 1 : 0
+            )
+        }
+        if events.count == 2 {
+            // The mouse-up is queued first, so a click that isn't taken as a link ends normally.
+            NSApp.postEvent(events[1], atStart: false)
+            editor.mouseDown(with: events[0])
+        }
+        try? await Task.sleep(for: .seconds(1.5))
+        let now = textView(in: window.contentView)
+        log("after click: \((now?.string ?? "").prefix(20).debugDescription), same editor \(now === editor)")
     }
 
     /// Tab and Shift-Tab at the end of the note's last list item.
