@@ -186,11 +186,9 @@ struct NoteView: View {
     // MARK: - Loading and saving
 
     private func load() async {
-        controller.onTextChange = { _ in scheduleSave() }
-        controller.onMakeCard = { text in cardDraft = CardDraft(text: text) }
-        controller.onPasteImage = { data in Task { await insertImage(data) } }
-        controller.renderer.resolveImage = { [vault, path] link in vault.resolveLink(link, fromNoteAt: path) }
-        controller.renderer.noteFolder = vault.url(for: VaultPath.parent(of: path))
+        configureEditor()
+        // A rename or a move changes the path but not what's being written.
+        guard !isLoaded else { return }
         do {
             let loaded = try await vault.load(path)
             document = loaded
@@ -199,12 +197,21 @@ struct NoteView: View {
             controller.setText(loaded.body)
             isLoaded = true
             if loaded.body.isEmpty, title == String(localized: "notes.note.untitled") {
-                // A new note: start in the title.
-                NoteHeader.focusTitleRequest = path
+                // A note that was just made: its title takes the cursor once the page has slid in.
+                try? await Task.sleep(for: .milliseconds(350))
+                controller.host?.hostFocusHeader()
             }
         } catch {
             loadError = error.localizedDescription
         }
+    }
+
+    private func configureEditor() {
+        controller.onTextChange = { _ in scheduleSave() }
+        controller.onMakeCard = { text in cardDraft = CardDraft(text: text) }
+        controller.onPasteImage = { data in Task { await insertImage(data) } }
+        controller.renderer.resolveImage = { [vault, path] link in vault.resolveLink(link, fromNoteAt: path) }
+        controller.renderer.noteFolder = vault.url(for: VaultPath.parent(of: path))
     }
 
     private func scheduleSave() {
@@ -349,9 +356,6 @@ struct NoteView: View {
 
 /// The top of a note: its title, written large, and its tags.
 struct NoteHeader: View {
-    /// Set by a note that was just made, so its title is ready to be typed.
-    @MainActor static var focusTitleRequest: String?
-
     @Binding var title: String
     let tags: [String]
     let inlineTags: [String]
@@ -376,16 +380,14 @@ struct NoteHeader: View {
                         // Return ends the title rather than starting a new line.
                         guard value.contains("\n") else { return }
                         title = value.replacingOccurrences(of: "\n", with: "")
-                        titleFocused = false
                         onFinishTitle()
                     }
                     .onChange(of: titleFocused) { _, focused in
                         if !focused { onCommitTitle() }
                     }
-                    .onSubmit {
-                        titleFocused = false
-                        onFinishTitle()
-                    }
+                    // Moving the cursor into the note ends the title; unfocusing the field as well would race
+                    // it and, on the Mac, leave nothing focused at all.
+                    .onSubmit(onFinishTitle)
                 TitleSwash(seed: title.inkSeed)
             }
 
@@ -412,12 +414,6 @@ struct NoteHeader: View {
         .padding(.top, 6)
         .padding(.bottom, 6)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .onAppear {
-            if NoteHeader.focusTitleRequest != nil {
-                NoteHeader.focusTitleRequest = nil
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { titleFocused = true }
-            }
-        }
     }
 
     private var titleFont: Font {

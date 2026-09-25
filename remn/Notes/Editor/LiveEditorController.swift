@@ -8,6 +8,8 @@ protocol LiveTextHost: AnyObject {
     var hostIsFocused: Bool { get }
     func hostReplace(_ range: NSRange, with text: String)
     func hostFocus()
+    /// Puts the cursor in the field at the top of the page, the note's title.
+    func hostFocusHeader()
     func hostScrollToSelection()
     /// The layout under the cursor changed without an edit; redraw the cursor at its new size.
     func hostRefreshCaret()

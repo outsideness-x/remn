@@ -191,6 +191,22 @@ final class LiveTextView: UITextView, LiveTextHost, UIGestureRecognizerDelegate 
 
     var hostIsFocused: Bool { isFirstResponder }
 
+    func hostFocusHeader() {
+        // SwiftUI can't move focus into a page hosted inside a text view, so ask the field itself.
+        func field(in view: UIView) -> UIView? {
+            for subview in view.subviews {
+                if subview is UITextField || subview is UITextView, subview.canBecomeFirstResponder { return subview }
+                if let found = field(in: subview) { return found }
+            }
+            return nil
+        }
+        guard let header = headerHost?.view, let title = field(in: header) as? UIResponder & UITextInput,
+              title.becomeFirstResponder()
+        else { return }
+        // The placeholder name is selected, so typing replaces it.
+        title.selectedTextRange = title.textRange(from: title.beginningOfDocument, to: title.endOfDocument)
+    }
+
     /// Edits made by the app go straight into the text, past the keyboard's autocorrection and smart quotes,
     /// which would otherwise turn a template's `"` into `«`.
     func hostReplace(_ range: NSRange, with text: String) {
@@ -466,6 +482,20 @@ final class LiveNSTextView: NSTextView, LiveTextHost {
     }
 
     var hostIsFocused: Bool { window?.firstResponder === self }
+
+    func hostFocusHeader() {
+        // SwiftUI can't move focus into a page hosted inside a text view, so ask the field itself.
+        func field(in view: NSView) -> NSTextField? {
+            for subview in view.subviews {
+                if let textField = subview as? NSTextField, textField.isEditable { return textField }
+                if let found = field(in: subview) { return found }
+            }
+            return nil
+        }
+        if let headerHost, let title = field(in: headerHost) {
+            window?.makeFirstResponder(title)
+        }
+    }
 
     func hostReplace(_ range: NSRange, with text: String) {
         guard shouldChangeText(in: range, replacementString: text) else { return }
