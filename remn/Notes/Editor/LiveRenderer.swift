@@ -68,7 +68,8 @@ final class LiveRenderer {
     }
 
     private func renderMath(_ latex: String, inline: Bool, key: String) -> LivePicture {
-        let source = latex.trimmingCharacters(in: .whitespacesAndNewlines)
+        let written = latex.trimmingCharacters(in: .whitespacesAndNewlines)
+        let source = LatexCompatibility.rewritten(written)
         let size = inline ? mathSize : mathSize * 1.12
         let font = Math.Font(name: .latinModern, size: size)
         let style: Math.TypesettingStyle = inline ? .text : .display
@@ -79,7 +80,7 @@ final class LiveRenderer {
             style: style
         )
         guard bounds.width > 0, !source.isEmpty else {
-            return renderError(source.isEmpty ? "$$" : source, inline: inline, key: key)
+            return renderError(written.isEmpty ? "$$" : written, inline: inline, key: key)
         }
         let ink = Color(LiveTheme.ink)
         let view = Math(source)
@@ -92,7 +93,7 @@ final class LiveRenderer {
         let renderer = ImageRenderer(content: view)
         renderer.scale = displayScale
         guard let image = renderer.cgImage else {
-            return renderError(source, inline: inline, key: key)
+            return renderError(written, inline: inline, key: key)
         }
         return LivePicture(
             kind: inline ? .inlineMath : .blockMath,

@@ -9,7 +9,7 @@ enum MarkdownRenderSource {
     static func normalized(_ source: String) -> String {
         sourceChunks(in: source)
             .map { chunk in
-                chunk.isCodeFence ? chunk.text : normalizeMath(in: chunk.text)
+                chunk.isCodeFence ? chunk.text : LatexCompatibility.rewritten(normalizeMath(in: chunk.text))
             }
             .joined()
     }
