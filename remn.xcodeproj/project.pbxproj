@@ -121,6 +121,7 @@
 		F89C2F844176B56B482A08AA /* CardEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E4DDE9993647270960E6C2 /* CardEditorView.swift */; };
 		F8E44050781AEE3AB274F377 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC017E7D16B771C0C61176D /* RootView.swift */; };
 		F9CEF11156B6FDB2BFD829A6 /* LiveMarkdownTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EE6E0A79E447449CF8B9E6 /* LiveMarkdownTests.swift */; };
+		FD4DCDAD4BAD263DF78996FC /* TypingProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A70B1BAD69690B4F5480FD /* TypingProbe.swift */; };
 		FE3B2A86AD4B7E2969557A84 /* SessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65143066E4333550817388 /* SessionService.swift */; };
 /* End PBXBuildFile section */
 
@@ -212,6 +213,7 @@
 		A633B00400E44408AFB4DD4B /* LibraryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStore.swift; sourceTree = "<group>"; };
 		A6E4DDE9993647270960E6C2 /* CardEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEditorView.swift; sourceTree = "<group>"; };
 		A936199CBCAFEC6DA6AE82E9 /* LiveStyler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveStyler.swift; sourceTree = "<group>"; };
+		B0A70B1BAD69690B4F5480FD /* TypingProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingProbe.swift; sourceTree = "<group>"; };
 		B6EE6E0A79E447449CF8B9E6 /* LiveMarkdownTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveMarkdownTests.swift; sourceTree = "<group>"; };
 		B74613E361D1008F37D52C7D /* FlashcardSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardSurface.swift; sourceTree = "<group>"; };
 		B7A5570F2C62C9A73E4F1ED7 /* NotesNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesNavigation.swift; sourceTree = "<group>"; };
@@ -573,6 +575,7 @@
 				6895F64A4DB608E8E9F16891 /* remnApp.swift */,
 				1D08D9FDB393E2857A395E38 /* RemnCommands.swift */,
 				6AC017E7D16B771C0C61176D /* RootView.swift */,
+				B0A70B1BAD69690B4F5480FD /* TypingProbe.swift */,
 				83F38508692CF3C7DF09D251 /* WindowSnapshot.swift */,
 			);
 			path = App;
@@ -828,6 +831,7 @@
 				2186EA12EDEF5D164D4C50DC /* StudySetupSheet.swift in Sources */,
 				A4B8A9D61AAEE3C98E00D5EC /* SubjectDetailView.swift in Sources */,
 				77CE4F9591967D8D25C5A624 /* SubjectModel.swift in Sources */,
+				FD4DCDAD4BAD263DF78996FC /* TypingProbe.swift in Sources */,
 				7CF5BB22F5CD0AD9A0F8876C /* TypstEngine.swift in Sources */,
 				4572E8E2D5328AAD4454978B /* TypstGallerySheet.swift in Sources */,
 				53ACFFA0C94E4C719D782B1B /* Vault.swift in Sources */,

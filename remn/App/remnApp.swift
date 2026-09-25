@@ -46,7 +46,10 @@ struct remnApp: App {
             .preferredColorScheme(AppearanceMode(rawValue: appearanceMode)?.colorScheme)
             .tint(.remnAccent)
             #if DEBUG && os(macOS)
-            .onAppear { WindowSnapshot.scheduleIfRequested() }
+            .onAppear {
+                WindowSnapshot.scheduleIfRequested()
+                TypingProbe.scheduleIfRequested()
+            }
             #endif
             #if os(macOS)
             .frame(minWidth: 760, minHeight: 540)
