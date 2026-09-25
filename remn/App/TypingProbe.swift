@@ -29,7 +29,8 @@ enum TypingProbe {
         NSApp.activate()
         window.makeKeyAndOrderFront(nil)
         let arguments = ProcessInfo.processInfo.arguments
-        let newNote = arguments.firstIndex(of: "-typingProbe").map { arguments.indices.contains($0 + 1) && arguments[$0 + 1] == "newNote" } ?? false
+        let mode = arguments.firstIndex(of: "-typingProbe").flatMap { arguments.indices.contains($0 + 1) ? arguments[$0 + 1] : nil }
+        let newNote = mode == "newNote"
         if newNote {
             // ⌘N, as a person would: a new note opens with its title ready for typing.
             press("n", in: window, modifiers: .command)
@@ -44,6 +45,13 @@ enum TypingProbe {
         guard let editor = textView(in: window.contentView) else {
             log.append("no editor")
             write()
+            return
+        }
+        if mode == "list" {
+            await probeList(editor, in: window) { line in
+                log.append(line)
+                write()
+            }
             return
         }
         if newNote {
@@ -79,6 +87,31 @@ enum TypingProbe {
         write()
     }
 
+    /// Tab and Shift-Tab at the end of the note's last list item.
+    private static func probeList(_ editor: LiveNSTextView, in window: NSWindow, log: (String) -> Void) async {
+        window.makeFirstResponder(editor)
+        let text = editor.string as NSString
+        let lastItem = text.range(of: "\n- ", options: .backwards)
+        guard lastItem.location != NSNotFound else {
+            log("no list item")
+            return
+        }
+        let lineEnd = text.lineRange(for: NSRange(location: NSMaxRange(lastItem), length: 0))
+        editor.setSelectedRange(NSRange(location: NSMaxRange(lineEnd) - 1, length: 0))
+        func line() -> String {
+            let text = editor.string as NSString
+            return text.substring(with: text.lineRange(for: editor.selectedRange())).debugDescription
+        }
+        log("before: \(line()) cursor \(editor.selectedRange())")
+        for (name, character, modifiers) in [("tab", Character("\t"), NSEvent.ModifierFlags()), ("tab", "\t", []), ("shift-tab", "\u{19}", .shift), ("tab", "\t", [])] {
+            log("pressing \(name)")
+            press(character, in: window, modifiers: modifiers)
+            log("\(name): \(line()) cursor \(editor.selectedRange()) responder \(describe(window.firstResponder))")
+            try? await Task.sleep(for: .milliseconds(300))
+            log("after \(name)")
+        }
+    }
+
     private static func press(_ character: Character, in window: NSWindow, modifiers: NSEvent.ModifierFlags = []) {
         for type in [NSEvent.EventType.keyDown, .keyUp] {
             guard let event = NSEvent.keyEvent(
@@ -91,10 +124,10 @@ enum TypingProbe {
                 characters: String(character),
                 charactersIgnoringModifiers: String(character),
                 isARepeat: false,
-                keyCode: ["a": 0, "b": 11, "n": 45, " ": 49, "\r": 36][character] ?? 0
+                keyCode: ["a": 0, "b": 11, "n": 45, " ": 49, "\r": 36, "\t": 48, "\u{19}": 48][character] ?? 0
             ) else { continue }
             // Straight to the window: while someone works in another app, this one can't become key.
-            if modifiers.isEmpty { window.sendEvent(event) } else { NSApp.sendEvent(event) }
+            if modifiers.contains(.command) { NSApp.sendEvent(event) } else { window.sendEvent(event) }
         }
     }
 
