@@ -163,6 +163,24 @@ final class LiveTextView: UITextView, LiveTextHost, UIGestureRecognizerDelegate 
         true
     }
 
+    // MARK: - A hardware keyboard
+
+    override var keyCommands: [UIKeyCommand]? {
+        let indent = UIKeyCommand(input: "\t", modifierFlags: [], action: #selector(indentList))
+        let outdent = UIKeyCommand(input: "\t", modifierFlags: .shift, action: #selector(outdentList))
+        indent.wantsPriorityOverSystemBehavior = true
+        outdent.wantsPriorityOverSystemBehavior = true
+        return (super.keyCommands ?? []) + [indent, outdent]
+    }
+
+    @objc private func indentList() {
+        if !controller.indentList(outdent: false) { insertText("\t") }
+    }
+
+    @objc private func outdentList() {
+        _ = controller.indentList(outdent: true)
+    }
+
     // MARK: - Pasting pictures
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -420,6 +438,16 @@ final class LiveNSTextView: NSTextView, LiveTextHost {
     override func insertNewline(_ sender: Any?) {
         if controller.continueList() { return }
         super.insertNewline(sender)
+    }
+
+    override func insertTab(_ sender: Any?) {
+        if controller.indentList(outdent: false) { return }
+        super.insertTab(sender)
+    }
+
+    override func insertBacktab(_ sender: Any?) {
+        if controller.indentList(outdent: true) { return }
+        super.insertBacktab(sender)
     }
 
     override func menu(for event: NSEvent) -> NSMenu? {

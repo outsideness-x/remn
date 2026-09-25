@@ -157,8 +157,49 @@ struct ListContinuationTests {
         #expect(pressReturn("- [ ] ") == "")
     }
 
+    @Test func anEmptyNestedItemStepsOutFirst() {
+        #expect(pressReturn("- milk\n    - ") == "- milk\n- ")
+        #expect(pressReturn("1. one\n\t- [ ] ") == "1. one\n- [ ] ")
+    }
+
     @Test func plainTextAndCodeAreLeftAlone() {
         #expect(pressReturn("just words") == nil)
         #expect(pressReturn("```\n- not a list") == nil)
     }
 }
+
+struct ListIndentTests {
+    private func press(_ text: String, _ selection: NSRange, outdent: Bool = false) -> (text: String, selection: NSRange)? {
+        let source = text as NSString
+        guard let edit = ListIndent.edit(in: source, selection: selection, outdent: outdent) else { return nil }
+        return (source.replacingCharacters(in: edit.range, with: edit.replacement), edit.selection)
+    }
+
+    @Test func tabTucksAnItemUnderTheOneAbove() {
+        let result = press("- milk\n- eggs", NSRange(location: 13, length: 0))
+        #expect(result?.text == "- milk\n    - eggs")
+        #expect(result?.selection == NSRange(location: 17, length: 0))
+    }
+
+    @Test func shiftTabBringsItBackOut() {
+        let result = press("- milk\n    - eggs", NSRange(location: 17, length: 0), outdent: true)
+        #expect(result?.text == "- milk\n- eggs")
+        #expect(result?.selection == NSRange(location: 13, length: 0))
+        // A cursor inside the indentation that goes lands at the start of the line.
+        #expect(press("  - x", NSRange(location: 1, length: 0), outdent: true)?.selection == NSRange(location: 0, length: 0))
+        // Already at the top: the key is still taken, and nothing changes.
+        #expect(press("- milk", NSRange(location: 3, length: 0), outdent: true)?.text == "- milk")
+    }
+
+    @Test func aSelectionMovesEveryItemInIt() {
+        let result = press("1. one\n2. two\nplain", NSRange(location: 0, length: 13))
+        #expect(result?.text == "    1. one\n    2. two\nplain")
+        #expect(result?.selection == NSRange(location: 4, length: 17))
+    }
+
+    @Test func offAListTabIsLeftAlone() {
+        #expect(press("just words", NSRange(location: 4, length: 0)) == nil)
+        #expect(press("```\n- code", NSRange(location: 8, length: 0)) == nil)
+    }
+}
+

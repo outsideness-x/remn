@@ -44,4 +44,11 @@ struct LiveEditorControllerTests {
         #expect(controller.text == "- milk\n")
         #expect(host.hostSelectedRange == NSRange(location: 7, length: 0))
     }
+
+    @Test func shiftTabKeepsTheStylerInsideTheShorterText() {
+        let (controller, host) = editor("- milk\n        - eggs\n", cursor: 21)
+        #expect(controller.indentList(outdent: true))
+        #expect(controller.text == "- milk\n    - eggs\n")
+        #expect(host.hostSelectedRange == NSRange(location: 17, length: 0))
+    }
 }

@@ -192,6 +192,15 @@ enum ListContinuation {
         let marker = (String(head[match.range]) as NSString).length
         let rest = text.substring(with: NSRange(location: line.location + marker, length: lineEnd - line.location - marker))
         if rest.trimmingCharacters(in: .whitespaces).isEmpty, location == lineEnd {
+            // An empty item inside another steps out a level before the list ends.
+            if match.output.7 == nil, let indent = match.output.1, !indent.isEmpty {
+                let outdent = ListIndent.removableIndent(of: String(indent))
+                return NoteInsertion.Edit(
+                    range: NSRange(location: line.location, length: outdent),
+                    replacement: "",
+                    selection: NSRange(location: location - outdent, length: 0)
+                )
+            }
             // An empty item: take its marker away and leave a plain line.
             return NoteInsertion.Edit(
                 range: NSRange(location: line.location, length: marker),
@@ -218,3 +227,77 @@ enum ListContinuation {
         )
     }
 }
+
+/// Tab tucks list items under the one above; Shift-Tab brings them back out.
+enum ListIndent {
+    /// One level of a list: four spaces, deep enough under both `- ` and `1. ` items.
+    static let unit = "    "
+
+    /// How much of `indent` one Shift-Tab takes away: a tab, or up to a level of spaces.
+    static func removableIndent(of indent: String) -> Int {
+        if indent.hasPrefix("\t") { return 1 }
+        return min((unit as NSString).length, indent.prefix { $0 == " " }.count)
+    }
+
+    /// The edit for the list items the selection touches, or nil when it touches none, so Tab keeps its
+    /// usual meaning. When there's nothing to move, the edit changes nothing.
+    static func edit(in text: NSString, selection: NSRange, outdent: Bool) -> NoteInsertion.Edit? {
+        let start = min(selection.location, text.length)
+        let selection = NSRange(location: start, length: min(selection.length, text.length - start))
+        let items = Set(LiveMarkdown(text as String).blocks.compactMap { block -> Int? in
+            switch block.kind {
+            case .listItem, .task: block.range.location
+            default: nil
+            }
+        })
+
+        let whole = text.lineRange(for: selection)
+        var lines: [NSRange] = []
+        var location = whole.location
+        repeat {
+            let line = text.lineRange(for: NSRange(location: location, length: 0))
+            lines.append(line)
+            location = NSMaxRange(line)
+        } while location < NSMaxRange(whole)
+        guard lines.contains(where: { items.contains($0.location) }) else { return nil }
+
+        var replacement = ""
+        var deltas: [Int] = []
+        for line in lines {
+            let content = text.substring(with: line)
+            guard items.contains(line.location) else {
+                replacement += content
+                deltas.append(0)
+                continue
+            }
+            if outdent {
+                let removable = removableIndent(of: content)
+                replacement += String(content.dropFirst(removable))
+                deltas.append(-removable)
+            } else {
+                replacement += unit + content
+                deltas.append((unit as NSString).length)
+            }
+        }
+
+        // Everything on a line moves with it; a cursor inside indentation that's taken away lands at the line's start.
+        func moved(_ position: Int) -> Int {
+            var shift = 0
+            for (index, line) in lines.enumerated() {
+                if position < NSMaxRange(line) || index == lines.count - 1 {
+                    let column = max(0, position - line.location)
+                    return line.location + shift + max(0, column + deltas[index])
+                }
+                shift += deltas[index]
+            }
+            return position + shift
+        }
+        let from = moved(selection.location)
+        return NoteInsertion.Edit(
+            range: whole,
+            replacement: replacement,
+            selection: NSRange(location: from, length: max(0, moved(NSMaxRange(selection)) - from))
+        )
+    }
+}
+

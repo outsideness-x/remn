@@ -236,6 +236,18 @@ final class LiveEditorController: NSObject {
         host.hostScrollToSelection()
     }
 
+    /// Tab and Shift-Tab on list items. Returns false off a list, so the key does what it usually does.
+    func indentList(outdent: Bool) -> Bool {
+        guard let host else { return false }
+        let string = storage.string as NSString
+        guard let edit = ListIndent.edit(in: string, selection: host.hostSelectedRange, outdent: outdent) else { return false }
+        if edit.replacement != string.substring(with: edit.range) {
+            host.hostReplace(edit.range, with: edit.replacement)
+        }
+        host.hostSelectedRange = edit.selection
+        return true
+    }
+
     /// Return in a list: carries the list on, or ends it on an empty item. Returns false for a plain newline.
     func continueList() -> Bool {
         guard let host, host.hostSelectedRange.length == 0,
