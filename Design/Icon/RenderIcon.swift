@@ -1,4 +1,4 @@
-// Renders remn's app icon with the same ink engine the app draws with.
+// Renders remn's app icon with the same ink engine and hand the app draws with.
 //
 //   Design/Icon/render.sh [output directory]
 //
@@ -6,13 +6,17 @@
 // so the hand keeps the proportions it has in the app.
 
 import AppKit
+import CoreText
 import SwiftUI
 
 @main
 struct RenderIcon {
     @MainActor
     static func main() throws {
-        let output = URL(fileURLWithPath: CommandLine.arguments.dropFirst().first ?? ".")
+        let arguments = CommandLine.arguments.dropFirst()
+        let output = URL(fileURLWithPath: arguments.first ?? ".")
+        let font = URL(fileURLWithPath: arguments.dropFirst().first ?? "remn/Resources/Fonts/Neucha.ttf")
+        guard CTFontManagerRegisterFontsForURL(font as CFURL, .process, nil) else { throw RenderError.failed(font.path) }
         for variant in IconArt.Variant.allCases {
             let renderer = ImageRenderer(content: IconArt(variant: variant))
             renderer.scale = 8
@@ -66,7 +70,7 @@ struct IconArt: View {
             .offset(x: 10, y: 17)
 
             // The card on top: paper laid a touch off-register, an ink outline, the red index rule
-            // and a line of handwriting.
+            // and the app's name, lettered in its hand.
             ZStack {
                 InkPatch(seed: 81, cornerRadius: 9)
                     .fill(cardPaper)
@@ -77,14 +81,10 @@ struct IconArt: View {
                     .fill(accent)
                     .frame(width: 70, height: 6)
                     .offset(y: -15)
-                Scribble(seed: 84)
-                    .fill(ink)
-                    .frame(width: 58, height: 12)
-                    .offset(x: -4, y: 2)
-                InkLine(seed: 85, pen: InkPen(width: 1.15, touchDown: 0.7, liftOff: 0.5))
-                    .fill(ink.opacity(0.28))
-                    .frame(width: 66, height: 5)
-                    .offset(y: 16)
+                HandwrittenText(verbatim: "remn", weight: 0.8)
+                    .font(.custom("Neucha", fixedSize: 34))
+                    .foregroundStyle(ink)
+                    .offset(y: 5)
             }
             .frame(width: 88, height: 60)
             .rotationEffect(.degrees(-7))
@@ -124,38 +124,5 @@ struct IconArt: View {
         case .dark: Color(red: 0.941, green: 0.404, blue: 0.306)
         case .tinted: Color(white: 0.62)
         }
-    }
-}
-
-/// A word of joined-up handwriting, reduced to its rhythm: loops of different heights.
-struct Scribble: Shape {
-    let seed: Int
-
-    func path(in rect: CGRect) -> Path {
-        var random = InkRandom(seed: seed)
-        let letters = 6
-        let step = rect.width / CGFloat(letters + 1)
-        var points: [CGPoint] = [CGPoint(x: rect.minX, y: rect.maxY - rect.height * 0.12)]
-        for letter in 0..<letters {
-            let tall = letter == 1 || letter == 4
-            let height = rect.height * (tall ? 1 : random.value(in: 0.42...0.58))
-            let lean = random.value(in: 0.26...0.34)
-            let start = rect.minX + step * (CGFloat(letter) + 0.35)
-            for sample in 0..<28 {
-                let u = CGFloat(sample) / 28
-                points.append(
-                    CGPoint(
-                        x: start + step * u + step * lean * sin(2 * .pi * u),
-                        y: rect.maxY - height * (1 - cos(2 * .pi * u)) / 2
-                    )
-                )
-            }
-        }
-        points.append(CGPoint(x: rect.maxX, y: rect.maxY - rect.height * 0.2))
-        return InkBrush.stroke(
-            points,
-            pen: InkPen(width: 1.55, touchDown: 0.55, liftOff: 0.3, attack: 3, release: 7, pressureVariation: 0.2),
-            seed: seed
-        )
     }
 }

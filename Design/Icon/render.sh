@@ -16,6 +16,6 @@ swiftc -O -parse-as-library -o "$build/render-icon" \
     "$root/remn/DesignSystem/Ink/InkShapes.swift" \
     "$root/remn/DesignSystem/Ink/InkText.swift"
 
-"$build/render-icon" "$out"
+"$build/render-icon" "$out" "$root/remn/Resources/Fonts/Neucha.ttf"
 python3 "$root/Design/Icon/grain.py" "$out"
 rm -rf "$build"
