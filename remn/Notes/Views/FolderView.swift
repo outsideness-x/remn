@@ -66,7 +66,7 @@ struct FolderView: View {
                 .buttonStyle(InkButtonStyle(kind: .primary, seed: path.inkSeed ^ 0x77))
                 .padding(.horizontal, 20)
                 .padding(.top, 14)
-                .padding(.bottom, isTabRoot ? 4 : 8)
+                .padding(.bottom, isTabRoot ? 4 : RemnPlatform.bottomButtonPadding)
                 .remnReadableWidth(600)
                 if isTabRoot {
                     @Bindable var appState = appState

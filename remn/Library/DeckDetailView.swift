@@ -79,7 +79,7 @@ struct DeckDetailView: View {
                 .buttonStyle(InkButtonStyle(kind: .primary, seed: deck.id.inkSeed))
                 .padding(.horizontal, 20)
                 .padding(.top, 14)
-                .padding(.bottom, 8)
+                .padding(.bottom, RemnPlatform.bottomButtonPadding)
                 .remnReadableWidth(600)
                 .background(alignment: .bottom) { PaperFade() }
             }

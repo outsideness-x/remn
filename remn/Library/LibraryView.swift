@@ -287,7 +287,7 @@ struct LibraryView: View {
         }
         .padding(.horizontal, isSidebar ? 14 : 20)
         .padding(.top, 14)
-        .padding(.bottom, isSidebar ? 14 : 4)
+        .padding(.bottom, isSidebar ? max(14, RemnPlatform.bottomButtonPadding) : 4)
         .remnReadableWidth(600)
     }
 

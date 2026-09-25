@@ -93,7 +93,7 @@ struct StudySetupSheet: View {
             .disabled(selectedSubjectIDs.isEmpty && initialDeckID == nil)
             .padding(.horizontal, 20)
             .padding(.top, 12)
-            .padding(.bottom, 8)
+            .padding(.bottom, RemnPlatform.bottomButtonPadding)
             .remnReadableWidth(600)
             .background(alignment: .bottom) { PaperFade() }
         }

@@ -22,6 +22,10 @@ enum RemnPlatform {
         false
         #endif
     }
+
+    /// The space under a button pinned to the foot of a page. On iPhone and iPad the home indicator
+    /// already leaves room below it; a Mac window's edge doesn't.
+    static var bottomButtonPadding: CGFloat { isMac ? 22 : 8 }
 }
 
 extension View {
