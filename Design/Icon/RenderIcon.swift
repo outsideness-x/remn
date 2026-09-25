@@ -18,17 +18,22 @@ struct RenderIcon {
         let font = URL(fileURLWithPath: arguments.dropFirst().first ?? "remn/Resources/Fonts/Neucha.ttf")
         guard CTFontManagerRegisterFontsForURL(font as CFURL, .process, nil) else { throw RenderError.failed(font.path) }
         for variant in IconArt.Variant.allCases {
-            let renderer = ImageRenderer(content: IconArt(variant: variant))
-            renderer.scale = 8
-            guard let image = renderer.cgImage else { throw RenderError.failed(variant.rawValue) }
-            let url = output.appendingPathComponent(variant.filename)
-            guard let destination = CGImageDestinationCreateWithURL(url as CFURL, "public.png" as CFString, 1, nil) else {
-                throw RenderError.failed(url.path)
-            }
-            CGImageDestinationAddImage(destination, image, nil)
-            guard CGImageDestinationFinalize(destination) else { throw RenderError.failed(url.path) }
-            print("wrote \(url.path) \(image.width)×\(image.height)")
+            try write(IconArt(variant: variant), to: output.appendingPathComponent(variant.filename))
         }
+        try write(MacIconArt(), to: output.appendingPathComponent("AppIcon-Mac-1024.png"))
+    }
+
+    @MainActor
+    private static func write(_ art: some View, to url: URL) throws {
+        let renderer = ImageRenderer(content: art)
+        renderer.scale = 8
+        guard let image = renderer.cgImage else { throw RenderError.failed(url.lastPathComponent) }
+        guard let destination = CGImageDestinationCreateWithURL(url as CFURL, "public.png" as CFString, 1, nil) else {
+            throw RenderError.failed(url.path)
+        }
+        CGImageDestinationAddImage(destination, image, nil)
+        guard CGImageDestinationFinalize(destination) else { throw RenderError.failed(url.path) }
+        print("wrote \(url.path) \(image.width)×\(image.height)")
     }
 
     enum RenderError: Error {
@@ -124,5 +129,19 @@ struct IconArt: View {
         case .dark: Color(red: 0.941, green: 0.404, blue: 0.306)
         case .tinted: Color(white: 0.62)
         }
+    }
+}
+
+/// The Mac icon: the light drawing on the rounded square every Mac app sits in, 824 of 1024 pixels
+/// on Apple's grid, so the shadow under it has room.
+struct MacIconArt: View {
+    var body: some View {
+        IconArt(variant: .light)
+            .scaleEffect(103 / 128)
+            .frame(width: 103, height: 103)
+            .clipShape(.rect(cornerRadius: 23.2, style: .continuous))
+            .compositingGroup()
+            .shadow(color: .black.opacity(0.3), radius: 1.25, y: 1.25)
+            .frame(width: 128, height: 128)
     }
 }

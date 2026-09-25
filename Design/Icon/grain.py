@@ -1,4 +1,4 @@
-"""Lays a faint paper tooth over the rendered icons and writes opaque sRGB PNGs."""
+"""Lays a faint paper tooth over the rendered icons, writes them as sRGB PNGs and cuts the Mac icon's sizes."""
 
 import sys
 from pathlib import Path
@@ -6,7 +6,9 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-STRENGTH = {"AppIcon": 3.2, "AppIcon-Dark": 2.4, "AppIcon-Tinted": 0.0}
+STRENGTH = {"AppIcon": 3.2, "AppIcon-Dark": 2.4, "AppIcon-Tinted": 0.0, "AppIcon-Mac-1024": 3.2}
+# The rest of the sizes macOS asks for, cut from the 1024-pixel Mac icon.
+MAC_SIZES = (16, 32, 64, 128, 256, 512)
 
 
 def grain(size: int, seed: int) -> np.ndarray:
@@ -19,15 +21,25 @@ def grain(size: int, seed: int) -> np.ndarray:
 
 
 def main(folder: Path) -> None:
-    for path in sorted(folder.glob("AppIcon*.png")):
-        variant = path.stem
-        image = Image.open(path).convert("RGB")
-        pixels = np.asarray(image, dtype=np.float32)
-        strength = STRENGTH.get(variant, 0.0)
+    for variant, strength in STRENGTH.items():
+        path = folder / f"{variant}.png"
+        image = Image.open(path)
+        # iOS icons are opaque; the Mac one keeps the clear margin around its rounded square.
+        pixels = np.asarray(image.convert("RGBA" if "Mac" in variant else "RGB"), dtype=np.float32)
         if strength:
-            pixels += grain(image.width, seed=17)[..., None] * strength
+            tooth = grain(image.width, seed=17) * strength
+            if pixels.shape[2] == 4:
+                tooth *= pixels[..., 3] / 255
+            pixels[..., :3] += tooth[..., None]
         Image.fromarray(pixels.clip(0, 255).astype(np.uint8)).save(path, optimize=True)
         print(f"grained {path.name}")
+
+    # Scaled with premultiplied alpha, so the clear margin doesn't bleed dark into the edge.
+    mac = Image.open(folder / "AppIcon-Mac-1024.png").convert("RGBa")
+    for size in MAC_SIZES:
+        path = folder / f"AppIcon-Mac-{size}.png"
+        mac.resize((size, size), Image.LANCZOS).convert("RGBA").save(path, optimize=True)
+        print(f"wrote {path.name}")
 
 
 if __name__ == "__main__":
