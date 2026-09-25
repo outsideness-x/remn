@@ -191,6 +191,8 @@ final class LiveTextView: UITextView, LiveTextHost, UIGestureRecognizerDelegate 
 
     var hostIsFocused: Bool { isFirstResponder }
 
+    var hostIsComposing: Bool { markedTextRange != nil }
+
     func hostFocusHeader() {
         // SwiftUI can't move focus into a page hosted inside a text view, so ask the field itself.
         func field(in view: UIView) -> UIView? {
@@ -317,6 +319,8 @@ final class LiveNSTextView: NSTextView, LiveTextHost {
         isAutomaticDashSubstitutionEnabled = false
         isAutomaticTextReplacementEnabled = false
         isAutomaticSpellingCorrectionEnabled = false
+        // Like autocorrection, suggested words would write into the Markdown by themselves.
+        inlinePredictionType = .no
         insertionPointColor = LiveTheme.accent
         typingAttributes = controller.typingAttributes
         selectedTextAttributes = [.backgroundColor: LiveTheme.accent.withAlphaComponent(0.2)]
@@ -482,6 +486,8 @@ final class LiveNSTextView: NSTextView, LiveTextHost {
     }
 
     var hostIsFocused: Bool { window?.firstResponder === self }
+
+    var hostIsComposing: Bool { hasMarkedText() }
 
     func hostFocusHeader() {
         // SwiftUI can't move focus into a page hosted inside a text view, so ask the field itself.

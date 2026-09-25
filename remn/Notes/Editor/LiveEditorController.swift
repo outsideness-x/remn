@@ -6,6 +6,8 @@ import SwiftUI
 protocol LiveTextHost: AnyObject {
     var hostSelectedRange: NSRange { get set }
     var hostIsFocused: Bool { get }
+    /// A character is still being put together, like a Japanese word or an accented letter.
+    var hostIsComposing: Bool { get }
     func hostReplace(_ range: NSRange, with text: String)
     func hostFocus()
     /// Puts the cursor in the field at the top of the page, the note's title.
@@ -83,6 +85,8 @@ final class LiveEditorController: NSObject {
     // MARK: - Events from the text view
 
     func textDidChange(notify: Bool = true) {
+        // Restyling half-typed text would undo the keyboard's own marking; wait until it's committed.
+        if host?.hostIsComposing == true { return }
         let current = storage.string
         guard current != parsedText else { return }
         let previous = (text: parsedText, markdown: markdown)
@@ -145,7 +149,8 @@ final class LiveEditorController: NSObject {
 
     @discardableResult
     private func restyle(_ reason: Restyle) -> Bool {
-        guard !isStyling else { return false }
+        // The parse is from before the half-typed text; it's styled once the keyboard commits it.
+        guard !isStyling, host?.hostIsComposing != true else { return false }
         let selection = selectionForStyling
         let signature = LiveStyler.activeSignature(of: markdown, selection: selection, in: storage.string as NSString)
             + (selection == nil ? [] : [NSRange(location: -1, length: 0)])
