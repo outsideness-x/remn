@@ -5,9 +5,21 @@ struct TypstTemplate: Identifiable, Hashable {
     let id: String
     let source: String
 
+    /// Written out one by one so Xcode sees every name that's translated.
     var title: LocalizedStringKey {
-        let key = "typst.template." + id
-        return LocalizedStringKey(key)
+        switch id {
+        case "annotated": "typst.template.annotated"
+        case "plot": "typst.template.plot"
+        case "pie": "typst.template.pie"
+        case "boxplot": "typst.template.boxplot"
+        case "diagram": "typst.template.diagram"
+        case "circuit": "typst.template.circuit"
+        case "gantt": "typst.template.gantt"
+        case "waves": "typst.template.waves"
+        case "table": "typst.template.table"
+        case "matrix": "typst.template.matrix"
+        default: LocalizedStringKey(id)
+        }
     }
 
     /// The templates in the reader's language, from `TypstTemplates/<language>/` in the app.
