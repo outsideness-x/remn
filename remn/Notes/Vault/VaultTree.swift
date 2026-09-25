@@ -31,6 +31,24 @@ struct VaultFolder: Identifiable, Hashable, Sendable {
         notes + folders.flatMap(\.allNotes)
     }
 
+    /// The note a `[[wiki link]]` written in `notePath` points to: by its path when the link names folders,
+    /// otherwise by title, the note's own folder first. A `#heading` after the name is ignored.
+    func notePath(linkedAs link: String, from notePath: String) -> String? {
+        var name = link
+        if let heading = name.firstIndex(of: "#") { name = String(name[..<heading]) }
+        name = name.trimmingCharacters(in: .whitespaces)
+        if name.lowercased().hasSuffix(".md") { name = String(name.dropLast(3)) }
+        guard !name.isEmpty else { return nil }
+        let notes = allNotes
+        if name.contains("/") {
+            let wanted = name.trimmingCharacters(in: CharacterSet(charactersIn: "/")) + ".md"
+            return notes.first { $0.path.caseInsensitiveCompare(wanted) == .orderedSame }?.path
+        }
+        let named = notes.filter { $0.title.caseInsensitiveCompare(name) == .orderedSame }
+        let folder = VaultPath.parent(of: notePath)
+        return (named.first { $0.folderPath == folder } ?? named.first)?.path
+    }
+
     var totalNoteCount: Int {
         notes.count + folders.reduce(0) { $0 + $1.totalNoteCount }
     }

@@ -518,6 +518,10 @@ struct LiveStyler {
                 .underlineStyle: NSUnderlineStyle.single.rawValue,
                 .underlineColor: LiveTheme.accent.withAlphaComponent(0.55),
             ], range: inline.content)
+            #if os(macOS)
+            // A link that shows as a link is followed with a click; the pointer says so.
+            if !active { storage.addAttribute(.cursor, value: NSCursor.pointingHand, range: inline.content) }
+            #endif
             hideOrDim(inline.markers.filter { NSIntersectionRange($0, inline.content).length == 0 })
         case .image(let url):
             if active {

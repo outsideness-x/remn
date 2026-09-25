@@ -8,6 +8,7 @@ struct NoteView: View {
     @Environment(AppState.self) private var appState
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openURL) private var openURL
 
     @State private var path: String
     @State private var title: String
@@ -210,6 +211,7 @@ struct NoteView: View {
         controller.onTextChange = { _ in scheduleSave() }
         controller.onMakeCard = { text in cardDraft = CardDraft(text: text) }
         controller.onPasteImage = { data in Task { await insertImage(data) } }
+        controller.onOpenLink = { target in openLink(target) }
         controller.renderer.resolveImage = { [vault, path] link in vault.resolveLink(link, fromNoteAt: path) }
         controller.renderer.noteFolder = vault.url(for: VaultPath.parent(of: path))
     }
@@ -249,6 +251,32 @@ struct NoteView: View {
         savedText = fresh.text
         controller.font = NoteFont(frontMatter: fresh.frontMatter.font)
         controller.setText(fresh.body)
+    }
+
+    // MARK: - Links
+
+    /// Web links open in the browser; `[[a note]]` opens that note, and makes it first, as Obsidian does,
+    /// when there's none by that name yet.
+    private func openLink(_ target: LiveEditorController.LinkTarget) {
+        switch target {
+        case .web(let url):
+            openURL(url)
+        case .note(let name):
+            if let linked = vault.root.notePath(linkedAs: name, from: path) {
+                appState.notesPath.append(.note(linked))
+                return
+            }
+            let title = VaultPath.sanitized(name.components(separatedBy: "#")[0])
+            guard !title.isEmpty, !name.contains("/") else { return }
+            Task {
+                do {
+                    let made = try await vault.createNote(in: VaultPath.parent(of: path), title: title)
+                    appState.notesPath.append(.note(made))
+                } catch {
+                    appState.errorMessage = error.localizedDescription
+                }
+            }
+        }
     }
 
     // MARK: - Pictures

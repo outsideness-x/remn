@@ -82,7 +82,7 @@ enum DemoLibrary {
         A v = \\lambda v
         $$
 
-        The scalars $\\lambda$ are the roots of the *characteristic polynomial* $\\det(A - \\lambda I) = 0$.
+        The scalars $\\lambda$ are the roots of the *characteristic polynomial* $\\det(A - \\lambda I) = 0$. See also [[Vector spaces]].
 
         ## Why it matters
 
@@ -162,7 +162,7 @@ enum DemoLibrary {
         A v = \\lambda v
         $$
 
-        Числа $\\lambda$ — корни *характеристического многочлена* $\\det(A - \\lambda I) = 0$.
+        Числа $\\lambda$ — корни *характеристического многочлена* $\\det(A - \\lambda I) = 0$. См. также [[Векторные пространства]].
 
         ## Зачем это нужно
 

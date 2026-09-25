@@ -42,6 +42,14 @@ final class LiveEditorController: NSObject {
     @ObservationIgnored var onMakeCard: (String) -> Void = { _ in }
     /// Called with a picture pasted or dropped into the note.
     @ObservationIgnored var onPasteImage: (Data) -> Void = { _ in }
+    /// Called with a link that was clicked.
+    @ObservationIgnored var onOpenLink: (LinkTarget) -> Void = { _ in }
+
+    /// Where a link in a note leads: a web page, or another note by its `[[name]]`.
+    enum LinkTarget: Equatable {
+        case web(URL)
+        case note(String)
+    }
 
     private(set) var hasSelection = false
     private(set) var isFocused = false
@@ -202,6 +210,31 @@ final class LiveEditorController: NSObject {
         let text = selectedText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
         onMakeCard(text)
+    }
+
+    // MARK: - Links
+
+    /// A click on a link that shows as a link follows it. `selection` is the cursor from before the click,
+    /// nil when the note wasn't being edited; a link the cursor is in shows its Markdown, and is edited instead.
+    func openLink(at index: Int, selection: NSRange?) -> Bool {
+        guard livePreview,
+              let inline = markdown.inlines.first(where: { NSLocationInRange(index, $0.content) }),
+              selection.map({ !LiveStyler.touches($0, inline.range) }) ?? true
+        else { return false }
+        switch inline.kind {
+        case .wikiLink(let target):
+            onOpenLink(.note(target))
+        case .link(let address):
+            if let url = URL(string: address), url.scheme != nil {
+                onOpenLink(.web(url))
+            } else {
+                // `[text](Other note.md)`: a note in the folder.
+                onOpenLink(.note(address.removingPercentEncoding ?? address))
+            }
+        default:
+            return false
+        }
+        return true
     }
 
     // MARK: - Edits

@@ -85,6 +85,8 @@ private struct PlatformLiveEditor: UIViewRepresentable {
 final class LiveTextView: UITextView, LiveTextHost, UIGestureRecognizerDelegate {
     private let controller: LiveEditorController
     fileprivate(set) var isRefreshingCaret = false
+    /// The cursor as a tap began, before the text view moves it; nil when the note wasn't being edited.
+    private var selectionAtTouch: NSRange?
     private var headerHost: UIHostingController<AnyView>?
     private var headerHeight: CGFloat = 0
 
@@ -156,7 +158,21 @@ final class LiveTextView: UITextView, LiveTextHost, UIGestureRecognizerDelegate 
         point.x -= textContainerInset.left
         point.y -= textContainerInset.top
         let index = layoutManager.characterIndex(for: point, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
-        _ = controller.toggleTask(at: index)
+        if controller.toggleTask(at: index) { return }
+        let glyph = layoutManager.glyphIndex(for: point, in: textContainer)
+        guard glyph < layoutManager.numberOfGlyphs,
+              layoutManager.boundingRect(forGlyphRange: NSRange(location: glyph, length: 1), in: textContainer).contains(point)
+        else { return }
+        let wasEditing = selectionAtTouch != nil
+        if controller.openLink(at: layoutManager.characterIndexForGlyph(at: glyph), selection: selectionAtTouch), !wasEditing {
+            // Following a link isn't a reason to bring up the keyboard.
+            DispatchQueue.main.async { [weak self] in _ = self?.resignFirstResponder() }
+        }
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        selectionAtTouch = isFirstResponder ? selectedRange : nil
+        super.touchesBegan(touches, with: event)
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith other: UIGestureRecognizer) -> Bool {
@@ -431,6 +447,13 @@ final class LiveNSTextView: NSTextView, LiveTextHost {
         if let layoutManager, let textContainer {
             let index = layoutManager.characterIndex(for: containerPoint, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
             if controller.toggleTask(at: index) { return }
+            // A plain click right on a link follows it; a shift-click still extends the selection.
+            let glyph = layoutManager.glyphIndex(for: containerPoint, in: textContainer)
+            if event.clickCount == 1, !event.modifierFlags.contains(.shift), glyph < layoutManager.numberOfGlyphs,
+               layoutManager.boundingRect(forGlyphRange: NSRange(location: glyph, length: 1), in: textContainer).contains(containerPoint),
+               controller.openLink(at: layoutManager.characterIndexForGlyph(at: glyph), selection: hostIsFocused ? selectedRange() : nil) {
+                return
+            }
         }
         super.mouseDown(with: event)
     }

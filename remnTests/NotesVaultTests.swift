@@ -82,6 +82,26 @@ struct VaultTests {
         return (Vault(rootURL: root), root)
     }
 
+    @Test func wikiLinksFindTheirNotes() {
+        func note(_ path: String) -> NoteSummary {
+            NoteSummary(
+                path: path, title: VaultPath.title(ofNoteNamed: VaultPath.name(of: path)), snippet: "", tags: [],
+                font: nil, modified: .now, isDownloaded: true
+            )
+        }
+        let root = VaultFolder(path: "", name: "", folders: [
+            VaultFolder(path: "Physics", name: "Physics", folders: [], notes: [note("Physics/Lenses.md"), note("Physics/Waves.md")]),
+            VaultFolder(path: "Art", name: "Art", folders: [], notes: [note("Art/Lenses.md")]),
+        ], notes: [note("Index.md")])
+        #expect(root.notePath(linkedAs: "waves", from: "Index.md") == "Physics/Waves.md")
+        // Two notes share a name: the one beside the link wins.
+        #expect(root.notePath(linkedAs: "Lenses", from: "Art/Colour.md") == "Art/Lenses.md")
+        #expect(root.notePath(linkedAs: "Physics/Lenses", from: "Art/Colour.md") == "Physics/Lenses.md")
+        #expect(root.notePath(linkedAs: "Waves#Interference", from: "Index.md") == "Physics/Waves.md")
+        #expect(root.notePath(linkedAs: "Index.md", from: "Physics/Waves.md") == "Index.md")
+        #expect(root.notePath(linkedAs: "Optics", from: "Index.md") == nil)
+    }
+
     @Test func foldersAndNotesRoundTrip() async throws {
         let (vault, root) = try makeVault()
         defer { try? FileManager.default.removeItem(at: root) }
