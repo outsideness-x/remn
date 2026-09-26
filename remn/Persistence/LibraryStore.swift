@@ -6,7 +6,7 @@ enum LibraryStore {
     static let cloudContainerIdentifier = "iCloud.com.chemical-pink.remn"
 
     static func makeContainer() throws -> ModelContainer {
-        let schema = Schema(versionedSchema: RemnSchemaV2.self)
+        let schema = Schema(versionedSchema: RemnSchemaV3.self)
         do {
             return try makeContainer(schema: schema, cloud: .private(cloudContainerIdentifier))
         } catch {

@@ -129,6 +129,7 @@
 		ED3DFE877C970B008EFC696E /* ScheduleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6589AD8278F3631AB285EE3 /* ScheduleState.swift */; };
 		EE8B34F39CAB36A385A6AE39 /* RemnCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D08D9FDB393E2857A395E38 /* RemnCommands.swift */; };
 		F3E30020DAC50E4107057764 /* Flashcard+Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F95FD1076C503DAC0C2F44 /* Flashcard+Display.swift */; };
+		F3FF45C53C8B1A124E969BC4 /* RemnSchemaV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283255A26C9C9F9A453AA1ED /* RemnSchemaV2.swift */; };
 		F7BF1560E4A8642001B0CA86 /* RemnTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D62DB0BDB38E94A38C92D4 /* RemnTextStyle.swift */; };
 		F84625FA29006BF459764CF2 /* EmojiFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378C11E4CC883FF465B91ECE /* EmojiFigure.swift */; };
 		F89C2F844176B56B482A08AA /* CardEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E4DDE9993647270960E6C2 /* CardEditorView.swift */; };
@@ -171,6 +172,7 @@
 		2437A96F3B6868C44924CD54 /* LiveEditorControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveEditorControllerTests.swift; sourceTree = "<group>"; };
 		263980D52455E1C8F51A106D /* ImageAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachment.swift; sourceTree = "<group>"; };
 		27F704B7B8F11803E5DE940C /* remn-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "remn-iOS.entitlements"; sourceTree = "<group>"; };
+		283255A26C9C9F9A453AA1ED /* RemnSchemaV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnSchemaV2.swift; sourceTree = "<group>"; };
 		29A01082DADBF34A7BB90FB1 /* InkPencil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkPencil.swift; sourceTree = "<group>"; };
 		29F95FD1076C503DAC0C2F44 /* Flashcard+Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flashcard+Display.swift"; sourceTree = "<group>"; };
 		2A92BF2EDB3DC41B3D94FAEB /* remn.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = remn.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -355,6 +357,7 @@
 				A633B00400E44408AFB4DD4B /* LibraryStore.swift */,
 				EE31C963CEF82E56A782734C /* RemnSchema.swift */,
 				1080BDD46E762B55739E7201 /* RemnSchemaV1.swift */,
+				283255A26C9C9F9A453AA1ED /* RemnSchemaV2.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -879,6 +882,7 @@
 				DCA22BC85351846C9E8D9392 /* RemnNavigationHeader.swift in Sources */,
 				B86480F4C6B017013F1F8DF2 /* RemnSchema.swift in Sources */,
 				A2371635291D0076C4D56119 /* RemnSchemaV1.swift in Sources */,
+				F3FF45C53C8B1A124E969BC4 /* RemnSchemaV2.swift in Sources */,
 				F7BF1560E4A8642001B0CA86 /* RemnTextStyle.swift in Sources */,
 				A3CFDFB7B4BA2F995A627EA2 /* RemnTypography.swift in Sources */,
 				8C92B2347AADF0C43F2E0D36 /* ReviewLogEntry.swift in Sources */,

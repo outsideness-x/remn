@@ -23,6 +23,8 @@ struct BackupSubject: Codable, Equatable, Sendable {
     var createdAt: Date
     var updatedAt: Date
     var manualSortOrder: Int
+    /// Missing from backups made before subjects had icons.
+    var icon: String?
 }
 
 struct BackupDeck: Codable, Equatable, Sendable {

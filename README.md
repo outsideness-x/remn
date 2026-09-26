@@ -42,7 +42,7 @@ xcodebuild -project remn.xcodeproj -scheme remn \
 
 ## Sync
 
-Cards, decks, subjects, review history and study sessions sync through CloudKit via SwiftData. The schema is versioned: `RemnSchemaV1` is the original local-only schema, kept frozen so existing libraries migrate, and `RemnSchemaV2` is the CloudKit-compatible one (no unique constraints, defaults everywhere, optional relationships). Sync follows the system iCloud settings for the app.
+Cards, decks, subjects, review history and study sessions sync through CloudKit via SwiftData. The schema is versioned, and every shipped version is kept frozen so existing libraries migrate: `RemnSchemaV1` is the original local-only schema, `RemnSchemaV2` the CloudKit-compatible one (no unique constraints, defaults everywhere, optional relationships), and `RemnSchemaV3` gives each subject an icon. Sync follows the system iCloud settings for the app.
 
 ## Scheduling
 

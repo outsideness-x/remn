@@ -39,7 +39,8 @@ enum BackupService {
                     name: $0.name,
                     createdAt: $0.createdAt,
                     updatedAt: $0.updatedAt,
-                    manualSortOrder: $0.manualSortOrder
+                    manualSortOrder: $0.manualSortOrder,
+                    icon: $0.icon
                 )
             },
             decks: decks.compactMap { deck in
@@ -93,13 +94,15 @@ enum BackupService {
                     subject.createdAt = value.createdAt
                     subject.updatedAt = value.updatedAt
                     subject.manualSortOrder = value.manualSortOrder
+                    subject.icon = value.icon
                 } else {
                     let subject = SubjectModel(
                         id: value.id,
                         name: value.name,
                         createdAt: value.createdAt,
                         updatedAt: value.updatedAt,
-                        manualSortOrder: value.manualSortOrder
+                        manualSortOrder: value.manualSortOrder,
+                        icon: value.icon
                     )
                     context.insert(subject)
                     subjects[value.id] = subject

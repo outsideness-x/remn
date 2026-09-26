@@ -15,6 +15,7 @@ final class BackupTests: XCTestCase {
         ```
         """
         let (subject, deck, card) = TestStore.makeCard(front: front, back: back)
+        subject.icon = "atom"
         source.insert(subject)
         source.insert(deck)
         source.insert(card)
@@ -51,9 +52,17 @@ final class BackupTests: XCTestCase {
         XCTAssertEqual(restored.frontMarkdown, front)
         XCTAssertEqual(restored.backMarkdown, back)
         XCTAssertEqual(restored.scheduleSnapshot, card.scheduleSnapshot)
+        XCTAssertEqual(restored.deck?.subject?.icon, "atom")
         XCTAssertEqual(try destination.fetchCount(FetchDescriptor<ReviewLogEntry>()), 1)
         XCTAssertEqual(settings.desiredRetention, 0.91)
         XCTAssertEqual(settings.appearanceMode, "dark")
+
+        // A backup from before subjects had icons still reads.
+        var json = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        json["subjects"] = (json["subjects"] as? [[String: Any]])?.map { $0.filter { $0.key != "icon" } }
+        let older = try BackupService.decode(JSONSerialization.data(withJSONObject: json))
+        XCTAssertEqual(older.subjects.count, 1)
+        XCTAssertNil(older.subjects.first?.icon)
     }
 
     func testInvalidRelationshipsDoNotMutateStore() throws {

@@ -8,6 +8,8 @@ final class SubjectModel: Identifiable {
     var createdAt: Date = Date.now
     var updatedAt: Date = Date.now
     var manualSortOrder: Int = 0
+    /// The id of the `SubjectIcon` drawn before the subject's name.
+    var icon: String?
 
     @Relationship(deleteRule: .cascade, inverse: \Deck.subject)
     var decks: [Deck]? = []
@@ -17,13 +19,15 @@ final class SubjectModel: Identifiable {
         name: String,
         createdAt: Date = .now,
         updatedAt: Date = .now,
-        manualSortOrder: Int = 0
+        manualSortOrder: Int = 0,
+        icon: String? = nil
     ) {
         self.id = id
         self.name = name
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.manualSortOrder = manualSortOrder
+        self.icon = icon
     }
 
     var allDecks: [Deck] { decks ?? [] }
