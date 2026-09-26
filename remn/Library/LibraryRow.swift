@@ -1,32 +1,46 @@
 import SwiftUI
 
-/// A subject or deck on the page: its name, and how much of it is waiting.
+/// A subject or deck on the page: its name, and how much of it is waiting. A subject wears its icon in front.
 struct LibraryRow: View {
     let title: String
     let dueCount: Int
     let totalCount: Int
     /// Tighter type for the sidebar of the split layout.
     var compact = false
+    /// Subjects keep a place for an icon; decks don't have one.
+    var icon: Icon = .none
+
+    enum Icon {
+        case none
+        case subject(String?)
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: compact ? 2 : 5) {
-            HandwrittenText(verbatim: title, weight: 0.3)
-                .font(compact ? RemnTypography.display(23, relativeTo: .title3) : RemnTypography.rowTitle)
-                .foregroundStyle(Color.remnInk)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-            HStack(spacing: 8) {
-                if dueCount > 0 {
-                    HandwrittenText("count.due \(dueCount)")
-                        .foregroundStyle(Color.remnAccent)
-                    HandwrittenText(verbatim: "·")
-                        .foregroundStyle(Color.remnGraphite)
-                        .accessibilityHidden(true)
-                }
-                HandwrittenText("count.cards \(totalCount)")
-                    .foregroundStyle(Color.remnGraphite)
+        HStack(alignment: .center, spacing: compact ? 8 : 14) {
+            if case .subject(let chosen) = icon {
+                SubjectIconSlot(icon: chosen, fallback: .card, size: compact ? 26 : 38)
             }
-            .font(compact ? RemnTypography.caption : RemnTypography.note)
+            VStack(alignment: .leading, spacing: compact ? 2 : 5) {
+                HandwrittenText(verbatim: title, weight: 0.3)
+                    .font(compact ? RemnTypography.display(23, relativeTo: .title3) : RemnTypography.rowTitle)
+                    .foregroundStyle(Color.remnInk)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                HStack(spacing: 8) {
+                    if dueCount > 0 {
+                        HandwrittenText("count.due \(dueCount)")
+                            .foregroundStyle(Color.remnAccent)
+                        HandwrittenText(verbatim: "·")
+                            .foregroundStyle(Color.remnGraphite)
+                            .accessibilityHidden(true)
+                    }
+                    HandwrittenText("count.cards \(totalCount)")
+                        .foregroundStyle(Color.remnGraphite)
+                }
+                .font(compact ? RemnTypography.caption : RemnTypography.note)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, compact ? 11 : 16)

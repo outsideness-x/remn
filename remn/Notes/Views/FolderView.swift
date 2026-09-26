@@ -18,6 +18,7 @@ struct FolderView: View {
     @State private var confirmDelete = false
     @State private var manageFolder: VaultFolder?
     @State private var renameFolder: VaultFolder?
+    @State private var iconFolder: VaultFolder?
     @State private var deleteFolder: VaultFolder?
 
     private var folder: VaultFolder? { vault.root.folder(at: path) }
@@ -37,7 +38,9 @@ struct FolderView: View {
                     if isTabRoot {
                         rootHeader
                     } else {
-                        ScreenTitle(title: title)
+                        ScreenTitle(title: title, icon: folder?.icon) {
+                            iconFolder = folder
+                        }
                     }
                     if let folder {
                         content(folder)
@@ -76,22 +79,31 @@ struct FolderView: View {
             .background(alignment: .bottom) { PaperFade() }
         }
         .sheet(isPresented: $showNewFolder) {
-            NameEditorSheet(title: "notes.folder.new") { name in
+            NameEditorSheet(title: "notes.folder.new", initialIcon: nil) { name, icon in
                 Task {
-                    do { try await vault.createFolder(named: name, in: path) }
+                    do { try await vault.createFolder(named: name, in: path, icon: icon) }
                     catch { appState.errorMessage = error.localizedDescription }
                 }
             }
         }
         .sheet(item: $renameFolder) { folder in
-            NameEditorSheet(title: "notes.folder.rename", initialValue: folder.name) { name in
+            NameEditorSheet(title: "notes.folder.rename", initialValue: folder.name, initialIcon: folder.icon) { name, icon in
                 Task {
                     do {
                         let renamed = try await vault.renameFolder(folder.path, to: name)
+                        if icon != folder.icon { try await vault.setIcon(icon, forFolder: renamed) }
                         if folder.path == path { replaceRoute(with: .folder(renamed)) }
                     } catch {
                         appState.errorMessage = error.localizedDescription
                     }
+                }
+            }
+        }
+        .sheet(item: $iconFolder) { folder in
+            SubjectIconPicker(name: folder.name, selection: folder.icon) { icon in
+                Task {
+                    do { try await vault.setIcon(icon, forFolder: folder.path) }
+                    catch { appState.errorMessage = error.localizedDescription }
                 }
             }
         }
@@ -254,6 +266,7 @@ struct FolderView: View {
     private func folderActions(for folder: VaultFolder, includesNew: Bool = false) -> [HandmadeDialogAction] {
         [
             HandmadeDialogAction("rename", role: .plain) { renameFolder = folder },
+            HandmadeDialogAction("icon.choose", role: .plain) { iconFolder = folder },
             HandmadeDialogAction("delete", role: .destructive) { deleteFolder = folder },
         ]
     }
@@ -282,22 +295,27 @@ struct FolderRow: View {
     var compact = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: compact ? 2 : 5) {
-            HandwrittenText(verbatim: folder.name, weight: 0.3)
-                .font(compact ? RemnTypography.display(22, relativeTo: .title3) : RemnTypography.rowTitle)
-                .foregroundStyle(Color.remnInk)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-            HStack(spacing: 8) {
-                HandwrittenText("count.notes \(folder.totalNoteCount)")
-                if !folder.folders.isEmpty {
-                    HandwrittenText(verbatim: "·")
-                        .accessibilityHidden(true)
-                    HandwrittenText("count.folders \(folder.folders.count)")
+        HStack(alignment: .center, spacing: compact ? 10 : 14) {
+            SubjectIconSlot(icon: folder.icon, size: compact ? 28 : 38)
+            VStack(alignment: .leading, spacing: compact ? 2 : 5) {
+                HandwrittenText(verbatim: folder.name, weight: 0.3)
+                    .font(compact ? RemnTypography.display(22, relativeTo: .title3) : RemnTypography.rowTitle)
+                    .foregroundStyle(Color.remnInk)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                HStack(spacing: 8) {
+                    HandwrittenText("count.notes \(folder.totalNoteCount)")
+                    if !folder.folders.isEmpty {
+                        HandwrittenText(verbatim: "·")
+                            .accessibilityHidden(true)
+                        HandwrittenText("count.folders \(folder.folders.count)")
+                    }
                 }
+                .font(compact ? RemnTypography.caption : RemnTypography.note)
+                .foregroundStyle(Color.remnGraphite)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
             }
-            .font(compact ? RemnTypography.caption : RemnTypography.note)
-            .foregroundStyle(Color.remnGraphite)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, compact ? 10 : 16)
@@ -330,7 +348,7 @@ struct TagNotesView: View {
                     LazyVStack(spacing: 14) {
                         ForEach(notes) { note in
                             NavigationLink(value: NotesRoute.note(note.path)) {
-                                NoteRow(note: note, showsFolder: true)
+                                NoteRow(note: note, showsFolder: true, folderIcon: vault.root.icon(forFolder: note.folderPath))
                             }
                             .buttonStyle(InkRowStyle())
                         }

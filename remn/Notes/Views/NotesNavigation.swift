@@ -96,6 +96,7 @@ struct NotesSidebar: View {
     @State private var showNewFolder = false
     @State private var newFolderParent = ""
     @State private var renameFolder: VaultFolder?
+    @State private var iconFolder: VaultFolder?
     @State private var deleteFolder: VaultFolder?
 
     var body: some View {
@@ -127,10 +128,10 @@ struct NotesSidebar: View {
         .paperBackground()
         .remnHidesSystemBar()
         .sheet(isPresented: $showNewFolder) {
-            NameEditorSheet(title: "notes.folder.new") { name in
+            NameEditorSheet(title: "notes.folder.new", initialIcon: nil) { name, icon in
                 Task {
                     do {
-                        let folder = try await vault.createFolder(named: name, in: newFolderParent)
+                        let folder = try await vault.createFolder(named: name, in: newFolderParent, icon: icon)
                         expanded.insert(newFolderParent)
                         selection = .folder(folder)
                     } catch {
@@ -140,14 +141,23 @@ struct NotesSidebar: View {
             }
         }
         .sheet(item: $renameFolder) { folder in
-            NameEditorSheet(title: "notes.folder.rename", initialValue: folder.name) { name in
+            NameEditorSheet(title: "notes.folder.rename", initialValue: folder.name, initialIcon: folder.icon) { name, icon in
                 Task {
                     do {
                         let renamed = try await vault.renameFolder(folder.path, to: name)
+                        if icon != folder.icon { try await vault.setIcon(icon, forFolder: renamed) }
                         if selection == .folder(folder.path) { selection = .folder(renamed) }
                     } catch {
                         appState.errorMessage = error.localizedDescription
                     }
+                }
+            }
+        }
+        .sheet(item: $iconFolder) { folder in
+            SubjectIconPicker(name: folder.name, selection: folder.icon) { icon in
+                Task {
+                    do { try await vault.setIcon(icon, forFolder: folder.path) }
+                    catch { appState.errorMessage = error.localizedDescription }
                 }
             }
         }
@@ -197,6 +207,7 @@ struct NotesSidebar: View {
                 count: vault.root.totalNoteCount,
                 depth: 0,
                 path: "",
+                icon: nil,
                 hasChildren: false,
                 item: .folder("")
             )
@@ -206,6 +217,7 @@ struct NotesSidebar: View {
                     count: entry.folder.totalNoteCount,
                     depth: entry.depth,
                     path: entry.folder.path,
+                    icon: entry.folder.icon,
                     hasChildren: !entry.folder.folders.isEmpty,
                     item: .folder(entry.folder.path)
                 )
@@ -242,6 +254,7 @@ struct NotesSidebar: View {
         count: Int,
         depth: Int,
         path: String,
+        icon: String?,
         hasChildren: Bool,
         item: NotesSidebarItem
     ) -> some View {
@@ -264,6 +277,12 @@ struct NotesSidebar: View {
                     .buttonStyle(InkPressStyle())
                 } else {
                     Color.clear.frame(width: 18, height: 28)
+                }
+                if path.isEmpty {
+                    NotebookDoodle(ink: .remnGraphite, accent: .remnAccent, width: 17)
+                        .frame(width: 24, height: 24)
+                } else {
+                    SubjectIconSlot(icon: icon, size: depth == 0 ? 24 : 21)
                 }
                 HandwrittenText(verbatim: title, weight: depth == 0 ? 0.3 : 0)
                     .font(depth == 0 ? RemnTypography.display(22, relativeTo: .title3) : RemnTypography.display(20, relativeTo: .body))
@@ -289,6 +308,7 @@ struct NotesSidebar: View {
                 showNewFolder = true
             },
             HandmadeDialogAction("rename", role: .plain) { renameFolder = folder },
+            HandmadeDialogAction("icon.choose", role: .plain) { iconFolder = folder },
             HandmadeDialogAction("delete", role: .destructive) { deleteFolder = folder },
         ]
     }

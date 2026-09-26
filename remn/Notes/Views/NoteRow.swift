@@ -49,15 +49,22 @@ struct NotePageSurface<Content: View>: View {
 struct NoteRow: View {
     let note: NoteSummary
     var showsFolder = false
+    /// The icon of the subject the note sits in, shown with its folder.
+    var folderIcon: String?
 
     var body: some View {
         NotePageSurface(seed: note.path.inkSeed) {
             VStack(alignment: .leading, spacing: 5) {
                 if showsFolder, !note.folderPath.isEmpty {
-                    HandwrittenText(verbatim: note.folderPath.replacingOccurrences(of: "/", with: " / "))
-                        .font(RemnTypography.caption)
-                        .foregroundStyle(Color.remnGraphite)
-                        .lineLimit(1)
+                    HStack(spacing: 6) {
+                        if let icon = SubjectIcon.named(folderIcon) {
+                            SubjectIconView(icon: icon, size: 18)
+                        }
+                        HandwrittenText(verbatim: note.folderPath.replacingOccurrences(of: "/", with: " / "))
+                            .font(RemnTypography.caption)
+                            .foregroundStyle(Color.remnGraphite)
+                            .lineLimit(1)
+                    }
                 }
                 HandwrittenText(verbatim: note.title, weight: 0.3)
                     .font(RemnTypography.display(23, relativeTo: .title3))

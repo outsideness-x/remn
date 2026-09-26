@@ -7,6 +7,7 @@ struct SubjectDetailView: View {
     @Bindable var subject: SubjectModel
 
     @State private var showCreate = false
+    @State private var showIcons = false
     @State private var manageDeck: Deck?
     @State private var renameDeck: Deck?
     @State private var deleteDeck: Deck?
@@ -18,7 +19,7 @@ struct SubjectDetailView: View {
             }
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    ScreenTitle(title: subject.name)
+                    ScreenTitle(title: subject.name, icon: subject.icon) { showIcons = true }
                     if subject.allDecks.isEmpty {
                         QuietEmptyState(
                             title: "deck.empty",
@@ -63,6 +64,13 @@ struct SubjectDetailView: View {
             NameEditorSheet(title: "deck.new") { name in
                 let order = (subject.allDecks.map(\.manualSortOrder).max() ?? -1) + 1
                 context.insert(Deck(subject: subject, name: name, manualSortOrder: order))
+                subject.updatedAt = .now
+                save()
+            }
+        }
+        .sheet(isPresented: $showIcons) {
+            SubjectIconPicker(name: subject.name, selection: subject.icon) { icon in
+                subject.icon = icon
                 subject.updatedAt = .now
                 save()
             }

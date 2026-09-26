@@ -23,6 +23,7 @@ struct LibraryView: View {
     @State private var showCreate = false
     @State private var manageSubject: SubjectModel?
     @State private var renameSubject: SubjectModel?
+    @State private var iconSubject: SubjectModel?
     @State private var deleteSubject: SubjectModel?
 
     private var isSidebar: Bool { selection != nil }
@@ -70,17 +71,25 @@ struct LibraryView: View {
             .background(alignment: .bottom) { PaperFade() }
         }
         .sheet(isPresented: $showCreate) {
-            NameEditorSheet(title: "subject.new") { name in
+            NameEditorSheet(title: "subject.new", initialIcon: nil) { name, icon in
                 let order = (subjects.map(\.manualSortOrder).max() ?? -1) + 1
-                let subject = SubjectModel(name: name, manualSortOrder: order)
+                let subject = SubjectModel(name: name, manualSortOrder: order, icon: icon)
                 context.insert(subject)
                 save()
                 selection?.wrappedValue = .subject(subject.id)
             }
         }
         .sheet(item: $renameSubject) { subject in
-            NameEditorSheet(title: "subject.rename", initialValue: subject.name) { name in
+            NameEditorSheet(title: "subject.rename", initialValue: subject.name, initialIcon: subject.icon) { name, icon in
                 subject.name = name
+                subject.icon = icon
+                subject.updatedAt = .now
+                save()
+            }
+        }
+        .sheet(item: $iconSubject) { subject in
+            SubjectIconPicker(name: subject.name, selection: subject.icon) { icon in
+                subject.icon = icon
                 subject.updatedAt = .now
                 save()
             }
@@ -201,7 +210,8 @@ struct LibraryView: View {
                             title: subject.name,
                             dueCount: subject.cards.dueTodayCount(),
                             totalCount: subject.cards.count,
-                            compact: true
+                            compact: true,
+                            icon: .subject(subject.icon)
                         )
                         .padding(.leading, 14)
                         .padding(.trailing, 40)
@@ -230,7 +240,8 @@ struct LibraryView: View {
                             LibraryRow(
                                 title: subject.name,
                                 dueCount: subject.cards.dueTodayCount(),
-                                totalCount: subject.cards.count
+                                totalCount: subject.cards.count,
+                                icon: .subject(subject.icon)
                             )
                         }
                         .buttonStyle(InkRowStyle())
@@ -307,7 +318,11 @@ struct LibraryView: View {
             HandmadeDialogAction("rename", role: .plain) {
                 manageSubject = nil
                 renameSubject = subject
-            }
+            },
+            HandmadeDialogAction("icon.choose", role: .plain) {
+                manageSubject = nil
+                iconSubject = subject
+            },
         ]
         if let index = subjects.firstIndex(where: { $0.id == subject.id }) {
             if index > subjects.startIndex {

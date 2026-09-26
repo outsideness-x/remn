@@ -127,6 +127,7 @@
 		E9039D7B2418A258D6593C74 /* CardSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4751617CF215BF60BAE16C /* CardSearch.swift */; };
 		EC5D100A8C97CC473A47287C /* CardExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2499DE0F3CF80E54B2E115 /* CardExportView.swift */; };
 		ED3DFE877C970B008EFC696E /* ScheduleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6589AD8278F3631AB285EE3 /* ScheduleState.swift */; };
+		EE76CF0088E24BF7CC623FB8 /* SubjectIconPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6FDD476F821CEADAC305BC /* SubjectIconPicker.swift */; };
 		EE8B34F39CAB36A385A6AE39 /* RemnCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D08D9FDB393E2857A395E38 /* RemnCommands.swift */; };
 		F3E30020DAC50E4107057764 /* Flashcard+Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F95FD1076C503DAC0C2F44 /* Flashcard+Display.swift */; };
 		F3FF45C53C8B1A124E969BC4 /* RemnSchemaV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283255A26C9C9F9A453AA1ED /* RemnSchemaV2.swift */; };
@@ -183,6 +184,7 @@
 		3883F3714493B8CE91778CA3 /* NotesVaultTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesVaultTests.swift; sourceTree = "<group>"; };
 		3B560B86BB3D8E23E083F82E /* LiveRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRenderer.swift; sourceTree = "<group>"; };
 		3D2767AD6663EDF37938359D /* RemnTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemnTypography.swift; sourceTree = "<group>"; };
+		3F6FDD476F821CEADAC305BC /* SubjectIconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectIconPicker.swift; sourceTree = "<group>"; };
 		3FCD11850748DFAC93771937 /* SubjectDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectDetailView.swift; sourceTree = "<group>"; };
 		42069C92CF073079F40906C8 /* Neucha.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Neucha.ttf; sourceTree = "<group>"; };
 		43359355A0A7079AF77BC1A9 /* CardRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRow.swift; sourceTree = "<group>"; };
@@ -599,6 +601,7 @@
 			isa = PBXGroup;
 			children = (
 				92D83F4115B9B8F0ED52CAA2 /* SubjectIcon.swift */,
+				3F6FDD476F821CEADAC305BC /* SubjectIconPicker.swift */,
 				D01F5C377FB2D0897C04B1A6 /* SubjectIcons+Humanities.swift */,
 				A222FA1D0A10D0D8A09F0E89 /* SubjectIcons+Languages.swift */,
 				92DEFE3E9033C1A73B7A60BB /* SubjectIcons+Sciences.swift */,
@@ -901,6 +904,7 @@
 				2186EA12EDEF5D164D4C50DC /* StudySetupSheet.swift in Sources */,
 				A4B8A9D61AAEE3C98E00D5EC /* SubjectDetailView.swift in Sources */,
 				299A403849D79BA8DF082768 /* SubjectIcon.swift in Sources */,
+				EE76CF0088E24BF7CC623FB8 /* SubjectIconPicker.swift in Sources */,
 				94362D5BACD6395D4C2B4B9F /* SubjectIcons+Humanities.swift in Sources */,
 				3C0291A2B8206BD875E145E0 /* SubjectIcons+Languages.swift in Sources */,
 				0B7C278F2D61005B689116AD /* SubjectIcons+Sciences.swift in Sources */,

@@ -1,20 +1,44 @@
 import SwiftUI
 
-/// A page title written on, with a red swash under it.
+/// A page title written on, with a red swash under it, and the subject's icon in front of it if it has one.
 struct ScreenTitle: View {
     let title: String
+    var icon: String?
+    /// Tapping the icon, to change it.
+    var onIcon: (() -> Void)?
+
+    init(title: String, icon: String? = nil, onIcon: (() -> Void)? = nil) {
+        self.title = title
+        self.icon = icon
+        self.onIcon = onIcon
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HandwrittenText(verbatim: title, weight: 0.7)
-                .font(RemnTypography.pageTitle)
-                .foregroundStyle(Color.remnInk)
-                .fixedSize(horizontal: false, vertical: true)
-                .accessibilityAddTraits(.isHeader)
-            TitleSwash(seed: title.inkSeed)
-                .inkWritesOn(duration: 0.3, delay: writingTime * 0.8)
+        HStack(alignment: .top, spacing: 12) {
+            if let chosen = SubjectIcon.named(icon) {
+                Button { onIcon?() } label: {
+                    SubjectIconView(icon: chosen, size: 42)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(InkPressStyle())
+                .disabled(onIcon == nil)
+                .padding(.top, 2)
+                .accessibilityLabel(Text("icon.title"))
+                .accessibilityValue(Text(verbatim: chosen.name))
+                .transition(.scale(scale: 0.5).combined(with: .opacity))
+            }
+            VStack(alignment: .leading, spacing: 0) {
+                HandwrittenText(verbatim: title, weight: 0.7)
+                    .font(RemnTypography.pageTitle)
+                    .foregroundStyle(Color.remnInk)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                TitleSwash(seed: title.inkSeed)
+                    .inkWritesOn(duration: 0.3, delay: writingTime * 0.8)
+            }
+            .inkWritesOn(duration: writingTime)
         }
-        .inkWritesOn(duration: writingTime)
+        .animation(.spring(duration: 0.35, bounce: 0.3), value: icon)
     }
 
     private var writingTime: Double {

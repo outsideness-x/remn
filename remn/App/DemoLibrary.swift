@@ -38,6 +38,12 @@ enum DemoLibrary {
         let cellFolder = root.appendingPathComponent(russian ? "Биология/attachments" : "Biology/attachments")
         try? FileManager.default.createDirectory(at: cellFolder, withIntermediateDirectories: true)
         try? cellPicture()?.write(to: cellFolder.appendingPathComponent("cell.png"))
+        let icons = russian
+            ? ["Линейная алгебра": "matrix", "Программирование": "code", "Биология": "cell"]
+            : ["Linear Algebra": "matrix", "Programming": "code", "Biology": "cell"]
+        for (folder, icon) in icons {
+            try? VaultFolderInfo.setIcon(icon, in: root.appendingPathComponent(folder, isDirectory: true))
+        }
         return Vault(rootURL: root, watches: true)
     }
 
@@ -250,6 +256,7 @@ enum DemoLibrary {
 
     private struct DemoSubject {
         let name: String
+        var icon: String?
         let decks: [DemoDeck]
     }
 
@@ -257,7 +264,7 @@ enum DemoLibrary {
         let russian = Locale.preferredLanguages.first?.hasPrefix("ru") == true
         let scheduler = FSRSSchedulerService()
         for (subjectIndex, subjectPlan) in (russian ? russianLibrary : englishLibrary).enumerated() {
-            let subject = SubjectModel(name: subjectPlan.name, manualSortOrder: subjectIndex)
+            let subject = SubjectModel(name: subjectPlan.name, manualSortOrder: subjectIndex, icon: subjectPlan.icon)
             context.insert(subject)
             for (deckIndex, deckPlan) in subjectPlan.decks.enumerated() {
                 let deck = Deck(subject: subject, name: deckPlan.name, manualSortOrder: deckIndex)
@@ -324,7 +331,7 @@ enum DemoLibrary {
     // MARK: - Content
 
     private static let englishLibrary: [DemoSubject] = [
-        DemoSubject(name: "Linear Algebra", decks: [
+        DemoSubject(name: "Linear Algebra", icon: "matrix", decks: [
             DemoDeck(name: "Eigen things", cards: [
                 DemoCard(
                     front: "What is an **eigenvector** of a linear map $T$?",
@@ -352,7 +359,7 @@ enum DemoLibrary {
                 DemoCard(front: "Rank–nullity theorem", back: "$$\\dim V = \\operatorname{rank} T + \\operatorname{nullity} T$$", plan: .later),
             ]),
         ]),
-        DemoSubject(name: "Spanish", decks: [
+        DemoSubject(name: "Spanish", icon: "flag-es", decks: [
             DemoDeck(name: "Everyday verbs", cards: [
                 DemoCard(front: "aprovechar", back: "to make the most of\n\n> *Aprovecha el día.*", plan: .due),
                 DemoCard(front: "tener", back: "to have — *tengo, tienes, tiene*", plan: .later),
@@ -361,7 +368,7 @@ enum DemoLibrary {
                 DemoCard(front: "soler", back: "to usually do — *suelo leer por la noche*", plan: .new),
             ]),
         ]),
-        DemoSubject(name: "Swift", decks: [
+        DemoSubject(name: "Swift", icon: "swift", decks: [
             DemoDeck(name: "Concurrency", cards: [
                 DemoCard(
                     front: "What does an `actor` protect?",
@@ -372,7 +379,7 @@ enum DemoLibrary {
                 DemoCard(front: "`Task` vs `Task.detached`", back: "`Task` inherits the actor and priority it was created on; `Task.detached` inherits neither.", plan: .new),
             ]),
         ]),
-        DemoSubject(name: "Biology", decks: [
+        DemoSubject(name: "Biology", icon: "dna", decks: [
             DemoDeck(name: "The cell", cards: [
                 DemoCard(front: "What does ATP synthase make?", back: "**ATP**, driven by protons flowing back across the inner mitochondrial membrane.", plan: .later),
                 DemoCard(front: "Where does translation happen?", back: "On ribosomes — free in the cytoplasm or on the rough ER.", plan: .later),
@@ -381,7 +388,7 @@ enum DemoLibrary {
     ]
 
     private static let russianLibrary: [DemoSubject] = [
-        DemoSubject(name: "Линейная алгебра", decks: [
+        DemoSubject(name: "Линейная алгебра", icon: "matrix", decks: [
             DemoDeck(name: "Собственные векторы", cards: [
                 DemoCard(
                     front: "Что такое **собственный вектор** линейного оператора $T$?",
@@ -405,7 +412,7 @@ enum DemoLibrary {
                 DemoCard(front: "Теорема о ранге и дефекте", back: "$$\\dim V = \\operatorname{rank} T + \\dim \\ker T$$", plan: .later),
             ]),
         ]),
-        DemoSubject(name: "Испанский", decks: [
+        DemoSubject(name: "Испанский", icon: "flag-es", decks: [
             DemoDeck(name: "Глаголы на каждый день", cards: [
                 DemoCard(front: "aprovechar", back: "воспользоваться, использовать с толком\n\n> *Aprovecha el día.*", plan: .due),
                 DemoCard(front: "tener", back: "иметь — *tengo, tienes, tiene*", plan: .later),
@@ -414,7 +421,7 @@ enum DemoLibrary {
                 DemoCard(front: "soler", back: "обычно что-то делать — *suelo leer por la noche*", plan: .new),
             ]),
         ]),
-        DemoSubject(name: "Swift", decks: [
+        DemoSubject(name: "Swift", icon: "swift", decks: [
             DemoDeck(name: "Конкурентность", cards: [
                 DemoCard(
                     front: "Что защищает `actor`?",
@@ -425,7 +432,7 @@ enum DemoLibrary {
                 DemoCard(front: "`Task` и `Task.detached`", back: "`Task` наследует актор и приоритет места создания, `Task.detached` — нет.", plan: .new),
             ]),
         ]),
-        DemoSubject(name: "История", decks: [
+        DemoSubject(name: "История", icon: "scroll", decks: [
             DemoDeck(name: "Книгопечатание", cards: [
                 DemoCard(front: "Когда напечатана Библия Гутенберга?", back: "Около **1455** года, в Майнце.", plan: .later),
                 DemoCard(front: "Первая точно датированная русская печатная книга", back: "«Апостол» Ивана Фёдорова, **1564** год.", plan: .later),

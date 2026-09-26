@@ -156,6 +156,10 @@ struct StudySetupSheet: View {
         } label: {
             HStack(spacing: 14) {
                 InkCheckbox(isOn: isOn, seed: subject.id.inkSeed)
+                if let icon = SubjectIcon.named(subject.icon) {
+                    SubjectIconView(icon: icon, size: 28)
+                        .padding(.trailing, -4)
+                }
                 HandwrittenText(verbatim: subject.name, weight: 0.3)
                     .font(RemnTypography.display(23, relativeTo: .headline))
                     .foregroundStyle(isOn ? Color.remnInk : Color.remnGraphite)
