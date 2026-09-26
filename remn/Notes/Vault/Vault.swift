@@ -159,13 +159,26 @@ final class Vault {
     // MARK: - Folders
 
     @discardableResult
-    func createFolder(named name: String, in parent: String) async throws -> String {
+    func createFolder(named name: String, in parent: String, icon: String? = nil) async throws -> String {
         let folderURL = try requireURL(parent)
         let clean = VaultPath.sanitized(name).nilIfEmpty ?? String(localized: "notes.folder.untitled")
         let url = VaultFiles.availableURL(named: clean, extension: nil, in: folderURL)
-        try await Task.detached { try VaultFiles.createFolder(url) }.value
+        try await Task.detached {
+            try VaultFiles.createFolder(url)
+            if let icon { try VaultFolderInfo.setIcon(icon, in: url) }
+        }.value
         refresh()
         return VaultPath.join(parent, url.lastPathComponent)
+    }
+
+    /// Puts `icon` in front of a folder's name, or takes it away.
+    func setIcon(_ icon: String?, forFolder path: String) async throws {
+        guard !path.isEmpty else { return }
+        let url = try requireURL(path)
+        try await Task.detached { try VaultFolderInfo.setIcon(icon, in: url) }.value
+        // Show it at once; the next read of the folder confirms it.
+        root = root.settingIcon(icon, at: path)
+        refresh()
     }
 
     @discardableResult

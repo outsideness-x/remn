@@ -137,6 +137,43 @@ struct VaultTests {
         #expect(vault.root.folder(at: physics)?.notes.count == 1)
     }
 
+    @Test func foldersKeepTheirIconInAHiddenFileInside() async throws {
+        let (vault, root) = try makeVault()
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        let physics = try await vault.createFolder(named: "Physics", in: "", icon: "atom")
+        let optics = try await vault.createFolder(named: "Optics", in: physics)
+        await vault.reload()
+        let info = root.appendingPathComponent("Physics/\(VaultFolderInfo.fileName)")
+        #expect(FileManager.default.fileExists(atPath: info.path))
+        #expect(vault.root.folder(at: physics)?.icon == "atom")
+        #expect(vault.root.folder(at: physics)?.notes.isEmpty == true)
+        #expect(vault.root.folder(at: optics)?.icon == nil)
+        #expect(vault.root.icon(forFolder: optics) == "atom")
+        #expect(vault.root.icon(forFolder: "") == nil)
+
+        // Whatever else is in the file stays.
+        try #"{"icon": "atom", "colour": "red"}"#.write(to: info, atomically: true, encoding: .utf8)
+        try await vault.setIcon("magnet", forFolder: physics)
+        #expect(vault.root.folder(at: physics)?.icon == "magnet")
+        let saved = try JSONSerialization.jsonObject(with: Data(contentsOf: info)) as? [String: String]
+        #expect(saved == ["icon": "magnet", "colour": "red"])
+
+        // The icon goes wherever the folder goes.
+        let renamed = try await vault.renameFolder(physics, to: "Physik")
+        await vault.reload()
+        #expect(vault.root.folder(at: renamed)?.icon == "magnet")
+
+        try await vault.setIcon(nil, forFolder: renamed)
+        let kept = root.appendingPathComponent("Physik/\(VaultFolderInfo.fileName)")
+        #expect(try JSONSerialization.jsonObject(with: Data(contentsOf: kept)) as? [String: String] == ["colour": "red"])
+        try #"{"icon": "atom"}"#.write(to: kept, atomically: true, encoding: .utf8)
+        try await vault.setIcon(nil, forFolder: renamed)
+        #expect(!FileManager.default.fileExists(atPath: kept.path))
+        await vault.reload()
+        #expect(vault.root.folder(at: renamed)?.icon == nil)
+    }
+
     @Test func attachmentsLiveBesideTheNoteAndStayOutOfTheTree() async throws {
         let (vault, root) = try makeVault()
         defer { try? FileManager.default.removeItem(at: root) }

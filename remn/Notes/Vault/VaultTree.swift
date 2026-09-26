@@ -23,6 +23,8 @@ struct VaultFolder: Identifiable, Hashable, Sendable {
     var name: String
     var folders: [VaultFolder]
     var notes: [NoteSummary]
+    /// The id of the `SubjectIcon` drawn before the folder's name.
+    var icon: String? = nil
 
     var id: String { path }
     var isRoot: Bool { path.isEmpty }
@@ -70,6 +72,61 @@ struct VaultFolder: Identifiable, Hashable, Sendable {
     /// Every folder below this one, depth first, with how deep it sits.
     func flattened(depth: Int = 0) -> [(folder: VaultFolder, depth: Int)] {
         folders.flatMap { [($0, depth)] + $0.flattened(depth: depth + 1) }
+    }
+
+    /// The icon of the subject a path belongs to: its own folder's, else the nearest folder above it with one.
+    func icon(forFolder path: String) -> String? {
+        var current = path
+        while !current.isEmpty {
+            if let icon = folder(at: current)?.icon { return icon }
+            current = VaultPath.parent(of: current)
+        }
+        return nil
+    }
+
+    /// The same tree with `icon` on the folder at `path`.
+    func settingIcon(_ icon: String?, at path: String) -> VaultFolder {
+        var copy = self
+        if copy.path == path {
+            copy.icon = icon
+        } else {
+            copy.folders = folders.map { folder in
+                path == folder.path || path.hasPrefix(folder.path + "/") ? folder.settingIcon(icon, at: path) : folder
+            }
+        }
+        return copy
+    }
+}
+
+/// What remn keeps about a folder besides its notes — for now, the subject's icon — in a hidden
+/// `.remn.json` inside it. It travels with the folder when it's renamed or moved, in any app,
+/// and Obsidian and Finder leave hidden files alone.
+enum VaultFolderInfo {
+    static let fileName = ".remn.json"
+
+    static func icon(in folder: URL) -> String? {
+        let url = folder.appendingPathComponent(fileName)
+        guard let text = try? VaultFiles.read(url), let data = text.data(using: .utf8),
+              let info = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+        else { return nil }
+        return (info["icon"] as? String)?.nilIfEmpty
+    }
+
+    /// Sets or clears the icon, keeping anything else a later version wrote beside it.
+    static func setIcon(_ icon: String?, in folder: URL) throws {
+        let url = folder.appendingPathComponent(fileName)
+        var info: [String: Any] = [:]
+        if let text = try? VaultFiles.read(url), let data = text.data(using: .utf8),
+           let existing = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+            info = existing
+        }
+        info["icon"] = icon
+        guard !info.isEmpty else {
+            if FileManager.default.fileExists(atPath: url.path) { try VaultFiles.remove(url) }
+            return
+        }
+        let data = try JSONSerialization.data(withJSONObject: info, options: [.prettyPrinted, .sortedKeys])
+        try VaultFiles.write(data, to: url)
     }
 }
 
@@ -134,6 +191,7 @@ enum VaultScanner {
 
         var folders: [VaultFolder] = []
         var notes: [NoteSummary] = []
+        var icon: String?
         for child in children {
             var fileName = child.lastPathComponent
             var isPlaceholder = false
@@ -141,7 +199,16 @@ enum VaultScanner {
             if fileName.hasPrefix("."), fileName.hasSuffix(".icloud") {
                 fileName = String(fileName.dropFirst().dropLast(".icloud".count))
                 isPlaceholder = true
-            } else if fileName.hasPrefix(".") {
+            }
+            if fileName == VaultFolderInfo.fileName {
+                if isPlaceholder {
+                    try? manager.startDownloadingUbiquitousItem(at: url.appendingPathComponent(fileName))
+                } else {
+                    icon = VaultFolderInfo.icon(in: url)
+                }
+                continue
+            }
+            if !isPlaceholder, fileName.hasPrefix(".") {
                 continue
             }
             let values = try? child.resourceValues(forKeys: Set(keys))
@@ -189,7 +256,7 @@ enum VaultScanner {
 
         folders.sort { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         notes.sort { $0.modified > $1.modified }
-        return VaultFolder(path: path, name: name, folders: folders, notes: notes)
+        return VaultFolder(path: path, name: name, folders: folders, notes: notes, icon: icon)
     }
 }
 
@@ -244,6 +311,17 @@ enum VaultFiles {
                     try FileManager.default.removeItem(at: url)
                 }
             }
+        }
+        if let coordinationError { throw coordinationError }
+        try result.get()
+    }
+
+    /// Removes a file outright, for remn's own bookkeeping; notes go to the Trash instead.
+    static func remove(_ url: URL) throws {
+        var result: Result<Void, Error> = .success(())
+        var coordinationError: NSError?
+        NSFileCoordinator().coordinate(writingItemAt: url, options: .forDeleting, error: &coordinationError) { url in
+            result = Result { try FileManager.default.removeItem(at: url) }
         }
         if let coordinationError { throw coordinationError }
         try result.get()
